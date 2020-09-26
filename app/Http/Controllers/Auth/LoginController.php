@@ -100,7 +100,7 @@ class LoginController extends Controller
             Session::forget('mahasiswa');
         }
 
-        // return redirect('/')->refresh();
-        return \App::make('redirect')->to('/')->with('flash_success', 'Thank you,!');
+        return redirect('/')->refresh();
+        
     }
 }
