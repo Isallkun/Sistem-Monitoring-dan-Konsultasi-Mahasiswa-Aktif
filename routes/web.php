@@ -32,8 +32,13 @@ Route::group(['prefix' => '/' ], function()
 		//localhost:8000/admin/dosen
 		Route::get('master/dosen', 'MasterDosenController@daftardosen');
 		
+		//Tambah data dosen
 		Route::get('master/dosen/tambah', 'MasterDosenController@tambahdosen');
 		Route::post('master/dosen/prosestambah', 'MasterDosenController@tambahdosen_proses');
+
+		//Ubah data dosen
+		Route::get('master/dosen/ubah/{id}', 'MasterDosenController@ubahdosen');
+		Route::post('master/dosen/ubahproses', 'MasterDosenController@ubahdosen_proses');
 
 	});
 

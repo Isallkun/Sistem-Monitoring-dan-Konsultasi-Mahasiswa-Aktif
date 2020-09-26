@@ -61,7 +61,8 @@
               <td>{{$d->kode_jurusan}}</td>
               <td>{{$d->users_username}}</td>
               <td>
-                Untuk Button
+                 <a href="{{url('admin/master/dosen/ubah/'.$d->npkdosen)}}" class="btn btn-warning">Ubah</a>
+                 
               </td>
             </tr>
             @endforeach

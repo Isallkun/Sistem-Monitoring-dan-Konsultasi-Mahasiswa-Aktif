@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Database\QueryException;
 
 use DB;
 use App\User;
@@ -67,29 +68,102 @@ class MasterDosenController extends Controller
             'password'=>'required|max:8'
         ]);
 
-        //Untuk proses enkripsi password
-        $encrypted = Crypt::encryptString($password);
         
-        $tambahdata_user= User::insert([
-           'username'=>$username, 
-           'password'=>$encrypted,
-           'id_role'=>$id_role
-        ]);
+        try
+        {
+            //Untuk proses enkripsi password
+            $encrypted = Crypt::encryptString($password);
+            
+            $tambahdata_user= User::insert(['username'=>$username, 
+               'password'=>$encrypted,
+               'id_role'=>$id_role
+            ]);
 
-        $tambahdata_dosen= Dosen::insert([
-            'npkdosen'=>$npk_dosen,
-            'namadosen'=>$nama_dosen,
-            'jeniskelamin'=>$jenis_kelamin,
-            'email'=>$email,
-            'telepon'=>$telepon,
-            'status'=>$status,
-            'kode_jurusan'=>$kode_jurusan,
-            'users_username'=>$username    
-        ]);
-        
-        return redirect('admin/master/dosen');
+            $tambahdata_dosen= Dosen::insert([
+                'npkdosen'=>$npk_dosen,
+                'namadosen'=>$nama_dosen,
+                'jeniskelamin'=>$jenis_kelamin,
+                'email'=>$email,
+                'telepon'=>$telepon,
+                'status'=>$status,
+                'kode_jurusan'=>$kode_jurusan,
+                'users_username'=>$username    
+            ]);
 
+            return redirect('admin/master/dosen/tambah')->with(['Success' => 'Berhasil Menambahkan Data']);
+        }
+       
+        catch(QueryException $e)
+        {
+            return redirect('admin/master/dosen/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database']);
+        }
     }
+
+    public function ubahdosen($id)
+    {  
+        $jurusan = DB::table('jurusan')
+                ->select('*')
+                ->get();
+
+        $role = DB::table('role')
+                ->select('*')
+                ->get();
+
+
+        $datadosen = DB::table('dosen')
+                ->select('*')
+                ->join('users', 'users.username', '=', 'dosen.users_username')
+                ->where('dosen.npkdosen', $id)
+                ->get();
+
+        $decrypted = Crypt::decryptString($datadosen[0]->password);   
+
+        // echo "$datadosen";
+        return view('master_dosen.ubahdosen_admin', compact('jurusan', 'role', 'datadosen', 'decrypted'));
+    }
+
+    public function ubahdosen_proses(Request $request, $id)
+    {
+        // Validasi Form
+        $this->validate($request,[
+            'nama_dosen' => 'required',
+            'email' => 'required|email',
+            'telepon' => 'required|numeric|min:12',
+            'status' => 'required',
+            'kode_jurusan' => 'required',
+            'id_role' => 'required',
+            'username' => 'required|min:5',
+            'password'=>'required|max:8'
+        ]);
+
+        try
+        {
+            //Untuk proses enkripsi password
+            $encrypted = Crypt::encryptString($password);
+            
+             $dosen = Dosen::find($id);
+             $dosen->namadosen = $request->get('nama_dosen');
+             $dosen->jeniskelamin = $request->get('jenis_kelamin');
+             $dosen->email = $request->get('email');
+             $dosen->telepon = $request->get('telepon');
+             $dosen->status = $request->get('status');
+             $dosen->kode_jurusan = $request->get('kode_jurusan');
+             $dosen->save();
+
+             $user = User::find($request->get('username'));
+             $user->password = $request->get('password');
+             $user->id_role = $request->get('id_role');
+             $user->save();
+
+             return redirect('admin/master/dosen/ubah/{id}')->with(['Success' => 'Berhasil Menambahkan Data']);
+        }
+        catch(QueryException $e)
+        {
+            // return $e;
+            return redirect('admin/master/dosen/ubah/{id}')->with(['Error' => 'Gagal Mengubah Data Kedalam Database']);
+        }
+    }
+
 
     /**
      * Show the form for creating a new resource.
