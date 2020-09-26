@@ -100,7 +100,9 @@ class LoginController extends Controller
             Session::forget('mahasiswa');
         }
 
-        return redirect('/')->refresh();
-        
+        Auth::logout(); 
+        Session::flush();
+      
+        return \App::make('redirect')->to('/');
     }
 }
