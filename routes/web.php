@@ -40,6 +40,10 @@ Route::group(['prefix' => '/' ], function()
 		Route::get('master/dosen/ubah/{id}', 'MasterDosenController@ubahdosen');
 		Route::post('master/dosen/ubahproses', 'MasterDosenController@ubahdosen_proses');
 
+		//Hapus data dosen
+		Route::get('master/dosen/hapus/{id}', 'MasterDosenController@hapusdosen');
+
+
 	});
 
 	Route::group(['prefix' => 'dosen'], function()

@@ -36,6 +36,16 @@
         </ul>
       </div>
     @endif
+
+    @if (count($errors) > 0)
+      <div class="alert alert-danger">
+        <ul>
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
     
     <!-- Main content -->
     <section class="content">
@@ -73,7 +83,12 @@
               <td>{{$d->users_username}}</td>
               <td>
                  <a href="{{url('admin/master/dosen/ubah/'.$d->npkdosen)}}" class="btn btn-warning">Ubah</a>
-                 
+
+                 <form method="get" action="{{url('admin/master/dosen/hapus/'.$d->npkdosen)}}">
+                   <input type="hidden" name="username" value="{{$d->users_username}}">
+                   <button type="submmit" class="btn btn-danger">Hapus</button>
+                 </form>
+
               </td>
             </tr>
             @endforeach

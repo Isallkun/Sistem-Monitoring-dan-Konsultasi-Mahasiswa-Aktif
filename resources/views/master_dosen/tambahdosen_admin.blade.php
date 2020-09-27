@@ -133,7 +133,7 @@
                     <input type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Password">
                   </div>
 
-                  <input type="checkbox" onclick="myFunction()">Show Password
+                  <input type="checkbox" onclick="myFunction()"> Show Password
 
                 </div>
                 <!-- /.card-body -->

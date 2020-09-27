@@ -19,6 +19,10 @@ class MasterDosenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */  
+    public function __construct()
+    {
+        $this->middleware('revalidate');
+    }
 
     public function daftardosen()
     {
@@ -122,7 +126,6 @@ class MasterDosenController extends Controller
 
     public function ubahdosen_proses(Request $request)
     {
-      
         try
         {
             $encrypted = Crypt::encryptString($request->get('password'));
@@ -145,12 +148,35 @@ class MasterDosenController extends Controller
                         'kode_jurusan' => $request->get('kode_jurusan')
                     ]);
 
-             return redirect('admin/master/dosen')->with(['Success' => 'Berhasil Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')]);
+            return redirect('admin/master/dosen')->with(['Success' => 'Berhasil Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')]);
         }
         catch(QueryException $e)
         {
-             return redirect("admin/master/dosen/ubah/{$request->get('npk_dosen')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')]);
+            return redirect("admin/master/dosen/ubah/{$request->get('npk_dosen')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')]);
         }
+    }
+
+    public function hapusdosen (Request $request,$id)
+    {
+        try
+        {
+            $dosen = DB::table('dosen')
+                ->where('npkdosen',$id)
+                ->delete();
+
+            $user = DB::table('users')
+                ->where('username',$request->get('username'))
+                ->delete();
+
+            return redirect('admin/master/dosen')->with(['Success' => 'Berhasil Menghapus Data '." ".$request->get('username')." - ".$id]);
+        }
+
+        catch(QueryException $e)
+        {
+            return redirect("admin/master/dosen")->with(['Error' => 'Gagal Menghapus Data '." ".$request->get('username')." - ".$id]);
+
+        }
+     
     }
 
 

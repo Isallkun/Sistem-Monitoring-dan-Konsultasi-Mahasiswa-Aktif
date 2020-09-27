@@ -136,7 +136,8 @@
 
                   <div class="form-group">
                     <label for="exampleInputUsername">Username</label>
-                    <input type="text" name="username" class="form-control" id="exampleInputUsername" value="{{$d->username}}" >
+                    <input type="text" name="informasi_nama" class="form-control" id="exampleInputUsername" value="{{$d->username}}" disabled>
+                    <input type="hidden" name="username" value="{{$d->username}}">
                   </div>
                   
                 
@@ -145,7 +146,7 @@
                     <input type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Password" value="{{$decrypted}}" >
                   </div>
 
-                  <input type="checkbox" onclick="myFunction()">Show Password
+                  <input type="checkbox" onclick="myFunction()"> Show Password
                   
                   @endforeach
                 
