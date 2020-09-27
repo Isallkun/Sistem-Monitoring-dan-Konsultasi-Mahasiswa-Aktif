@@ -17,18 +17,16 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth','revalidate']], function ()
 {
-	Route::get('/', 'AdminController@index'); ## route yang perlu auth
+	Route::get('/', 'HomeAdminController@index'); ## route yang perlu auth
 });
 
 Route::group(['prefix' => '/' ], function()
 {
-	//localhost:8000
-  	Route::get('/', 'HomeController@index');
   	//localhost:8000/admin/
 	Route::group(['prefix' => 'admin'], function()
 	{
 		//localhost:8000/admin/(halaman home admin)
-		Route::get('/', 'AdminController@index');
+		Route::get('/', 'HomeAdminController@index');
 		//localhost:8000/admin/dosen
 		Route::get('master/dosen', 'MasterDosenController@daftardosen');
 		

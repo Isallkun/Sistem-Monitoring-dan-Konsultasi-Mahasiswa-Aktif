@@ -3,25 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use Session;
+use DB;
 
-
-class AdminController extends Controller
+class HomeAdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('revalidate');
-    }
-    
     public function index()
     {
-        if(Session::get('admin') == null)
+        if(Session::get('admin') != null)
         {
+            $dosen_aktif = DB::table('dosen')
+                        ->select('*')
+                        ->where('status','aktif')
+                        ->count();
+
+            return view('home_admin',compact('dosen_aktif'));
+
             // if(Session::get('dosen') != null)
             // {
             //     return redirect('homem');  
@@ -30,11 +33,11 @@ class AdminController extends Controller
             // {
             //     return view('auth.login');  
             // }
-            return view('auth.login');  
+            
         }
         else
         {
-            return view('home_admin');
+            return redirect('/');  
         }
     }
 

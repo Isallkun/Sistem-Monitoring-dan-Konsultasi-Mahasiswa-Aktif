@@ -69,6 +69,7 @@
             </a>
           </li>
 
+          <li class="nav-header">Master Data</li>
           <li class="nav-item has-treeview">
             <a href="{{ url('admin/master/dosen') }}" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
@@ -99,9 +100,10 @@
             </a>
           </li>
 
+          <li class="nav-header">Settings Pengguna</li>
           <li class="nav-item">
             <a href="{{ route('keluar') }}" class="nav-link">
-              <i class="fa fa-sign-out"></i>
+              <i class="nav-icon fas fa-sign-out-alt"></i>
               <p>
                 Logout
               </p>
