@@ -62,7 +62,7 @@
           <div class="form-group">
             <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
             
-            <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" data-toggle="dropdown" id="exampleInputPencarian">
+            <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="exampleInputPencarian" data-toggle="dropdown">
               <option value="npkdosen">NPK Dosen</option>
               <option value="namadosen">Nama</option>
               <option value="jeniskelamin">Jenis Kelamin</option>
@@ -146,7 +146,7 @@ $(document).ready(function(){
          $.ajax({
           url:"{{ route('masterdosen.fetch') }}",
           method:"POST",
-          data:{query:query, _token:_token},
+          data:{query:query,_token:_token},
           success:function(data){
             $('#dosenList').fadeIn();  
               $('#dosenList').html(data);

@@ -291,18 +291,17 @@ class MasterDosenController extends Controller
 
     function fetch(Request $request)
     {
+        $query = $request->get('query');
 
         if($request->get('query'))
-        {
-            $query = $request->get('query');
-
-            $data = DB::table('dosen')
+        {             
+            
+            $datadosen = DB::table('dosen')
                 ->where('npkdosen', 'LIKE', "%{$query}%")
                 ->get();
-            
-            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
-            
-            foreach($data as $row)
+       
+            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';            
+            foreach($datadosen as $row)
             {
                 $output .= '
                 <li><a href="#">'.$row->npkdosen.'</a></li>';
