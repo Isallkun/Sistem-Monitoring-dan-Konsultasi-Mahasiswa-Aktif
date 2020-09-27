@@ -135,7 +135,7 @@ class MasterDosenController extends Controller
                     ]);
 
              $dosen = DB::table('dosen') 
-                    ->where('npkdosen',$request->get('$npk_dosen'))
+                    ->where('npkdosen',$request->get('npk_dosen'))
                     ->update([
                         'namadosen' => $request->get('nama_dosen'),
                         'jeniskelamin' => $request->get('jenis_kelamin'),
