@@ -90,7 +90,7 @@ class MasterDosenController extends Controller
                 'users_username'=>$username    
             ]);
 
-            return redirect('admin/master/dosen/tambah')->with(['Success' => 'Berhasil Menambahkan Data']);
+            return redirect('admin/master/dosen')->with(['Success' => 'Berhasil Menambahkan Data']);
         }
        
         catch(QueryException $e)
@@ -109,7 +109,6 @@ class MasterDosenController extends Controller
                 ->select('*')
                 ->get();
 
-
         $datadosen = DB::table('dosen')
                 ->select('*')
                 ->join('users', 'users.username', '=', 'dosen.users_username')
@@ -118,49 +117,39 @@ class MasterDosenController extends Controller
 
         $decrypted = Crypt::decryptString($datadosen[0]->password);   
 
-        // echo "$datadosen";
         return view('master_dosen.ubahdosen_admin', compact('jurusan', 'role', 'datadosen', 'decrypted'));
     }
 
-    public function ubahdosen_proses(Request $request, $id)
+    public function ubahdosen_proses(Request $request)
     {
-        // Validasi Form
-        $this->validate($request,[
-            'nama_dosen' => 'required',
-            'email' => 'required|email',
-            'telepon' => 'required|numeric|min:12',
-            'status' => 'required',
-            'kode_jurusan' => 'required',
-            'id_role' => 'required',
-            'username' => 'required|min:5',
-            'password'=>'required|max:8'
-        ]);
-
+      
         try
         {
-            //Untuk proses enkripsi password
-            $encrypted = Crypt::encryptString($password);
-            
-             $dosen = Dosen::find($id);
-             $dosen->namadosen = $request->get('nama_dosen');
-             $dosen->jeniskelamin = $request->get('jenis_kelamin');
-             $dosen->email = $request->get('email');
-             $dosen->telepon = $request->get('telepon');
-             $dosen->status = $request->get('status');
-             $dosen->kode_jurusan = $request->get('kode_jurusan');
-             $dosen->save();
+            $encrypted = Crypt::encryptString($request->get('password'));
 
-             $user = User::find($request->get('username'));
-             $user->password = $request->get('password');
-             $user->id_role = $request->get('id_role');
-             $user->save();
+             $pengguna = DB::table('users') 
+                    ->where('username',$request->get('username'))
+                    ->update([
+                        'password' => $encrypted,
+                        'id_role' => $request->get('id_role')
+                    ]);
 
-             return redirect('admin/master/dosen/ubah/{id}')->with(['Success' => 'Berhasil Menambahkan Data']);
+             $dosen = DB::table('dosen') 
+                    ->where('npkdosen',$request->get('$npk_dosen'))
+                    ->update([
+                        'namadosen' => $request->get('nama_dosen'),
+                        'jeniskelamin' => $request->get('jenis_kelamin'),
+                        'email' => $request->get('email'),
+                        'telepon' => $request->get('telepon'),
+                        'status' => $request->get('status'),
+                        'kode_jurusan' => $request->get('kode_jurusan')
+                    ]);
+
+             return redirect('admin/master/dosen')->with(['Success' => 'Berhasil Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')]);
         }
         catch(QueryException $e)
         {
-            // return $e;
-            return redirect('admin/master/dosen/ubah/{id}')->with(['Error' => 'Gagal Mengubah Data Kedalam Database']);
+             return redirect("admin/master/dosen/ubah/{$request->get('npk_dosen')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')]);
         }
     }
 

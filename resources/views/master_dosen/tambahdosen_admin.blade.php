@@ -15,22 +15,6 @@
 <!-- Isi dari yield -->
 @section('content')
     
-    @if (\Session::has('Success'))
-      <div class="alert alert-success alert-block">
-        <ul>
-            <li>{!! \Session::get('Success') !!}</li>
-        </ul>
-      </div>
-    @endif
-
-    @if (\Session::has('Error'))
-      <div class="alert alert-danger alert-block">
-        <ul>
-            <li>{!! \Session::get('Error') !!}</li>
-        </ul>
-      </div>
-    @endif
-    
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">

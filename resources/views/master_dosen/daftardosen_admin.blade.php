@@ -7,7 +7,10 @@
 
 <!-- Isi dari yield -->
 @section('content')
+    
+   
 
+    
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -26,6 +29,14 @@
     </div>
     <!-- /.content-header -->
 
+    @if (\Session::has('Success'))
+      <div class="alert alert-success alert-block">
+        <ul>
+            <li>{!! \Session::get('Success') !!}</li>
+        </ul>
+      </div>
+    @endif
+    
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">

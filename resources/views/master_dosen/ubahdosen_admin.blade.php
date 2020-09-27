@@ -15,14 +15,6 @@
 <!-- Isi dari yield -->
 @section('content')
     
-    @if (\Session::has('Success'))
-      <div class="alert alert-success alert-block">
-        <ul>
-            <li>{!! \Session::get('Success') !!}</li>
-        </ul>
-      </div>
-    @endif
-    
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
@@ -54,16 +46,9 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
+             
               <form action="{{url('admin/master/dosen/ubahproses')}}" role="form" method="post">
                 {{ csrf_field() }}
-
-                 @if (\Session::has('Success'))
-                  <div class="alert alert-success alert-block">
-                    <ul>
-                        <li>{!! \Session::get('Success') !!}</li>
-                    </ul>
-                  </div>
-                @endif
 
                 @if (\Session::has('Error'))
                   <div class="alert alert-danger alert-block">
@@ -75,10 +60,9 @@
 
                 @foreach($datadosen as $d)
                 <div class="card-body">
+                  
+                  <input type="hidden" name="npk_dosen" value="{{ $d->npkdosen }}">
 
-                  <input type="hidden" name="npk_dosen" id="exampleInputNpk" value="{{$d->npkdosen}}">
-              
-                
                   <div class="form-group">
                     <label for="exampleInputNama">Nama Dosen</label>
                     <input type="text" name="nama_dosen" class="form-control" id="exampleInputNama" placeholder="Enter Nama Dosen" value="{{$d->namadosen}}">
@@ -152,7 +136,7 @@
 
                   <div class="form-group">
                     <label for="exampleInputUsername">Username</label>
-                    <input type="username" name="username" class="form-control" id="exampleInputUsername" value="{{$d->username}}">
+                    <input type="text" name="username" class="form-control" id="exampleInputUsername" value="{{$d->username}}" >
                   </div>
                   
                 
