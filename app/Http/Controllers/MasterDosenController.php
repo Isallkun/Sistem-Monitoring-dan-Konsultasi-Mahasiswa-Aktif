@@ -64,33 +64,32 @@ class MasterDosenController extends Controller
 
     public function tambahdosen_proses(Request $request)
     {
-        $npk_dosen = $request->get('npk_dosen');
-        $nama_dosen = $request->get('nama_dosen');
-        $jenis_kelamin = $request->get('jenis_kelamin');
-        $email = $request->get('email');
-        $telepon = $request->get('telepon');
-        $status = $request->get('status');
-        $kode_jurusan = $request->get('kode_jurusan');
-        $id_role = $request->get('id_role');
-        $username = $request->get('username');
-        $password = $request->get('password');
-
-        // Validasi Form
-        $this->validate($request,[
-            'npk_dosen' => 'required|numeric|min:6',
-            'nama_dosen' => 'required',
-            'email' => 'required|email',
-            'telepon' => 'required|numeric|min:12',
-            'status' => 'required',
-            'kode_jurusan' => 'required',
-            'id_role' => 'required',
-            'username' => 'required|min:5',
-            'password'=>'required|max:8'
-        ]);
-
-        
         try
         {
+            $npk_dosen = $request->get('npk_dosen');
+            $nama_dosen = $request->get('nama_dosen');
+            $jenis_kelamin = $request->get('jenis_kelamin');
+            $email = $request->get('email');
+            $telepon = $request->get('telepon');
+            $status = $request->get('status');
+            $kode_jurusan = $request->get('kode_jurusan');
+            $id_role = $request->get('id_role');
+            $username = $request->get('username');
+            $password = $request->get('password');
+
+            // Validasi Form
+            $this->validate($request,[
+                'npk_dosen' => 'required|numeric|min:6',
+                'nama_dosen' => 'required',
+                'email' => 'required|email',
+                'telepon' => 'required|numeric|min:12',
+                'status' => 'required',
+                'kode_jurusan' => 'required',
+                'id_role' => 'required',
+                'username' => 'required|min:5',
+                'password'=>'required|max:8'
+            ]);
+
             //Untuk proses enkripsi password
             $encrypted = Crypt::encryptString($password);
             
@@ -151,6 +150,19 @@ class MasterDosenController extends Controller
     {
         try
         {
+            // Validasi Form
+            $this->validate($request,[
+                'npk_dosen' => 'required|numeric|min:6',
+                'nama_dosen' => 'required',
+                'email' => 'required|email',
+                'telepon' => 'required|numeric|min:12',
+                'status' => 'required',
+                'kode_jurusan' => 'required',
+                'id_role' => 'required',
+                'username' => 'required|min:5',
+                'password'=>'required|max:8'
+            ]);
+
             $encrypted = Crypt::encryptString($request->get('password'));
 
              $pengguna = DB::table('users') 
@@ -197,75 +209,108 @@ class MasterDosenController extends Controller
         catch(QueryException $e)
         {
             return redirect("admin/master/dosen")->with(['Error' => 'Gagal Menghapus Data '." ".$request->get('username')." - ".$id]);
-
         }
      
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function caridosen (Request $request)
     {
-        //
+        $jenis_pencarian = $request->get('pencarian');
+        $keyword = $request->get('keyword');
+        
+        $this->validate($request,[
+            'pencarian' => 'required',
+            'keyword' =>'required'
+        ]);
+       
+
+        if($jenis_pencarian == "npkdosen")
+        {
+            $dosen = DB::table('dosen')
+                ->select('*')
+                ->where('npkdosen',$keyword )
+                ->paginate(10);
+        }
+        else if ($jenis_pencarian == "namadosen")
+        {
+            $dosen = DB::table('dosen')
+                ->select('*')
+                ->where('namadosen',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian =="jeniskelamin")
+        {
+             $dosen = DB::table('dosen')
+                ->select('*')
+                ->where('jeniskelamin',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian =="email")
+        {
+             $dosen = DB::table('dosen')
+                ->select('*')
+                ->where('email',$keyword )
+                ->paginate(10);
+        }
+        else if ($jenis_pencarian=="telepon")
+        {
+            $dosen = DB::table('dosen')
+                ->select('*')
+                ->where('telepon',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian=="status")
+        {
+            $dosen = DB::table('dosen')
+                ->select('*')
+                ->where('status',$keyword )
+                ->paginate(10);
+
+        }
+        else if($jenis_pencarian=="kodejurusan")
+        {
+            $dosen = DB::table('dosen')
+                ->select('*')
+                ->where('kode_jurusan',$keyword )
+                ->paginate(10);
+        }
+        else if ($jenis_pencarian=="username")
+        {
+            $dosen = DB::table('dosen')
+                ->select('*')
+                ->where('users_username',$keyword )
+                ->paginate(10);
+        }
+        else
+        {
+           return redirect("admin/master/dosen")->with(['Error' => 'Gagal melakukan proses pencarian']);
+        }
+
+        return view('master_dosen.daftardosen_admin', compact('dosen'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    function fetch(Request $request)
     {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        if($request->get('query'))
+        {
+            $query = $request->get('query');
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+            $data = DB::table('dosen')
+                ->where('npkdosen', 'LIKE', "%{$query}%")
+                ->get();
+            
+            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';
+            
+            foreach($data as $row)
+            {
+                $output .= '
+                <li><a href="#">'.$row->npkdosen.'</a></li>';
+            }
+            
+            $output .= '</ul>';
+            echo $output;
+         }
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 }

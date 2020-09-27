@@ -50,8 +50,37 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <a href="{{ url('admin/master/dosen/tambah') }}" class="btn btn-info" role="button">Tambah Data</a>
-        <br><br>
+        <a href="{{ url('admin/master/dosen/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
+        <br><br><br>
+
+        <form method="GET" action="{{url('admin/master/dosen/prosescari')}}" enctype="multipart/form-data">
+          {{ csrf_field() }}
+          <input type="hidden" name="_token" value="{{csrf_token() }}"> 
+          
+          <label for="exampleInputPencarian">Pencarian Data: </label>
+
+          <div class="form-group">
+            <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
+            
+            <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" data-toggle="dropdown" id="exampleInputPencarian">
+              <option value="npkdosen">NPK Dosen</option>
+              <option value="namadosen">Nama</option>
+              <option value="jeniskelamin">Jenis Kelamin</option>
+              <option value="email">Email</option>
+              <option value="telepon">Telepon</option>
+              <option value="status">Status</option>
+              <option value="kodejurusan">Kode Jurusan</option>
+              <option value="username">Username</option>
+            </select>
+
+            <button type="submit" class="btn btn-light"><i class="fas fa-search"></i></button>
+
+            <div id="dosenList"></div>
+          
+          </div>
+
+        </form>
+        
         <!-- Small boxes (Stat box) -->
         <table class="table table-bordered table-striped">
           <thead>
@@ -105,4 +134,32 @@
 @endsection
 
 @push('scripts')
+<script>
+$(document).ready(function(){
+
+ $('#keyword').keyup(function(){ 
+        var query = $(this).val();
+
+        if(query != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"{{ route('masterdosen.fetch') }}",
+          method:"POST",
+          data:{query:query, _token:_token},
+          success:function(data){
+            $('#dosenList').fadeIn();  
+              $('#dosenList').html(data);
+          }
+         });
+        }
+    });
+
+    $(document).on('click', 'li', function(){  
+        $('#keyword').val($(this).text());  
+        $('#dosenList').fadeOut();  
+    });  
+
+});
+</script>
 @endpush

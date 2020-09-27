@@ -41,9 +41,14 @@ Route::group(['prefix' => '/' ], function()
 		//Hapus data dosen
 		Route::get('master/dosen/hapus/{id}', 'MasterDosenController@hapusdosen');
 
-
+		//Pencarian Data Dosen
+		Route::get('master/dosen/prosescari', 'MasterDosenController@caridosen');
+		//Suggestion pencarian data dosen
+		Route::post('master/dosen/fetch', 'MasterDosenController@fetch')->name('masterdosen.fetch');
+		
 	});
 
+	//localhost:8000/dosen/
 	Route::group(['prefix' => 'dosen'], function()
 	{
 		Route::get('/', 'HomeAdminController@index');
