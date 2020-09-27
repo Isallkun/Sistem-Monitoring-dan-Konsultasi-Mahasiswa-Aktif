@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\QueryException;
 
 use DB;
+use Session;
 use App\User;
 use App\Dosen;
 
@@ -26,24 +27,39 @@ class MasterDosenController extends Controller
 
     public function daftardosen()
     {
-       $dosen = DB::table('dosen')
+        if(Session::get('admin') != null)
+        {
+            $dosen = DB::table('dosen')
             ->select('*')
             ->paginate(10);
 
-        return view('master_dosen.daftardosen_admin', compact('dosen'));
+            return view('master_dosen.daftardosen_admin', compact('dosen'));
+        }
+        else
+        {
+            return redirect("/");
+        }
+       
     }
 
     public function tambahdosen()
     {
-        $jurusan = DB::table('jurusan')
-                ->select('*')
-                ->get();
+        if(Session::get('admin') != null)
+        {
+            $jurusan = DB::table('jurusan')
+                    ->select('*')
+                    ->get();
 
-        $role = DB::table('role')
-                ->select('*')
-                ->get();
+            $role = DB::table('role')
+                    ->select('*')
+                    ->get();
 
-        return view('master_dosen.tambahdosen_admin', compact('jurusan', 'role'));
+            return view('master_dosen.tambahdosen_admin', compact('jurusan', 'role'));
+        }
+        else
+        {
+            return redirect("/");
+        }
     }
 
     public function tambahdosen_proses(Request $request)
@@ -105,23 +121,30 @@ class MasterDosenController extends Controller
 
     public function ubahdosen($id)
     {  
-        $jurusan = DB::table('jurusan')
-                ->select('*')
-                ->get();
+        if(Session::get('admin') != null)
+        {
+            $jurusan = DB::table('jurusan')
+                    ->select('*')
+                    ->get();
 
-        $role = DB::table('role')
-                ->select('*')
-                ->get();
+            $role = DB::table('role')
+                    ->select('*')
+                    ->get();
 
-        $datadosen = DB::table('dosen')
-                ->select('*')
-                ->join('users', 'users.username', '=', 'dosen.users_username')
-                ->where('dosen.npkdosen', $id)
-                ->get();
+            $datadosen = DB::table('dosen')
+                    ->select('*')
+                    ->join('users', 'users.username', '=', 'dosen.users_username')
+                    ->where('dosen.npkdosen', $id)
+                    ->get();
 
-        $decrypted = Crypt::decryptString($datadosen[0]->password);   
+            $decrypted = Crypt::decryptString($datadosen[0]->password);   
 
-        return view('master_dosen.ubahdosen_admin', compact('jurusan', 'role', 'datadosen', 'decrypted'));
+            return view('master_dosen.ubahdosen_admin', compact('jurusan', 'role', 'datadosen', 'decrypted'));
+        }
+        else
+        {
+            return redirect("/");
+        }
     }
 
     public function ubahdosen_proses(Request $request)
