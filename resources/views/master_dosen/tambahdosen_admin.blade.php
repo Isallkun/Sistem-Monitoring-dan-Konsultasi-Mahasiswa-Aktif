@@ -107,7 +107,7 @@
                     <select class="btn btn-primary dropdown-toggle" name="kode_jurusan" data-toggle="dropdown" id="exampleInputKodeJurusan">
                       <option value="">Pilih Jurusan</option>
                        @foreach($jurusan as $j)
-                        <option value="{{$j->idjurusan}}">{{$j->idjurusan}} - {{$j->nama}}</option>
+                        <option value="{{$j->kodejurusan}}">{{$j->kodejurusan}} - {{$j->namajurusan}}</option>
                        @endforeach
                     </select>
                   </div>

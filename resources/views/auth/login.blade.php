@@ -32,6 +32,14 @@
       <form action="{{route('login')}}" method="post">
         {{ csrf_field() }}
 
+        @if (\Session::has('Info'))
+          <div class="alert alert-warning alert-block">
+            <ul>
+                <li>{!! \Session::get('Info') !!}</li>
+            </ul>
+          </div>
+        @endif
+
         <div class="input-group mb-3">
           <input type="username" class="form-control" placeholder="Username" name="username" required>
           <div class="input-group-append">

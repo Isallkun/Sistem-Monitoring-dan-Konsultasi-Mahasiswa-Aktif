@@ -9,6 +9,10 @@ use DB;
 
 class HomeAdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('revalidate');
+    }
     /**
      * Display a listing of the resource.
      *

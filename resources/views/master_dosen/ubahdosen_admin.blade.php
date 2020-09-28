@@ -111,10 +111,10 @@
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="kode_jurusan" data-toggle="dropdown" id="exampleInputKodeJurusan">
                       @foreach($jurusan as $j)
-                        @if($d->kode_jurusan == $j->idjurusan)
-                          <option value="{{$j->idjurusan}}" selected>{{$j->idjurusan}} - {{$j->nama}}</option>
-                        @else if($d->status != $j->idjurusan)
-                          <option value="{{$j->idjurusan}}">{{$j->idjurusan}} - {{$j->nama}}</option>
+                        @if($d->jurusan_kodejurusan == $j->kodejurusan)
+                          <option value="{{$j->kodejurusan}}" selected>{{$j->kodejurusan}} - {{$j->namajurusan}}</option>
+                        @else if($d->status != $j->kodejurusan)
+                          <option value="{{$j->kodejurusan}}">{{$j->kodejurusan}} - {{$j->namajurusan}}</option>
                         @endif
                       @endforeach
                     </select>
@@ -125,7 +125,7 @@
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="id_role" data-toggle="dropdown" id="exampleInputIdRole">
                       @foreach($role as $r)
-                        @if($r->idrole == $d->id_role)
+                        @if($r->idrole == $d->role_idrole)
                           <option value="{{$r->idrole}}" selected>{{$r->idrole}} - {{$r->nama}}</option>
                         @else
                           <option value="{{$r->idrole}}">{{$r->idrole}} - {{$r->nama}}</option>

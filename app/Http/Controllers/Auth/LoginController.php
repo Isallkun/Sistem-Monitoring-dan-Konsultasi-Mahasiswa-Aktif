@@ -56,17 +56,17 @@ class LoginController extends Controller
             
             if ($password == $decrypted)
             {
-                if($hasil[0]->id_role == "1")
+                if($hasil[0]->role_idrole == "1")
                 {
                     Session::put('admin',$hasil[0]->username);
                     return redirect('admin/');
                 }
-                else if($hasil[0]->id_role == "2")
+                else if($hasil[0]->role_idrole == "2")
                 {
                     Session::put('dosen',$hasil[0]->username);
                     return view('...', compact('username'));    
                 }   
-                else if($hasil[0]->id_role == "3")
+                else if($hasil[0]->role_idrole == "3")
                 {
                     Session::put('mahasiswa',$hasil[0]->username);
                     return view('...', compact('username'));    

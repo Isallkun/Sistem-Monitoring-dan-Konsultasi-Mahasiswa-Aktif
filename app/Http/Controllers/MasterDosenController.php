@@ -50,6 +50,7 @@ class MasterDosenController extends Controller
                     ->select('*')
                     ->get();
 
+
             $role = DB::table('role')
                     ->select('*')
                     ->get();
@@ -95,7 +96,7 @@ class MasterDosenController extends Controller
             
             $tambahdata_user= User::insert(['username'=>$username, 
                'password'=>$encrypted,
-               'id_role'=>$id_role
+               'role_idrole'=>$id_role
             ]);
 
             $tambahdata_dosen= Dosen::insert([
@@ -105,8 +106,9 @@ class MasterDosenController extends Controller
                 'email'=>$email,
                 'telepon'=>$telepon,
                 'status'=>$status,
-                'kode_jurusan'=>$kode_jurusan,
-                'users_username'=>$username    
+                'users_username'=>$username, 
+                'jurusan_kodejurusan'=>$kode_jurusan
+                   
             ]);
 
             return redirect('admin/master/dosen')->with(['Success' => 'Berhasil Menambahkan Data']);
@@ -169,7 +171,7 @@ class MasterDosenController extends Controller
                     ->where('username',$request->get('username'))
                     ->update([
                         'password' => $encrypted,
-                        'id_role' => $request->get('id_role')
+                        'role_idrole' => $request->get('id_role')
                     ]);
 
              $dosen = DB::table('dosen') 
@@ -180,7 +182,7 @@ class MasterDosenController extends Controller
                         'email' => $request->get('email'),
                         'telepon' => $request->get('telepon'),
                         'status' => $request->get('status'),
-                        'kode_jurusan' => $request->get('kode_jurusan')
+                        'jurusan_kodejurusan' => $request->get('kode_jurusan')
                     ]);
 
             return redirect('admin/master/dosen')->with(['Success' => 'Berhasil Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')]);
@@ -267,18 +269,18 @@ class MasterDosenController extends Controller
                 ->paginate(10);
 
         }
-        else if($jenis_pencarian=="kodejurusan")
-        {
-            $dosen = DB::table('dosen')
-                ->select('*')
-                ->where('kode_jurusan',$keyword )
-                ->paginate(10);
-        }
         else if ($jenis_pencarian=="username")
         {
             $dosen = DB::table('dosen')
                 ->select('*')
                 ->where('users_username',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian=="kodejurusan")
+        {
+            $dosen = DB::table('dosen')
+                ->select('*')
+                ->where('jurusan_kodejurusan',$keyword )
                 ->paginate(10);
         }
         else
@@ -370,18 +372,6 @@ class MasterDosenController extends Controller
                     <li><a href="#">'.$row->status.'</a></li>';
                 }
             }    
-            else if( $pencarian== 'kodejurusan')
-            {
-                $datadosen = DB::table('dosen')
-                ->where('kode_jurusan', 'LIKE', "%{$query}%")
-                ->get();
-
-                foreach($datadosen as $row)
-                {
-                    $output .= '
-                    <li><a href="#">'.$row->kode_jurusan.'</a></li>';
-                }
-            }   
             else if($pencarian== 'username')
             {
                 $datadosen = DB::table('dosen')
@@ -394,6 +384,19 @@ class MasterDosenController extends Controller
                     <li><a href="#">'.$row->users_username.'</a></li>';
                 }
             }    
+            else if( $pencarian== 'kodejurusan')
+            {
+                $datadosen = DB::table('dosen')
+                ->where('jurusan_kodejurusan', 'LIKE', "%{$query}%")
+                ->get();
+
+                foreach($datadosen as $row)
+                {
+                    $output .= '
+                    <li><a href="#">'.$row->jurusan_kodejurusan.'</a></li>';
+                }
+            }   
+           
             $output .= '</ul>';
             echo $output;
          }

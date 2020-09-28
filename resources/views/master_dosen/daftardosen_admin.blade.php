@@ -108,7 +108,7 @@
               <td>{{$d->email}}</td>
               <td>{{$d->telepon}}</td>
               <td>{{$d->status}}</td>
-              <td>{{$d->kode_jurusan}}</td>
+              <td>{{$d->jurusan_kodejurusan}}</td>
               <td>{{$d->users_username}}</td>
               <td>
                  <a href="{{url('admin/master/dosen/ubah/'.$d->npkdosen)}}" class="btn btn-warning">Ubah</a>
