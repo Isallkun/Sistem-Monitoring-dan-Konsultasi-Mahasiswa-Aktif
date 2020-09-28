@@ -62,7 +62,7 @@
           <div class="form-group">
             <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
             
-            <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="exampleInputPencarian" data-toggle="dropdown">
+            <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
               <option value="npkdosen">NPK Dosen</option>
               <option value="namadosen">Nama</option>
               <option value="jeniskelamin">Jenis Kelamin</option>
@@ -143,10 +143,11 @@ $(document).ready(function(){
         if(query != '')
         {
          var _token = $('input[name="_token"]').val();
+         var pencarian = document.getElementById("pencarian").value;
          $.ajax({
           url:"{{ route('masterdosen.fetch') }}",
           method:"POST",
-          data:{query:query,_token:_token},
+          data:{query:query,_token:_token, jenis:pencarian},
           success:function(data){
             $('#dosenList').fadeIn();  
               $('#dosenList').html(data);

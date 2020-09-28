@@ -292,21 +292,108 @@ class MasterDosenController extends Controller
     function fetch(Request $request)
     {
         $query = $request->get('query');
+        $pencarian =$request->get('jenis');
 
-        if($request->get('query'))
-        {             
-            
-            $datadosen = DB::table('dosen')
+        if($request->get('query') && $request->get('jenis'))
+        {           
+            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';    
+
+            if($pencarian == 'npkdosen')
+            {
+                 $datadosen = DB::table('dosen')
                 ->where('npkdosen', 'LIKE', "%{$query}%")
                 ->get();
-       
-            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';            
-            foreach($datadosen as $row)
-            {
-                $output .= '
-                <li><a href="#">'.$row->npkdosen.'</a></li>';
-            }
             
+                foreach($datadosen as $row)
+                {
+                    $output .= '
+                    <li><a href="#">'.$row->npkdosen.'</a></li>';
+                }
+            }      
+            else if( $pencarian== 'namadosen')
+            {
+                $datadosen = DB::table('dosen')
+                ->where('namadosen', 'LIKE', "%{$query}%")
+                ->get();
+
+                foreach($datadosen as $row)
+                {
+                    $output .= '
+                    <li><a href="#">'.$row->namadosen.'</a></li>';
+                }
+            }    
+            else if( $pencarian== 'jeniskelamin')
+            {
+                $datadosen = DB::table('dosen')
+                ->where('jeniskelamin', 'LIKE', "%{$query}%")
+                ->get();
+
+                foreach($datadosen as $row)
+                {
+                    $output .= '
+                    <li><a href="#">'.$row->jeniskelamin.'</a></li>';
+                }
+            }   
+            else if( $pencarian== 'email')
+            {
+                $datadosen = DB::table('dosen')
+                ->where('email', 'LIKE', "%{$query}%")
+                ->get();
+
+                foreach($datadosen as $row)
+                {
+                    $output .= '
+                    <li><a href="#">'.$row->email.'</a></li>';
+                }
+            }    
+            else if( $pencarian== 'telepon')
+            {
+                $datadosen = DB::table('dosen')
+                ->where('telepon', 'LIKE', "%{$query}%")
+                ->get();
+
+                foreach($datadosen as $row)
+                {
+                    $output .= '
+                    <li><a href="#">'.$row->telepon.'</a></li>';
+                }
+            }  
+            else if( $pencarian== 'status')
+            {
+                $datadosen = DB::table('dosen')
+                ->where('status', 'LIKE', "%{$query}%")
+                ->get();
+
+                foreach($datadosen as $row)
+                {
+                    $output .= '
+                    <li><a href="#">'.$row->status.'</a></li>';
+                }
+            }    
+            else if( $pencarian== 'kodejurusan')
+            {
+                $datadosen = DB::table('dosen')
+                ->where('kode_jurusan', 'LIKE', "%{$query}%")
+                ->get();
+
+                foreach($datadosen as $row)
+                {
+                    $output .= '
+                    <li><a href="#">'.$row->kode_jurusan.'</a></li>';
+                }
+            }   
+            else if($pencarian== 'username')
+            {
+                $datadosen = DB::table('dosen')
+                ->where('users_username', 'LIKE', "%{$query}%")
+                ->get();
+
+                foreach($datadosen as $row)
+                {
+                    $output .= '
+                    <li><a href="#">'.$row->users_username.'</a></li>';
+                }
+            }    
             $output .= '</ul>';
             echo $output;
          }
