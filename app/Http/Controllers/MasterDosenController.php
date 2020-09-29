@@ -78,23 +78,25 @@ class MasterDosenController extends Controller
             $username = $request->get('username');
             $password = $request->get('password');
 
-            // Validasi Form
+            // Form Validasi Input User
             $this->validate($request,[
                 'npk_dosen' => 'required|numeric|min:6',
                 'nama_dosen' => 'required',
+                'jenis_kelamin' => 'required',
                 'email' => 'required|email',
                 'telepon' => 'required|numeric|min:12',
                 'status' => 'required',
                 'kode_jurusan' => 'required',
                 'id_role' => 'required',
-                'username' => 'required|min:5',
-                'password'=>'required|max:8'
+                'username' => 'required',
+                'password'=>'required|max:10'
             ]);
 
             //Untuk proses enkripsi password
             $encrypted = Crypt::encryptString($password);
             
-            $tambahdata_user= User::insert(['username'=>$username, 
+            $tambahdata_user= User::insert([
+               'username'=>$username, 
                'password'=>$encrypted,
                'role_idrole'=>$id_role
             ]);
@@ -276,13 +278,6 @@ class MasterDosenController extends Controller
                 ->where('users_username',$keyword )
                 ->paginate(10);
         }
-        else if($jenis_pencarian=="kodejurusan")
-        {
-            $dosen = DB::table('dosen')
-                ->select('*')
-                ->where('jurusan_kodejurusan',$keyword )
-                ->paginate(10);
-        }
         else
         {
            return redirect("admin/master/dosen")->with(['Error' => 'Gagal melakukan proses pencarian']);
@@ -384,18 +379,6 @@ class MasterDosenController extends Controller
                     <li><a href="#">'.$row->users_username.'</a></li>';
                 }
             }    
-            else if( $pencarian== 'kodejurusan')
-            {
-                $datadosen = DB::table('dosen')
-                ->where('jurusan_kodejurusan', 'LIKE', "%{$query}%")
-                ->get();
-
-                foreach($datadosen as $row)
-                {
-                    $output .= '
-                    <li><a href="#">'.$row->jurusan_kodejurusan.'</a></li>';
-                }
-            }   
            
             $output .= '</ul>';
             echo $output;

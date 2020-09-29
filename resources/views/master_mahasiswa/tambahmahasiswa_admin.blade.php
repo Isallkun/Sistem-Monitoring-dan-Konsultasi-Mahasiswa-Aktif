@@ -20,13 +20,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Tambah Data Dosen</h1>
+            <h1>Tambah Data Mahasiswa</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('admin')}}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{url('admin/master/dosen')}}">Daftar Dosen</a></li>
-              <li class="breadcrumb-item active">Tambah Data Dosen</li>
+              <li class="breadcrumb-item"><a href="{{url('admin/master/mahasiswa')}}">Daftar Mahasiswa</a></li>
+              <li class="breadcrumb-item active">Tambah Data Mahasiswa</li>
             </ol>
           </div>
         </div>
@@ -42,40 +42,40 @@
             <!-- jquery validation -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Form Input Data Dosen</h3>
+                <h3 class="card-title">Form Input Data Mahasiswa</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{url('admin/master/dosen/prosestambah')}}" role="form" method="post">
+              <form action="{{url('admin/master/mahasiswa/prosestambah')}}" role="form" method="post">
                 {{ csrf_field() }}
 
-              @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                  <ul>
-                    @foreach ($errors->all() as $error)
-                      <li>{{ $error }}</li>
-                    @endforeach
-                  </ul>
-                </div>
-              @endif
+                @if (count($errors) > 0)
+                  <div class="alert alert-danger">
+                    <ul>
+                      @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                      @endforeach
+                    </ul>
+                  </div>
+                @endif
 
-              @if (\Session::has('Error'))
-                <div class="alert alert-danger alert-block">
-                  <ul>
-                      <li>{!! \Session::get('Error') !!}</li>
-                  </ul>
-                </div>
-              @endif
+                @if (\Session::has('Error'))
+                  <div class="alert alert-danger alert-block">
+                    <ul>
+                        <li>{!! \Session::get('Error') !!}</li>
+                    </ul>
+                  </div>
+                @endif
                
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputNpk">NPK Dosen</label>
-                    <input type="text" name="npk_dosen" class="form-control" id="exampleInputNpk" placeholder="Enter NPK Dosen">
+                    <label for="exampleInputNrp">NRP Mahasiswa</label>
+                    <input type="text" name="nrp_mahasiswa" class="form-control" id="exampleInputNrp" placeholder="Enter NRP Mahasiswa">
                   </div>
                 
                   <div class="form-group">
-                    <label for="exampleInputNama">Nama Dosen</label>
-                    <input type="text" name="nama_dosen" class="form-control" id="exampleInputNama" placeholder="Enter Nama Dosen">
+                    <label for="exampleInputNama">Nama Mahasiswa</label>
+                    <input type="text" name="nama_mahasiswa" class="form-control" id="exampleInputNama" placeholder="Enter Nama Mahasiswa">
                   </div>
 
                   <div class="form-group">
@@ -89,13 +89,41 @@
                   </div>
 
                   <div class="form-group">
+                    <label for="exampleInputTanggalLahir">Tanggal Lahir</label>
+                    <input type="date" name="tanggal_lahir" class="form-control" id="exampleInputTanggalLahir">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputTempatLahir">Tempat Lahir</label>
+                    <input type="text" name="tempat_lahir" class="form-control" id="exampleInputTempatLahir" placeholder="Enter Tempat Lahir">
+                  </div>
+
+                  <div class="form-group">
                     <label for="exampleInputEmail">Email</label>
-                    <input type="text" name="email" class="form-control" id="exampleInputEmail" placeholder="Enter Email">
+                    <input type="email" name="email" class="form-control" id="exampleInputEmail" placeholder="Enter Email">
                   </div>
 
                   <div class="form-group">
                     <label for="exampleInputTelepon">Telepon</label>
                     <input type="text" name="telepon" class="form-control" id="exampleInputTelepon" placeholder="Enter Telepon">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputAngkatan">Angkatan</label>
+                    <br>
+                    <select class="btn btn-primary dropdown-toggle" name="angkatan" data-toggle="dropdown" id="exampleInputAngkatan">
+                      {{ $now = date('Y') }}
+                      {{ $last = date('Y')-4 }}   
+                          <option value="">-- Pilih Tahun Angkatan --</option>
+                       @for ($i = $now; $i >= $last; $i--)
+                          <option value="{{ $i }}">{{ $i }}</option>
+                      @endfor
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputAlamat">Alamat</label>
+                    <input type="text" name="alamat" class="form-control" id="exampleInputAlamat" placeholder="Enter Alamat">
                   </div>
 
                   <div class="form-group">
@@ -108,7 +136,18 @@
                     </select>
                   </div>
 
-                   <div class="form-group">
+                  <div class="form-group">
+                    <label for="exampleInputKodeJurusan">Dosen Wali</label>
+                    <br>
+                    <select class="btn btn-primary dropdown-toggle" name="npk_dosenwali" data-toggle="dropdown" id="exampleInputNPKDosen">
+                      <option value="">-- Pilih Dosen Wali --</option>
+                       @foreach($dosen as $d)
+                        <option value="{{$d->npkdosen}}">{{$d->npkdosen}} - {{$d->namadosen}}</option>
+                       @endforeach
+                    </select>
+                  </div>
+
+                  <div class="form-group">
                     <label for="exampleInputKodeJurusan">Kode Jurusan</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="kode_jurusan" data-toggle="dropdown" id="exampleInputKodeJurusan">

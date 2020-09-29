@@ -16,12 +16,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Daftar Dosen</h1>
+            <h1 class="m-0 text-dark">Daftar Mahasiswa</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('admin')}}">Home</a></li>
-              <li class="breadcrumb-item active">Daftar Dosen</li>
+              <li class="breadcrumb-item active">Daftar Mahasiswa</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -37,7 +37,7 @@
         </ul>
       </div>
     @endif
-
+    
     @if (\Session::has('Success'))
       <div class="alert alert-success alert-block">
         <ul>
@@ -45,16 +45,14 @@
         </ul>
       </div>
     @endif
-
-    
     
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <a href="{{ url('admin/master/dosen/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
+        <a href="{{ url('admin/master/mahasiswa/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
         <br><br><br>
 
-        <form method="GET" action="{{url('admin/master/dosen/prosescari')}}" enctype="multipart/form-data">
+        <form method="GET" action="{{url('admin/master/mahasiswa/prosescari')}}" enctype="multipart/form-data">
           {{ csrf_field() }}
           <input type="hidden" name="_token" value="{{csrf_token() }}"> 
           
@@ -64,18 +62,23 @@
             <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
             
             <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
-              <option value="npkdosen">NPK Dosen</option>
-              <option value="namadosen">Nama</option>
+              <option value="nrpmahasiswa">NRP Mahasiswa</option>
+              <option value="namamahasiswa">Nama</option>
               <option value="jeniskelamin">Jenis Kelamin</option>
+              <option value="tanggallahir">Tanggal Lahir</option>
+              <option value="tempatlahir">Tempat Lahir</option>
               <option value="email">Email</option>
               <option value="telepon">Telepon</option>
+              <option value="angkatan">Angkatan</option>
+              <option value="alamat">Alamat</option>
               <option value="status">Status</option>
               <option value="username">Username</option>
+              <option value="npkdosen">NPK Dosen</option>
             </select>
 
             <button type="submit" class="btn btn-light"><i class="fas fa-search"></i></button>
 
-            <div id="dosenList"></div>
+            <div id="mahasiswaList"></div>
           
           </div>
 
@@ -86,35 +89,36 @@
           <thead>
             <tr> 
               <th width="1%">No.</th>
-              <th width="1%">NPK</th>
+              <th width="1%">NRP</th>
               <th width="1%">Nama</th>
               <th width="1%">Jenis Kelamin</th>
               <th width="1%">Email</th>
               <th width="1%">Telepon</th>
+              <th width="1%">Angkatan</th>
               <th width="1%">Status</th>
-              <th width="1%">Username</th>     
+              <th width="1%">Username</th>
+              <th width="1%">Dosen Wali</th>
               <th width="1%">Action</th>
                      
             </tr>
           </thead>
           <tbody>
-            @foreach($dosen as $no => $d)
+            @foreach($mahasiswa as $no => $m)
             <tr>
               <td>{{$no+1}}</td>
-              <td>{{$d->npkdosen}}</td>
+              <td>{{$m->nrpmahasiswa}}</td>
+              <td>{{$m->namamahasiswa}}</td>
+              <td>{{$m->jeniskelamin}}</td>
+              <td>{{$m->email}}</td>
+              <td>{{$m->telepon}}</td>
+              <td>{{$m->angkatan}}</td>
+              <td>{{$m->status}}</td>
+              <td>{{$m->users_username}}</td>
+              @foreach($dosen as $d)
               <td>{{$d->namadosen}}</td>
-              <td>{{$d->jeniskelamin}}</td>
-              <td>{{$d->email}}</td>
-              <td>{{$d->telepon}}</td>
-              <td>{{$d->status}}</td>
-              <td>{{$d->users_username}}</td>
+              @endforeach
               <td>
-                 <a href="{{url('admin/master/dosen/ubah/'.$d->npkdosen)}}" class="btn btn-warning">Ubah</a>
-
-                 <form method="get" action="{{url('admin/master/dosen/hapus/'.$d->npkdosen)}}">
-                   <input type="hidden" name="username" value="{{$d->users_username}}">
-                   <button type="submmit" class="btn btn-danger">Hapus</button>
-                 </form>
+              [Edit]
 
               </td>
             </tr>
@@ -122,9 +126,9 @@
           </tbody>
         </table>
           <br/>
-        Halaman : {{$dosen->currentPage()}} <br/>
-        Jumlah Data : {{$dosen->total()}} <br/>
-        Data Per Halaman : {{$dosen->perPage()}} <br/>
+        Halaman : {{$mahasiswa->currentPage()}} <br/>
+        Jumlah Data : {{$mahasiswa->total()}} <br/>
+        Data Per Halaman : {{$mahasiswa->perPage()}} <br/>
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
     </section>
@@ -147,8 +151,8 @@ $(document).ready(function(){
           method:"POST",
           data:{query:query,_token:_token, jenis:pencarian},
           success:function(data){
-            $('#dosenList').fadeIn();  
-              $('#dosenList').html(data);
+            $('#mahasiswaList').fadeIn();  
+              $('#mahasiswaList').html(data);
           }
          });
         }

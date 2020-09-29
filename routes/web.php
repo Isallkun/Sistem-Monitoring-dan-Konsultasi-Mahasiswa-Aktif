@@ -27,9 +27,11 @@ Route::group(['prefix' => '/' ], function()
 	{
 		//localhost:8000/admin/(halaman home admin)
 		Route::get('/', 'HomeAdminController@index');
+		
+		//1. MASTER DOSEN
 		//localhost:8000/admin/dosen
 		Route::get('master/dosen', 'MasterDosenController@daftardosen');
-		
+	
 		//Tambah data dosen
 		Route::get('master/dosen/tambah', 'MasterDosenController@tambahdosen');
 		Route::post('master/dosen/prosestambah', 'MasterDosenController@tambahdosen_proses');
@@ -45,6 +47,15 @@ Route::group(['prefix' => '/' ], function()
 		Route::get('master/dosen/prosescari', 'MasterDosenController@caridosen');
 		//Suggestion pencarian data dosen
 		Route::post('master/dosen/fetch', 'MasterDosenController@fetch')->name('masterdosen.fetch');
+
+		//2. MASTER MAHASISWA
+		//localhost:8000/admin/dosen
+		Route::get('master/mahasiswa', 'MasterMahasiswaController@daftarmahasiswa');
+
+		//Tambah data mahasiswa
+		Route::get('master/mahasiswa/tambah', 'MasterMahasiswaController@tambahmahasiswa');
+		Route::post('master/mahasiswa/prosestambah', 'MasterMahasiswaController@tambahmahasiswa_proses');
+		
 		
 	});
 
