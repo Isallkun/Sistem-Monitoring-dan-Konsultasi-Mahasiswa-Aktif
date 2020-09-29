@@ -65,8 +65,6 @@
               <option value="nrpmahasiswa">NRP Mahasiswa</option>
               <option value="namamahasiswa">Nama</option>
               <option value="jeniskelamin">Jenis Kelamin</option>
-              <option value="tanggallahir">Tanggal Lahir</option>
-              <option value="tempatlahir">Tempat Lahir</option>
               <option value="email">Email</option>
               <option value="telepon">Telepon</option>
               <option value="angkatan">Angkatan</option>
@@ -114,9 +112,7 @@
               <td>{{$m->angkatan}}</td>
               <td>{{$m->status}}</td>
               <td>{{$m->users_username}}</td>
-              @foreach($dosen as $d)
-              <td>{{$d->namadosen}}</td>
-              @endforeach
+              <td>{{$m->namadosen}}</td>
               <td>
               [Edit]
 

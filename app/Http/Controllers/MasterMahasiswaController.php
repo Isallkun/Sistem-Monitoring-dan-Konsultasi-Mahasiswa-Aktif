@@ -29,15 +29,13 @@ class MasterMahasiswaController extends Controller
         if(Session::get('admin') != null)
         {
             $mahasiswa = DB::table('mahasiswa')
-            ->select('*')
+            ->select('mahasiswa.*', 'dosen.namadosen')
+            ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
             ->paginate(10);
 
-            $dosen = DB::table('mahasiswa')
-            ->select('*')
-            ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-            ->get();
+            // dd($mahasiswa);
 
-            return view('master_mahasiswa.daftarmahasiswa_admin', compact('mahasiswa', 'dosen'));
+            return view('master_mahasiswa.daftarmahasiswa_admin', compact('mahasiswa'));
         }
         else
         {
