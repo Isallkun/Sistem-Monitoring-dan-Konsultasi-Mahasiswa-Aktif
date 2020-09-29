@@ -27,7 +27,13 @@ class HomeAdminController extends Controller
                         ->where('status','aktif')
                         ->count();
 
-            return view('home_admin',compact('dosen_aktif'));
+
+            $mahasiswa_aktif = DB::table('mahasiswa')
+                        ->select('*')
+                        ->where('status','aktif')
+                        ->count();
+
+            return view('home_admin',compact('dosen_aktif', 'mahasiswa_aktif'));
 
             // if(Session::get('dosen') != null)
             // {

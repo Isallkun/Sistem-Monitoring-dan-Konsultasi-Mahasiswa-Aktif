@@ -39,7 +39,7 @@
                 <p>Total Dosen Aktif</p>
               </div>
               <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="ion ion-person"></i>
               </div>
               <a href="{{url('admin/master/dosen')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -49,14 +49,14 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <h3>{{$mahasiswa_aktif}}</h3>
 
-                <p>Bounce Rate</p>
+                <p>Mahasiswa Aktif</p>
               </div>
               <div class="icon">
-                <i class="ion ion-stats-bars"></i>
+                <i class="ion ion-ios-people"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('admin/master/mahasiswa')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
