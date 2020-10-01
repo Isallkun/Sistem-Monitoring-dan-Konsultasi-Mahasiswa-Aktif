@@ -56,7 +56,9 @@ Route::group(['prefix' => '/' ], function()
 		Route::get('master/mahasiswa/tambah', 'MasterMahasiswaController@tambahmahasiswa');
 		Route::post('master/mahasiswa/prosestambah', 'MasterMahasiswaController@tambahmahasiswa_proses');
 		
-		
+		//Ubah data mahasiswa
+		Route::get('master/mahasiswa/ubah/{id}', 'MasterMahasiswaController@ubahmahasiswa');
+		Route::post('master/mahasiswa/ubahproses', 'MasterMahasiswaController@ubahmahasiswa_proses');
 	});
 
 	//localhost:8000/dosen/

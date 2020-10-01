@@ -114,7 +114,7 @@
               <td>{{$m->users_username}}</td>
               <td>{{$m->namadosen}}</td>
               <td>
-              [Edit]
+               <a href="{{url('admin/master/mahasiswa/ubah/'.$m->nrpmahasiswa)}}" class="btn btn-warning">Ubah</a>
 
               </td>
             </tr>

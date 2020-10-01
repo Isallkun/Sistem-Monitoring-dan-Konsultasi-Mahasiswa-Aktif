@@ -20,13 +20,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Ubah Data Dosen</h1>
+            <h1>Ubah Data Mahasiswa</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('admin')}}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{url('admin/master/dosen')}}">Daftar Dosen</a></li>
-              <li class="breadcrumb-item active">Ubah Data Dosen</li>
+              <li class="breadcrumb-item"><a href="{{url('admin/master/mahasiswa')}}">Daftar Mahasiswa</a></li>
+              <li class="breadcrumb-item active">Ubah Data Mahasiswa</li>
             </ol>
           </div>
         </div>
@@ -42,12 +42,11 @@
             <!-- jquery validation -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Form Input Data Dosen</h3>
+                <h3 class="card-title">Form Input Data Mahasiswa</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-             
-              <form action="{{url('admin/master/dosen/ubahproses')}}" role="form" method="post">
+              <form action="{{url('admin/master/mahasiswa/ubahproses')}}" role="form" method="post">
                 {{ csrf_field() }}
 
                 @if (count($errors) > 0)
@@ -67,25 +66,25 @@
                     </ul>
                   </div>
                 @endif
-
-                @foreach($datadosen as $d)
+                
+                @foreach($datamahasiswa as $m)
                 <div class="card-body">
                   
-                  <input type="hidden" name="npk_dosen" value="{{ $d->npkdosen }}">
+                  <input type="hidden" name="nrp_mahasiswa" value="{{$m->nrpmahasiswa}}">
 
                   <div class="form-group">
-                    <label for="exampleInputNama">Nama Dosen</label>
-                    <input type="text" name="nama_dosen" class="form-control" id="exampleInputNama" placeholder="Enter Nama Dosen" value="{{$d->namadosen}}">
+                    <label for="exampleInputNama">Nama Mahasiswa</label>
+                    <input type="text" name="nama_mahasiswa" class="form-control" id="exampleInputNama" placeholder="Enter Nama Mahasiswa" value="{{$m->namamahasiswa}}">
                   </div>
 
                   <div class="form-group">
                     <label for="exampleInputJenisKelamin">Jenis Kelamin</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="jenis_kelamin" data-toggle="dropdown" id="exampleInputJenisKelamin">
-                      @if($d->jeniskelamin == "laki-laki")
+                      @if($m->jeniskelamin == "laki-laki")
                         <option value="laki-laki" selected>Laki-laki</option>
                         <option value="perempuan" >Perempuan</option>
-                      @else if($d->jeniskelamin == "perempuan")
+                      @else if($m->jeniskelamin == "perempuan")
                       <option value="laki-laki">Laki-laki</option>
                         <option value="perempuan" selected>Perempuan</option>
                       @endif
@@ -93,37 +92,83 @@
                   </div>
 
                   <div class="form-group">
+                    <label for="exampleInputTanggalLahir">Tanggal Lahir</label>
+                    <input type="date" name="tanggal_lahir" class="form-control" id="exampleInputTanggalLahir" value="{{$m->tanggallahir}}">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputTempatLahir">Tempat Lahir</label>
+                    <input type="text" name="tempat_lahir" class="form-control" id="exampleInputTempatLahir" placeholder="Enter Tempat Lahir" value="{{$m->tempatlahir}}">
+                  </div>
+
+                  <div class="form-group">
                     <label for="exampleInputEmail">Email</label>
-                    <input type="text" name="email" class="form-control" id="exampleInputEmail" placeholder="Enter Email" value="{{$d->email}}">
+                    <input type="email" name="email" class="form-control" id="exampleInputEmail" placeholder="Enter Email" value="{{$m->email}}">
                   </div>
 
                   <div class="form-group">
                     <label for="exampleInputTelepon">Telepon</label>
-                    <input type="text" name="telepon" class="form-control" id="exampleInputTelepon" placeholder="Enter Telepon" value="{{$d->telepon}}">
+                    <input type="text" name="telepon" class="form-control" id="exampleInputTelepon" placeholder="Enter Telepon" value="{{$m->telepon}}">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputAngkatan">Angkatan</label>
+                    <br>
+                    <select class="btn btn-primary dropdown-toggle" name="angkatan" data-toggle="dropdown" id="exampleInputAngkatan">
+                      {{ $now = date('Y') }}
+                      {{ $last = date('Y')-4 }}   
+
+                      @for ($i = $now; $i >= $last; $i--)
+                        @if($m->angkatan != $i)
+                        <option value="{{ $i }}">{{ $i }}</option>
+                        @else
+                        <option value="{{ $i }}" selected>{{ $i }}</option>
+                        @endif
+                      @endfor
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputAlamat">Alamat</label>
+                    <input type="text" name="alamat" class="form-control" id="exampleInputAlamat" placeholder="Enter Alamat" value="{{$m->alamat}}">
                   </div>
 
                   <div class="form-group">
                     <label for="exampleInputStatus">Status</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="status" data-toggle="dropdown" id="exampleInputStatus">
-                      @if($d->status == "aktif")
+                      @if($m->status == "aktif")
                         <option value="aktif" selected>Aktif</option>
                         <option value="tidak aktif">Tidak Aktif</option>
-                      @else if($d->status == "tidak aktif")
+                      @else if($m->status == "tidak aktif")
                         <option value="aktif">Aktif</option>
                         <option value="tidak aktif" selected>Tidak Aktif</option>
                       @endif
                     </select>
                   </div>
 
-                   <div class="form-group">
+                  <div class="form-group">
+                    <label for="exampleInputKodeJurusan">Dosen Wali</label>
+                    <br>
+                    <select class="btn btn-primary dropdown-toggle" name="npk_dosenwali" data-toggle="dropdown" id="exampleInputNPKDosen">
+                       @foreach($dosen as $d)
+                        @if($m->dosen_npkdosen == $d->npkdosen)
+                          <option value="{{$d->npkdosen}}" selected>{{$d->npkdosen}} - {{$d->namadosen}}</option>
+                        @else
+                          <option value="{{$d->npkdosen}}">{{$d->npkdosen}} - {{$d->namadosen}}</option>
+                        @endif
+                       @endforeach
+                    </select>
+                  </div>
+
+                  <div class="form-group">
                     <label for="exampleInputKodeJurusan">Kode Jurusan</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="kode_jurusan" data-toggle="dropdown" id="exampleInputKodeJurusan">
                       @foreach($jurusan as $j)
-                        @if($d->jurusan_kodejurusan == $j->kodejurusan)
+                        @if($m->jurusan_kodejurusan == $j->kodejurusan)
                           <option value="{{$j->kodejurusan}}" selected>{{$j->kodejurusan}} - {{$j->namajurusan}}</option>
-                        @else if($d->status != $j->kodejurusan)
+                        @else if($m->status != $j->kodejurusan)
                           <option value="{{$j->kodejurusan}}">{{$j->kodejurusan}} - {{$j->namajurusan}}</option>
                         @endif
                       @endforeach
@@ -134,8 +179,8 @@
                     <label for="exampleInputRole">Jabatan</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="id_role" data-toggle="dropdown" id="exampleInputIdRole">
-                      @foreach($role as $r)
-                        @if($r->idrole == $d->role_idrole)
+                        @foreach($role as $r)
+                        @if($r->idrole == $m->role_idrole)
                           <option value="{{$r->idrole}}" selected>{{$r->idrole}} - {{$r->nama}}</option>
                         @else
                           <option value="{{$r->idrole}}">{{$r->idrole}} - {{$r->nama}}</option>
@@ -146,20 +191,18 @@
 
                   <div class="form-group">
                     <label for="exampleInputUsername">Username</label>
-                    <input type="text" name="informasi_nama" class="form-control" id="exampleInputUsername" value="{{$d->username}}" disabled>
-                    <input type="hidden" name="username" value="{{$d->username}}">
+                    <input type="username" name="username" class="form-control" id="exampleInputUsername" placeholder="Username" value="{{$m->username}}">
                   </div>
                   
-                
                   <div class="form-group">
                     <label for="exampleInputPassword">Password</label>
-                    <input type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Password" value="{{$decrypted}}" >
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Password" value="{{$decrypted}}">
                   </div>
 
-                  <input type="checkbox" onclick="myFunction()"> Show Password  
+                  <input type="checkbox" onclick="myFunction()"> Show Password
+
                 </div>
                 @endforeach
-                
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
