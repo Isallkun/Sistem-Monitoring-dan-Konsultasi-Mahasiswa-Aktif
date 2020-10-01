@@ -71,7 +71,7 @@
               <option value="alamat">Alamat</option>
               <option value="status">Status</option>
               <option value="username">Username</option>
-              <option value="npkdosen">NPK Dosen</option>
+              <option value="namadosen">Nama Dosen</option>
             </select>
 
             <button type="submit" class="btn btn-light"><i class="fas fa-search"></i></button>
@@ -112,7 +112,7 @@
               <td>{{$m->angkatan}}</td>
               <td>{{$m->status}}</td>
               <td>{{$m->users_username}}</td>
-              <td>{{$m->namadosen}}</td>
+              <td>{{$m->namadosen}}  ({{$m->npkdosen}})</td>
               <td>
                <a href="{{url('admin/master/mahasiswa/ubah/'.$m->nrpmahasiswa)}}" class="btn btn-warning">Ubah</a>
 
@@ -147,7 +147,7 @@ $(document).ready(function(){
          var _token = $('input[name="_token"]').val();
          var pencarian = document.getElementById("pencarian").value;
          $.ajax({
-          url:"{{ route('masterdosen.fetch') }}",
+          url:"{{ route('mastermahasiswa.fetch') }}",
           method:"POST",
           data:{query:query,_token:_token, jenis:pencarian},
           success:function(data){
@@ -160,7 +160,7 @@ $(document).ready(function(){
 
     $(document).on('click', 'li', function(){  
         $('#keyword').val($(this).text());  
-        $('#dosenList').fadeOut();  
+        $('#mahasiswaList').fadeOut();  
     });  
 
 });

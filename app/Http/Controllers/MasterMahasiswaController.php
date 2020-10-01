@@ -29,10 +29,10 @@ class MasterMahasiswaController extends Controller
         if(Session::get('admin') != null)
         {
             $mahasiswa = DB::table('mahasiswa')
-            ->select('mahasiswa.*', 'dosen.namadosen')
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
             ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
             ->paginate(10);
-
+            
             return view('master_mahasiswa.daftarmahasiswa_admin', compact('mahasiswa'));
         }
         else
@@ -253,6 +253,104 @@ class MasterMahasiswaController extends Controller
         {
             return redirect("admin/master/mahasiswa")->with(['Error' => 'Gagal Menghapus Data '." ".$request->get('username')." - ".$id]);
         }
-     
+    }
+
+    public function carimahasiswa (Request $request)
+    {
+        $jenis_pencarian = $request->get('pencarian');
+        $keyword = $request->get('keyword');
+
+         $this->validate($request,[
+            'pencarian' => 'required',
+            'keyword' =>'required'
+        ]);
+
+        if($jenis_pencarian == "nrpmahasiswa")
+        {
+            $mahasiswa = DB::table('mahasiswa')
+                ->select('mahasiswa.*', 'dosen.namadosen')
+                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->where('nrpmahasiswa',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "namamahasiswa")
+        {
+            $mahasiswa = DB::table('mahasiswa')
+                ->select('mahasiswa.*', 'dosen.namadosen')
+                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->where('namamahasiswa',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "jeniskelamin")
+        {
+            $mahasiswa = DB::table('mahasiswa')
+                ->select('mahasiswa.*', 'dosen.namadosen')
+                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->where('jeniskelamin',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "email")
+        {
+            $mahasiswa = DB::table('mahasiswa')
+                ->select('mahasiswa.*', 'dosen.namadosen')
+                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->where('email',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "telepon")
+        {
+            $mahasiswa = DB::table('mahasiswa')
+                ->select('mahasiswa.*', 'dosen.namadosen')
+                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->where('telepon',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "angkatan")
+        {
+            $mahasiswa = DB::table('mahasiswa')
+                ->select('mahasiswa.*', 'dosen.namadosen')
+                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->where('angkatan',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "alamat")
+        {
+            $mahasiswa = DB::table('mahasiswa')
+                ->select('mahasiswa.*', 'dosen.namadosen')
+                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->where('alamat',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "status")
+        {
+            $mahasiswa = DB::table('mahasiswa')
+                ->select('mahasiswa.*', 'dosen.namadosen')
+                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->where('status',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "username")
+        {
+            $mahasiswa = DB::table('mahasiswa')
+                ->select('mahasiswa.*', 'dosen.namadosen')
+                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->where('username',$keyword )
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "namadosen")
+        {
+            $mahasiswa = DB::table('mahasiswa')
+                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
+                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->where('dosen.namadosen',$keyword )
+                ->paginate(10);
+        }
+        else
+        {
+           return redirect("admin/master/mahasiswa")->with(['Error' => 'Gagal melakukan proses pencarian']);
+
+        }
+
+        return view('master_mahasiswa.daftarmahasiswa_admin', compact('mahasiswa'));
     }
 }

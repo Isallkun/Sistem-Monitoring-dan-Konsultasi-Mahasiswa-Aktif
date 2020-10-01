@@ -63,12 +63,17 @@ Route::group(['prefix' => '/' ], function()
 		//Hapus data mahasiswa
 		Route::get('master/mahasiswa/hapus/{id}', 'MasterMahasiswaController@hapusmahasiswa');
 
+		//Pencarian Data Mahasiswa
+		Route::get('master/mahasiswa/prosescari', 'MasterMahasiswaController@carimahasiswa');
+		//Suggestion pencarian data dosen
+		Route::post('master/mahasiswa/fetch', 'MasterMahasiswaController@fetch')->name('mastermahasiswa.fetch');
+
 	});
 
 	//localhost:8000/dosen/
 	Route::group(['prefix' => 'dosen'], function()
 	{
-		Route::get('/', 'HomeAdminController@index');
+		Route::get('/', 'HomeDosenController@index');
 
 	});
 
