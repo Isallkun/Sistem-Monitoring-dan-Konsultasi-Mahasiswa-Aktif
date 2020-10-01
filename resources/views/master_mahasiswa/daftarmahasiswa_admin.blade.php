@@ -116,6 +116,10 @@
               <td>
                <a href="{{url('admin/master/mahasiswa/ubah/'.$m->nrpmahasiswa)}}" class="btn btn-warning">Ubah</a>
 
+              <form method="get" action="{{url('admin/master/mahasiswa/hapus/'.$m->nrpmahasiswa)}}">
+                 <input type="hidden" name="username" value="{{$m->users_username}}">
+                 <button type="submmit" class="btn btn-danger">Hapus</button>
+               </form>
               </td>
             </tr>
             @endforeach

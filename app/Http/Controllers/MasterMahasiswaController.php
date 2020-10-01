@@ -33,8 +33,6 @@ class MasterMahasiswaController extends Controller
             ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
             ->paginate(10);
 
-            // dd($mahasiswa);
-
             return view('master_mahasiswa.daftarmahasiswa_admin', compact('mahasiswa'));
         }
         else
@@ -90,7 +88,7 @@ class MasterMahasiswaController extends Controller
             //Untuk proses enkripsi password
             $encrypted = Crypt::encryptString($password);
 
-//            Form Validasi Input User
+            // Form Validasi Input User
             $this->validate($request,[
                 'nrp_mahasiswa' =>'required|numeric|min:9',
                 'nama_mahasiswa' =>'required',
@@ -100,6 +98,7 @@ class MasterMahasiswaController extends Controller
                 'email'=>'required|email',
                 'telepon' => 'required|numeric|min:12',
                 'angkatan' => 'required|numeric|min:4',
+                'alamat'=>'required',
                 'status' => 'required',
                 'npk_dosenwali' => 'required',
                 'kode_jurusan' => 'required',
@@ -176,7 +175,84 @@ class MasterMahasiswaController extends Controller
     }
 
     public function ubahmahasiswa_proses(Request $request)
-    {   
+    {
+        try
+        {
+            // Form Validasi Input User
+            $this->validate($request,[
+                'nama_mahasiswa' =>'required',
+                'jenis_kelamin'=> 'required',
+                'tanggal_lahir'=>'required',
+                'tempat_lahir'=>'required',
+                'email'=>'required|email',
+                'telepon' => 'required|numeric|min:12',
+                'angkatan' => 'required|numeric|min:4',
+                'alamat' => 'required',
+                'status' => 'required',
+                'npk_dosenwali' => 'required',
+                'kode_jurusan' => 'required',
+                'id_role' => 'required',
+                'password'=>'required|max:10'
+            ]);
 
+            $encrypted = Crypt::encryptString($request->get('password'));
+
+            $pengguna = DB::table('users')
+                    ->where('username',$request->get('username'))
+                    ->update([
+                        'password' => $encrypted,
+                        'role_idrole' => $request->get('id_role')
+                    ]);
+
+            $mahasiswa = DB::table('mahasiswa') 
+                    ->where('nrpmahasiswa',$request->get('nrp_mahasiswa'))
+                    ->update([
+                        'namamahasiswa' => $request->get('nama_mahasiswa'),
+                        'jeniskelamin' => $request->get('jenis_kelamin'),
+                        'tanggallahir'=> $request->get('tanggal_lahir'),
+                        'tempatlahir' =>$request->get('tempat_lahir'),
+                        'email'=>$request->get('email'),
+                        'telepon'=>$request->get('telepon'),
+                        'angkatan'=>$request->get('angkatan'),
+                        'alamat'=>$request->get('alamat'),
+                        'status'=>$request->get('status'),
+                        'dosen_npkdosen'=>$request->get('npk_dosenwali'),
+                        'jurusan_kodejurusan'=>$request->get('kode_jurusan')
+                    ]);
+
+
+
+
+            return redirect('admin/master/mahasiswa')->with(['Success' => 'Berhasil Mengubah Data '.$request->get('nama_mahasiswa')." - ".$request->get('nrp_mahasiswa')]);
+
+
+
+        }
+        catch(QueryException $e)
+        {
+            return redirect("admin/master/mahasiswa/ubah/{$request->get('nrp_mahasiswa')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_mahasiswa')." - ".$request->get('nrp_mahasiswa')]);
+        }
+    }
+
+    public function hapusmahasiswa (Request $request,$id)
+    {
+        try
+        {
+            $dosen = DB::table('mahasiswa')
+                ->where('nrpmahasiswa',$id)
+                ->delete();
+
+            $user = DB::table('users')
+                ->where('username',$request->get('username'))
+                ->delete();
+
+            return redirect('admin/master/mahasiswa')->with(['Success' => 'Berhasil Menghapus Data '." ".$request->get('username')." - ".$id]);
+        }
+
+        catch(QueryException $e)
+        {
+            return redirect("admin/master/mahasiswa")->with(['Error' => 'Gagal Menghapus Data '." ".$request->get('username')." - ".$id]);
+        }
+     
     }
 }

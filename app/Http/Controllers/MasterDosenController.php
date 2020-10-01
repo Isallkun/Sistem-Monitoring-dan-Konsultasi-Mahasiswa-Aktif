@@ -163,20 +163,19 @@ class MasterDosenController extends Controller
                 'status' => 'required',
                 'kode_jurusan' => 'required',
                 'id_role' => 'required',
-                'username' => 'required|min:5',
                 'password'=>'required|max:8'
             ]);
 
             $encrypted = Crypt::encryptString($request->get('password'));
 
-             $pengguna = DB::table('users') 
+            $pengguna = DB::table('users') 
                     ->where('username',$request->get('username'))
                     ->update([
                         'password' => $encrypted,
                         'role_idrole' => $request->get('id_role')
                     ]);
 
-             $dosen = DB::table('dosen') 
+            $dosen = DB::table('dosen') 
                     ->where('npkdosen',$request->get('npk_dosen'))
                     ->update([
                         'namadosen' => $request->get('nama_dosen'),

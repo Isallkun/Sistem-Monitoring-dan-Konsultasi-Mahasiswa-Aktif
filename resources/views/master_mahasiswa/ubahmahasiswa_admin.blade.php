@@ -191,7 +191,8 @@
 
                   <div class="form-group">
                     <label for="exampleInputUsername">Username</label>
-                    <input type="username" name="username" class="form-control" id="exampleInputUsername" placeholder="Username" value="{{$m->username}}">
+                    <input type="username" class="form-control" id="exampleInputUsername" placeholder="Username" value="{{$m->username}}" disabled>
+                    <input type="hidden" name="username" value="{{$m->username}}">
                   </div>
                   
                   <div class="form-group">
