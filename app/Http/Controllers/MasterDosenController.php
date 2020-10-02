@@ -284,7 +284,7 @@ class MasterDosenController extends Controller
 
         return view('master_dosen.daftardosen_admin', compact('dosen'));
     }
-
+    
     function fetch(Request $request)
     {
         $query = $request->get('query');
@@ -302,8 +302,7 @@ class MasterDosenController extends Controller
             
                 foreach($datadosen as $row)
                 {
-                    $output .= '
-                    <li><a href="#">'.$row->npkdosen.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->npkdosen.'</a></li>';
                 }
             }      
             else if( $pencarian== 'namadosen')
@@ -314,8 +313,7 @@ class MasterDosenController extends Controller
 
                 foreach($datadosen as $row)
                 {
-                    $output .= '
-                    <li><a href="#">'.$row->namadosen.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->namadosen.'</a></li>';
                 }
             }    
             else if( $pencarian== 'jeniskelamin')
@@ -326,8 +324,7 @@ class MasterDosenController extends Controller
 
                 foreach($datadosen as $row)
                 {
-                    $output .= '
-                    <li><a href="#">'.$row->jeniskelamin.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->jeniskelamin.'</a></li>';
                 }
             }   
             else if( $pencarian== 'email')
@@ -338,8 +335,7 @@ class MasterDosenController extends Controller
 
                 foreach($datadosen as $row)
                 {
-                    $output .= '
-                    <li><a href="#">'.$row->email.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->email.'</a></li>';
                 }
             }    
             else if( $pencarian== 'telepon')
@@ -350,8 +346,7 @@ class MasterDosenController extends Controller
 
                 foreach($datadosen as $row)
                 {
-                    $output .= '
-                    <li><a href="#">'.$row->telepon.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->telepon.'</a></li>';
                 }
             }  
             else if( $pencarian== 'status')
@@ -362,8 +357,7 @@ class MasterDosenController extends Controller
 
                 foreach($datadosen as $row)
                 {
-                    $output .= '
-                    <li><a href="#">'.$row->status.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->status.'</a></li>';
                 }
             }    
             else if($pencarian== 'username')
@@ -374,14 +368,13 @@ class MasterDosenController extends Controller
 
                 foreach($datadosen as $row)
                 {
-                    $output .= '
-                    <li><a href="#">'.$row->users_username.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->users_username.'</a></li>';
                 }
             }    
            
             $output .= '</ul>';
             echo $output;
-         }
+        }
     }
     
 }

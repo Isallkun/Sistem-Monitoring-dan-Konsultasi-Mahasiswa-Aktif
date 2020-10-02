@@ -71,7 +71,7 @@
               <option value="alamat">Alamat</option>
               <option value="status">Status</option>
               <option value="username">Username</option>
-              <option value="namadosen">Nama Dosen</option>
+              <option value="dosenwali">Dosen Wali</option>
             </select>
 
             <button type="submit" class="btn btn-light"><i class="fas fa-search"></i></button>
@@ -132,9 +132,9 @@
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
     </section>
-
+    
 @endsection
-
+ 
 @push('scripts')
 <script>
 $(document).ready(function(){
