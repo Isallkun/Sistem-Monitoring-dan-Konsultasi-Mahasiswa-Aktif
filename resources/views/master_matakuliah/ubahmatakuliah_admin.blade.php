@@ -20,13 +20,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Tambah Data Matakuliah</h1>
+            <h1>Ubah Data Matakuliah</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('admin')}}">Home</a></li>
               <li class="breadcrumb-item"><a href="{{url('admin/master/matakuliah')}}">Daftar Matakuliah</a></li>
-              <li class="breadcrumb-item active">Tambah Data Matakuliah</li>
+              <li class="breadcrumb-item active">Ubah Data Matakuliah</li>
             </ol>
           </div>
         </div>
@@ -46,7 +46,8 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{url('admin/master/matakuliah/prosestambah')}}" role="form" method="post">
+             
+              <form action="{{url('admin/master/matakuliah/ubahproses')}}" role="form" method="post">
                 {{ csrf_field() }}
 
                 @if (count($errors) > 0)
@@ -66,40 +67,44 @@
                     </ul>
                   </div>
                 @endif
-               
+
+                @foreach($datamatakuliah as $d)
                 <div class="card-body">
-                  <div class="form-group">
-                    <label for="exampleInputKodeMatakuliah">Kode Matakuliah</label>
-                    <input type="text" name="kode_matakuliah" class="form-control" id="exampleInputKodeMatakuliah" placeholder="Enter Kode Matakuliah">
-                  </div>
-                
+                  
+                  <input type="hidden" name="kode_matakuliah" value="{{ $d->kodematakuliah }}">
+
                   <div class="form-group">
                     <label for="exampleInputNamaMatakuliah">Nama Matakuliah</label>
-                    <input type="text" name="nama_matakuliah" class="form-control" id="exampleInputNamaMatakuliah" placeholder="Enter Nama Matakuliah">
+                    <input type="text" name="nama_matakuliah" class="form-control" id="exampleInputNamaMatakuliah" placeholder="Enter Nama Matakuliah" value="{{$d->namamatakuliah}}">
                   </div>
 
                   <div class="form-group">
                     <label for="exampleInputJenis">Jenis</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="jenis" data-toggle="dropdown" id="exampleInputJenis">
-                      <option value="">-- Pilih Jenis Matakuliah --</option>
-                      <option value="wajib">Wajib</option>
-                      <option value="pilihan">Pilihan</option>
+                      @if($d->jenis == "wajib")
+                        <option value="wajib" selected>Wajib</option>
+                        <option value="pilihan" >Pilihan</option>
+                      @else if($d->jenis == "pilihan")
+                        <option value="wajib">Wajib</option>
+                        <option value="pilihan" selected>Pilihan</option>
+                      @endif
                     </select>
                   </div>
 
                   <div class="form-group">
                     <label for="exampleInputTotalSKS">Total SKS</label>
-                    <input type="number" name="totalsks" class="form-control" id="exampleInputTotalSKS" value="0">
+                    <input type="number" name="totalsks" class="form-control" id="exampleInputTotalSKS" value="{{$d->totalsks}}">
                   </div>
 
                   <div class="form-group">
                     <label for="exampleInputKeterangan">Keterangan</label>
-                    <textarea class="form-control" name="keterangan" rows="5" id="exampleInputKeterangan" placeholder="Enter Nama Matakuliah"></textarea>
+                    <textarea class="form-control" name="keterangan" rows="5" id="exampleInputKeterangan" placeholder="Enter Nama Matakuliah">{{$d->keterangan}}</textarea>
                   </div>
-
-
+                
                 </div>
+                @endforeach
+                
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
@@ -134,5 +139,19 @@
 <script src="{{url('../../asset/dist/js/adminlte.min.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{url('../../asset/dist/js/demo.js')}}"></script>
+
+<script type="text/javascript">
+  function myFunction() {
+    var x = document.getElementById("exampleInputPassword");
+    if (x.type === "password") 
+    {
+      x.type = "text";
+    } 
+    else 
+    {
+      x.type = "password";
+    }
+  }
+</script>
 
 @endpush

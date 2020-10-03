@@ -10,14 +10,14 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', 'HomeAdminController@index');
+Route::get('/', 'HomeController@index');
 Route::get('logout', 'Auth\LoginController@logout')->name('keluar');
 
 Auth::routes();
 
 Route::group(['middleware' => ['auth','revalidate']], function ()
 {
-	Route::get('/', 'HomeAdminController@index'); ## route yang perlu auth
+	Route::get('/', 'HomeController@index'); ## route yang perlu auth
 });
 
 Route::group(['prefix' => '/' ], function()
@@ -26,7 +26,7 @@ Route::group(['prefix' => '/' ], function()
 	Route::group(['prefix' => 'admin'], function()
 	{
 		//localhost:8000/admin/(halaman home admin)
-		Route::get('/', 'HomeAdminController@index');
+		Route::get('/', 'HomeController@index');
 		
 		//1. MASTER DOSEN
 		//localhost:8000/admin/dosen
@@ -74,9 +74,16 @@ Route::group(['prefix' => '/' ], function()
 		//localhost:8000/admin/matakuliah
 		Route::get('master/matakuliah', 'MasterMatakuliahController@daftarmatakuliah');
 
-		//Tambah data dosen
+		//Tambah data matakuliah
 		Route::get('master/matakuliah/tambah', 'MasterMatakuliahController@tambahmatakuliah');
 		Route::post('master/matakuliah/prosestambah', 'MasterMatakuliahController@tambahmatakuliah_proses');
+
+		//Ubah data matakuliah
+		Route::get('master/matakuliah/ubah/{id}', 'MasterMatakuliahController@ubahmatakuliah');
+		Route::post('master/matakuliah/ubahproses', 'MasterMatakuliahController@ubahmatakuliah_proses');
+
+		//Hapus data matakuliah
+		Route::get('master/matakuliah/hapus/{id}', 'MasterMatakuliahController@hapusmatakuliah');
 
 	});
 

@@ -83,6 +83,9 @@
               <th width="1%">No.</th>
               <th width="1%">Kode Matakuliah</th>
               <th width="1%">Nama Matakuliah</th>
+              <th width="1%">Jenis</th>
+              <th width="1%">Total SKS</th>
+              <th width="1%">Keterangan</th>
               <th width="1%">Action</th>
             </tr>
           </thead>
@@ -92,9 +95,16 @@
               <td>{{$no+1}}</td>
               <td>{{$m->kodematakuliah}}</td>
               <td>{{$m->namamatakuliah}}</td>
+              <td>{{$m->jenis}}</td>
+              <td>{{$m->totalsks}}</td>
+              <td>{{$m->keterangan}}</td>
               <td>
-                 [Ubah]
-                 [Hapus]
+                 <a href="{{url('admin/master/matakuliah/ubah/'.$m->kodematakuliah)}}" class="btn btn-warning">Ubah</a>
+                 
+                 <form method="get" action="{{url('admin/master/matakuliah/hapus/'.$m->kodematakuliah)}}">
+                  <input type="hidden" name="nama_matkauliah" value="{{$m->namamatakuliah}}">
+                  <button type="submmit" class="btn btn-danger">Hapus</button>
+               </form>
 
               </td>
             </tr>
