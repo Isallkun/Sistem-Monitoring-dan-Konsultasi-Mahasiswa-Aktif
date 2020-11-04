@@ -48,7 +48,10 @@ class LoginController extends Controller
         $username = $request->get('username');
         $password = $request->get('password');
 
-        $hasil = DB::table('users')->where('username',$username)->get();
+        $hasil = DB::table('users')
+                ->where('username',$username)
+                ->get();
+
 
         if (count($hasil) != 0)
         {
@@ -59,11 +62,19 @@ class LoginController extends Controller
                 if($hasil[0]->role_idrole == "1")
                 {
                     Session::put('admin',$hasil[0]->username);
+                    Session::put('profil','administrator.jpg');
+
                     return redirect('admin/');
                 }
                 else if($hasil[0]->role_idrole == "2")
                 {
                     Session::put('dosen',$hasil[0]->username);
+
+                    $hasil_profil = DB::table('dosen')
+                                    -> where('users_username', $hasil[0]->username)
+                                    -> get();
+                    Session::put('profil',$hasil_profil[0]->profil);
+
                     return view('...', compact('username'));    
                 }   
                 else if($hasil[0]->role_idrole == "3")
@@ -88,16 +99,19 @@ class LoginController extends Controller
         if(Session::get('admin') !=null)
         {
             Session::forget('admin');
+            Session::forget('profil');
         }
         
         if(Session::get('dosen') !=null)
         {
             Session::forget('dosen');
+            Session::forget('profil');
         }
         
         if(Session::get('mahasiswa') !=null)
         {
             Session::forget('mahasiswa');
+            Session::forget('profil');
         }
 
         return redirect("/");

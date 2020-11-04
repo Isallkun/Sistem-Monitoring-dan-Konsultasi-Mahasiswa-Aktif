@@ -64,8 +64,10 @@
             <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
             
             <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
-              <option value="npkdosen">Kode Matakuliah</option>
-              <option value="namadosen">Nama Matakuliah</option>
+              <option value="kodematakuliah">Kode Matakuliah</option>
+              <option value="namamatakuliah">Nama Matakuliah</option>
+              <option value="jenismatakuliah">Jenis Matakuliah</option>
+              <option value="totalsks">Total SKS</option>
             </select>
 
             <button type="submit" class="btn btn-light"><i class="fas fa-search"></i></button>

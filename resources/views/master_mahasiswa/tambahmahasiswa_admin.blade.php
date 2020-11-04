@@ -108,7 +108,7 @@
                     <input type="text" name="telepon" class="form-control" id="exampleInputTelepon" placeholder="Enter Telepon">
                   </div>
 
-                  <div class="form-group">
+                 <!--  <div class="form-group">
                     <label for="exampleInputAngkatan">Angkatan</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="angkatan" data-toggle="dropdown" id="exampleInputAngkatan">
@@ -119,7 +119,7 @@
                           <option value="{{ $i }}">{{ $i }}</option>
                       @endfor
                     </select>
-                  </div>
+                  </div> -->
 
                   <div class="form-group">
                     <label for="exampleInputAlamat">Alamat</label>
@@ -159,14 +159,12 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputRole">Jabatan</label>
-                    <br>
-                    <select class="btn btn-primary dropdown-toggle" name="id_role" data-toggle="dropdown" id="exampleInputIdRole">
-                      <option value="">-- Pilih Jabatan --</option>
-                       @foreach($role as $r)
-                        <option value="{{$r->idrole}}">{{$r->idrole}} - {{$r->nama}}</option>
-                       @endforeach
-                    </select>
+                    <b>Profil Pengguna</b><br/>
+                    <input type="file" name="profil_pengguna" accept="image/*">
+                  </div>
+
+                  <div class="form-group">
+                    <input type="hidden" name="id_role" id="exampleInputIdRole" value="3">
                   </div>
 
                   <div class="form-group">

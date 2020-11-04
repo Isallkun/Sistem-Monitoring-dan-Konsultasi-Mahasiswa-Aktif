@@ -43,7 +43,7 @@ Route::group(['prefix' => '/' ], function()
 		//Hapus data dosen
 		Route::get('master/dosen/hapus/{id}', 'MasterDosenController@hapusdosen');
 
-		//Pencarian Data Dosen
+		//Pencarian data Dosen
 		Route::get('master/dosen/prosescari', 'MasterDosenController@caridosen');
 		//Suggestion pencarian data dosen
 		Route::post('master/dosen/fetch', 'MasterDosenController@fetch')->name('masterdosen.fetch');
@@ -64,7 +64,7 @@ Route::group(['prefix' => '/' ], function()
 		//Hapus data mahasiswa
 		Route::get('master/mahasiswa/hapus/{id}', 'MasterMahasiswaController@hapusmahasiswa');
 
-		//Pencarian Data Mahasiswa
+		//Pencarian data Mahasiswa
 		Route::get('master/mahasiswa/prosescari', 'MasterMahasiswaController@carimahasiswa');
 		//Suggestion pencarian data dosen
 		Route::post('master/mahasiswa/fetch', 'MasterMahasiswaController@fetch')->name('mastermahasiswa.fetch');
@@ -84,6 +84,9 @@ Route::group(['prefix' => '/' ], function()
 
 		//Hapus data matakuliah
 		Route::get('master/matakuliah/hapus/{id}', 'MasterMatakuliahController@hapusmatakuliah');
+
+		//Pencarian data Matakuliah
+		Route::get('master/matakuliah/prosescari', 'MasterMatakuliahController@carimatakuliah');
 
 	});
 

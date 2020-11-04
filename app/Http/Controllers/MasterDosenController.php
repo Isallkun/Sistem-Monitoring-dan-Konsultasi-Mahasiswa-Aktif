@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\QueryException;
 
 use DB;
 use Session;
+use File;
 use App\User;
 use App\Dosen;
 
@@ -30,7 +32,8 @@ class MasterDosenController extends Controller
         if(Session::get('admin') != null)
         {
             $dosen = DB::table('dosen')
-            ->select('*')
+            ->select('dosen.*','jurusan.namajurusan')
+            ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
             ->paginate(10);
 
             return view('master_dosen.daftardosen_admin', compact('dosen'));
@@ -75,9 +78,11 @@ class MasterDosenController extends Controller
             $status = $request->get('status');
             $kode_jurusan = $request->get('kode_jurusan');
             $id_role = $request->get('id_role');
+            $profil = $request->file('profil_pengguna');
             $username = $request->get('username');
             $password = $request->get('password');
 
+       
             // Form Validasi Input User
             $this->validate($request,[
                 'npk_dosen' => 'required|numeric|min:6',
@@ -87,6 +92,7 @@ class MasterDosenController extends Controller
                 'telepon' => 'required|numeric|min:12',
                 'status' => 'required',
                 'kode_jurusan' => 'required',
+                'profil_pengguna' =>'required|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
                 'id_role' => 'required',
                 'username' => 'required',
                 'password'=>'required|max:10'
@@ -94,7 +100,14 @@ class MasterDosenController extends Controller
 
             //Untuk proses enkripsi password
             $encrypted = Crypt::encryptString($password);
-            
+
+
+            // isi dengan nama folder tempat kemana file diupload
+            $tujuan_upload = 'data_pengguna';
+            // ubah nama file gambar sesuai format yang diinginkan
+            $file_name = time()."_".$npk_dosen.".".$profil->getClientOriginalExtension();
+
+
             $tambahdata_user= User::insert([
                'username'=>$username, 
                'password'=>$encrypted,
@@ -108,11 +121,14 @@ class MasterDosenController extends Controller
                 'email'=>$email,
                 'telepon'=>$telepon,
                 'status'=>$status,
+                'profil'=>$file_name,
                 'users_username'=>$username, 
-                'jurusan_kodejurusan'=>$kode_jurusan
-                   
+                'jurusan_idjurusan'=>$kode_jurusan
             ]);
-
+            
+            // simpan upload gambar pada folder public
+            $profil->move($tujuan_upload,$file_name);
+            
             return redirect('admin/master/dosen')->with(['Success' => 'Berhasil Menambahkan Data']);
         }
        
@@ -175,7 +191,10 @@ class MasterDosenController extends Controller
                         'role_idrole' => $request->get('id_role')
                     ]);
 
-            $dosen = DB::table('dosen') 
+            $profil_pengguna = $request->file('profil_pengguna');
+            if($profil_pengguna == "")
+            {
+                $dosen = DB::table('dosen') 
                     ->where('npkdosen',$request->get('npk_dosen'))
                     ->update([
                         'namadosen' => $request->get('nama_dosen'),
@@ -183,14 +202,46 @@ class MasterDosenController extends Controller
                         'email' => $request->get('email'),
                         'telepon' => $request->get('telepon'),
                         'status' => $request->get('status'),
-                        'jurusan_kodejurusan' => $request->get('kode_jurusan')
-                    ]);
+                        'jurusan_idjurusan' => $request->get('kode_jurusan')
+                ]);    
+            }
+
+            else
+            {
+                $datadosen = DB::table('dosen')
+                            ->join('users', 'users.username', '=', 'dosen.users_username')
+                            ->where('dosen.npkdosen', $request->get('npk_dosen'))
+                            ->get();
+                //Hapus File gambar sebelumnya
+                File::delete('data_pengguna/'.$datadosen[0]->profil);
+
+                // isi dengan nama folder tempat kemana file diupload
+                $tujuan_upload = 'data_pengguna';
+                // ubah nama file gambar sesuai format yang diinginkan
+                $file_name = time()."_".$request->get('npk_dosen').".".$profil_pengguna->getClientOriginalExtension();
+                
+                $dosen = DB::table('dosen') 
+                    ->where('npkdosen',$request->get('npk_dosen'))
+                    ->update([
+                        'namadosen' => $request->get('nama_dosen'),
+                        'jeniskelamin' => $request->get('jenis_kelamin'),
+                        'email' => $request->get('email'),
+                        'telepon' => $request->get('telepon'),
+                        'status' => $request->get('status'),
+                        'profil' =>$file_name,
+                        'jurusan_idjurusan' => $request->get('kode_jurusan')
+                ]);    
+
+                // simpan upload gambar pada folder public
+                $profil_pengguna->move($tujuan_upload,$file_name);
+            }
+            
 
             return redirect('admin/master/dosen')->with(['Success' => 'Berhasil Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')]);
         }
         catch(QueryException $e)
         {
-            return redirect("admin/master/dosen/ubah/{$request->get('npk_dosen')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')]);
+            // return redirect("admin/master/dosen/ubah/{$request->get('npk_dosen')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')]);
         }
     }
 
@@ -198,6 +249,14 @@ class MasterDosenController extends Controller
     {
         try
         {
+            $datadosen = DB::table('dosen')
+                        ->join('users', 'users.username', '=', 'dosen.users_username')
+                        ->where('dosen.npkdosen', $id)
+                        ->get();
+            //Hapus File gambar 
+            File::delete('data_pengguna/'.$datadosen[0]->profil);
+
+
             $dosen = DB::table('dosen')
                 ->where('npkdosen',$id)
                 ->delete();
@@ -262,11 +321,12 @@ class MasterDosenController extends Controller
                 ->where('telepon',$keyword )
                 ->paginate(10);
         }
-        else if($jenis_pencarian=="status")
+        else if($jenis_pencarian=="jurusan")
         {
             $dosen = DB::table('dosen')
-                ->select('*')
-                ->where('status',$keyword )
+                ->select('jurusan.namajurusan')
+                 ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
+                ->where('jurusan.namajurusan',$keyword )
                 ->paginate(10);
 
         }
@@ -349,15 +409,16 @@ class MasterDosenController extends Controller
                     $output .= '<li><a href="#">'.$row->telepon.'</a></li>';
                 }
             }  
-            else if( $pencarian== 'status')
+            else if( $pencarian== 'jurusan')
             {
                 $datadosen = DB::table('dosen')
-                ->where('status', 'LIKE', "%{$query}%")
+                ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
+                ->where('jurusan.namajurusan', 'LIKE', "%{$query}%")
                 ->get();
 
                 foreach($datadosen as $row)
                 {
-                    $output .= '<li><a href="#">'.$row->status.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->namajurusan.'</a></li>';
                 }
             }    
             else if($pencarian== 'username')

@@ -46,7 +46,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{url('admin/master/dosen/prosestambah')}}" role="form" method="post">
+              <form action="{{url('admin/master/dosen/prosestambah')}}" role="form" method="post" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
               @if (count($errors) > 0)
@@ -109,27 +109,25 @@
                   </div>
 
                    <div class="form-group">
-                    <label for="exampleInputKodeJurusan">Kode Jurusan</label>
+                    <label for="exampleInputJurusan">Jurusan</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="kode_jurusan" data-toggle="dropdown" id="exampleInputKodeJurusan">
                       <option value="">-- Pilih Jurusan --</option>
                        @foreach($jurusan as $j)
-                        <option value="{{$j->kodejurusan}}">{{$j->kodejurusan}} - {{$j->namajurusan}}</option>
+                        <option value="{{$j->idjurusan}}">{{$j->namajurusan}}</option>
                        @endforeach
                     </select>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputRole">Jabatan</label>
-                    <br>
-                    <select class="btn btn-primary dropdown-toggle" name="id_role" data-toggle="dropdown" id="exampleInputIdRole">
-                      <option value="">-- Pilih Jabatan --</option>
-                       @foreach($role as $r)
-                        <option value="{{$r->idrole}}">{{$r->idrole}} - {{$r->nama}}</option>
-                       @endforeach
-                    </select>
+                    <b>Profil Pengguna</b><br/>
+                    <input type="file" name="profil_pengguna" accept="image/*">
                   </div>
 
+                  <div class="form-group">
+                    <input type="hidden" name="id_role" id="exampleInputIdRole" value="2">
+                  </div>
+                  
                   <div class="form-group">
                     <label for="exampleInputUsername">Username</label>
                     <input type="username" name="username" class="form-control" id="exampleInputUsername" placeholder="Username">

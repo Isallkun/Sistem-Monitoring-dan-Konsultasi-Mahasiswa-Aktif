@@ -47,7 +47,7 @@
               <!-- /.card-header -->
               <!-- form start -->
              
-              <form action="{{url('admin/master/dosen/ubahproses')}}" role="form" method="post">
+              <form action="{{url('admin/master/dosen/ubahproses')}}" role="form" method="post" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 @if (count($errors) > 0)
@@ -121,27 +121,24 @@
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="kode_jurusan" data-toggle="dropdown" id="exampleInputKodeJurusan">
                       @foreach($jurusan as $j)
-                        @if($d->jurusan_kodejurusan == $j->kodejurusan)
-                          <option value="{{$j->kodejurusan}}" selected>{{$j->kodejurusan}} - {{$j->namajurusan}}</option>
-                        @else if($d->status != $j->kodejurusan)
-                          <option value="{{$j->kodejurusan}}">{{$j->kodejurusan}} - {{$j->namajurusan}}</option>
+                        @if($d->jurusan_idjurusan == $j->idjurusan)
+                          <option value="{{$j->idjurusan}}" selected>{{$j->idjurusan}} - {{$j->namajurusan}}</option>
+                        @else if($d->status != $j->idjurusan)
+                          <option value="{{$j->idjurusan}}">{{$j->namajurusan}}</option>
                         @endif
                       @endforeach
                     </select>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputRole">Jabatan</label>
-                    <br>
-                    <select class="btn btn-primary dropdown-toggle" name="id_role" data-toggle="dropdown" id="exampleInputIdRole">
-                      @foreach($role as $r)
-                        @if($r->idrole == $d->role_idrole)
-                          <option value="{{$r->idrole}}" selected>{{$r->idrole}} - {{$r->nama}}</option>
-                        @else
-                          <option value="{{$r->idrole}}">{{$r->idrole}} - {{$r->nama}}</option>
-                        @endif
-                      @endforeach
-                    </select>
+                    <b>Profil Pengguna</b><br/>
+                    <img src="{{url('data_pengguna/'.$d->profil )}}" class="img-thumbnail" style="width: 200px; height: 200px">
+                    <br><br>
+                    <input type="file" name="profil_pengguna" accept="image/*">
+                  </div>
+
+                  <div class="form-group">
+                    <input type="hidden" name="id_role" id="exampleInputIdRole" value="2">
                   </div>
 
                   <div class="form-group">

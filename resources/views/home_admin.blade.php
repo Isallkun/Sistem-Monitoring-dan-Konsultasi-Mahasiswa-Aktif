@@ -51,7 +51,7 @@
               <div class="inner">
                 <h3>{{$mahasiswa_aktif}}</h3>
 
-                <p>Mahasiswa Aktif</p>
+                <p>Total Mahasiswa Aktif</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-people"></i>
@@ -66,7 +66,7 @@
               <div class="inner">
                 <h3>{{$matakuliah}}</h3>
 
-                <p>Matakuliah</p>
+                <p>Total Matakuliah</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-book"></i>
@@ -74,7 +74,22 @@
               <a href="{{url('admin/master/matakuliah')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          
+          <!-- ./col -->
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <h3>-</h3>
+
+                <p>Total Konsultasi</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-archive"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
           <!-- ./col -->
         </div>
         <!-- /.row -->

@@ -61,17 +61,17 @@
           <label for="exampleInputPencarian">Pencarian Data: </label>
 
           <div class="form-group">
-            <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
-            
             <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
               <option value="npkdosen">NPK Dosen</option>
               <option value="namadosen">Nama</option>
               <option value="jeniskelamin">Jenis Kelamin</option>
               <option value="email">Email</option>
               <option value="telepon">Telepon</option>
-              <option value="status">Status</option>
+              <option value="jurusan">Jurusan</option>
               <option value="username">Username</option>
             </select>
+
+            <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
 
             <button type="submit" class="btn btn-light"><i class="fas fa-search"></i></button>
 
@@ -92,6 +92,7 @@
               <th width="1%">Email</th>
               <th width="1%">Telepon</th>
               <th width="1%">Status</th>
+              <th width="1%">Jurusan</th>
               <th width="1%">Username</th>     
               <th width="1%">Action</th>
                      
@@ -107,6 +108,7 @@
               <td>{{$d->email}}</td>
               <td>{{$d->telepon}}</td>
               <td>{{$d->status}}</td>
+              <td>{{$d->namajurusan}}</td>
               <td>{{$d->users_username}}</td>
               <td>
                  <a href="{{url('admin/master/dosen/ubah/'.$d->npkdosen)}}" class="btn btn-warning">Ubah</a>

@@ -162,5 +162,51 @@ class MasterMatakuliahController extends Controller
         }
     }
 
+    public function carimatakuliah (Request $request)
+    {
+        $jenis_pencarian = $request->get('pencarian');
+        $keyword = $request->get('keyword');
+
+         $this->validate($request,[
+            'pencarian' => 'required',
+            'keyword' =>'required'
+        ]);
+
+        if($jenis_pencarian == "kodematakuliah")
+        {
+            $matakuliah = DB::table('matakuliah')
+                ->select('*')
+                ->where('kodematakuliah',$keyword)
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "namamatakuliah")
+        {
+            $matakuliah = DB::table('matakuliah')
+                ->select('*')
+                ->where('namamatakuliah',$keyword)
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "jenismatakuliah")
+        {
+            $matakuliah = DB::table('matakuliah')
+                ->select('*')
+                ->where('jenis',$keyword)
+                ->paginate(10);
+        }
+        else if($jenis_pencarian == "totalsks")
+        {
+            $matakuliah = DB::table('matakuliah')
+                ->select('*')
+                ->where('totalsks',$keyword)
+                ->paginate(10);
+        }
+        else
+        {
+            return redirect("admin/master/matakuliah")->with(['Error' => 'Gagal melakukan proses pencarian']);
+        }
+
+        return view('master_matakuliah.daftarmatakuliah_admin', compact('matakuliah'));
+    }
+
 
 }
