@@ -46,7 +46,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{url('admin/master/mahasiswa/ubahproses')}}" role="form" method="post">
+              <form action="{{url('admin/master/mahasiswa/ubahproses')}}" role="form" method="post" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 @if (count($errors) > 0)
@@ -112,19 +112,16 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputAngkatan">Angkatan</label>
+                    <label for="exampleInputTahunAkademik">Tahun Akademik</label>
                     <br>
-                    <select class="btn btn-primary dropdown-toggle" name="angkatan" data-toggle="dropdown" id="exampleInputAngkatan">
-                      {{ $now = date('Y') }}
-                      {{ $last = date('Y')-4 }}   
-
-                      @for ($i = $now; $i >= $last; $i--)
-                        @if($m->angkatan != $i)
-                        <option value="{{ $i }}">{{ $i }}</option>
+                    <select class="btn btn-primary dropdown-toggle" name="tahun_akademik" data-toggle="dropdown" id="exampleInputTahunAkademik">
+                       @foreach($tahun_akademik as $t)
+                        @if($m->thnakademik_idthnakademik == $t->idtahunakademik)
+                          <option value="{{$t->idtahunakademik}}" selected>{{$t->tahun}}</option>
                         @else
-                        <option value="{{ $i }}" selected>{{ $i }}</option>
+                          <option value="{{$t->idtahunakademik}}">{{$t->tahun}}</option>
                         @endif
-                      @endfor
+                       @endforeach
                     </select>
                   </div>
 
@@ -162,31 +159,29 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputKodeJurusan">Kode Jurusan</label>
+                    <label for="exampleInputKodeJurusan">Jurusan</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="kode_jurusan" data-toggle="dropdown" id="exampleInputKodeJurusan">
                       @foreach($jurusan as $j)
-                        @if($m->jurusan_kodejurusan == $j->kodejurusan)
-                          <option value="{{$j->kodejurusan}}" selected>{{$j->kodejurusan}} - {{$j->namajurusan}}</option>
+                        @if($m->jurusan_idjurusan == $j->idjurusan)
+                          <option value="{{$j->idjurusan}}" selected>{{$j->namajurusan}}</option>
                         @else if($m->status != $j->kodejurusan)
-                          <option value="{{$j->kodejurusan}}">{{$j->kodejurusan}} - {{$j->namajurusan}}</option>
+                          <option value="{{$j->idjurusan}}">{{$j->namajurusan}}</option>
                         @endif
                       @endforeach
                     </select>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputRole">Jabatan</label>
-                    <br>
-                    <select class="btn btn-primary dropdown-toggle" name="id_role" data-toggle="dropdown" id="exampleInputIdRole">
-                        @foreach($role as $r)
-                        @if($r->idrole == $m->role_idrole)
-                          <option value="{{$r->idrole}}" selected>{{$r->idrole}} - {{$r->nama}}</option>
-                        @else
-                          <option value="{{$r->idrole}}">{{$r->idrole}} - {{$r->nama}}</option>
-                        @endif
-                      @endforeach
-                    </select>
+                    <b>Profil Pengguna</b><br/>
+                    <img src="{{url('data_pengguna/'.$m->profil )}}" class="img-thumbnail" style="width: 200px; height: 200px">
+                    <br><br>
+                    <input type="file" name="profil_pengguna" accept="image/*">
+                  </div>
+
+                  <div class="form-group">
+                    <input type="hidden" name="id_role" id="exampleInputIdRole" value="{{$m->role_idrole}}">
+
                   </div>
 
                   <div class="form-group">

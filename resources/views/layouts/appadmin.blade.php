@@ -74,7 +74,7 @@
             <a href="{{ url('admin/master/dosen') }}" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Master Dosen
+                Data Dosen Wali
                 <i class="fas fa-angle-right right"></i>
               </p>
             </a>
@@ -84,7 +84,7 @@
             <a href="{{ url('admin/master/mahasiswa') }}" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Master Mahasiswa
+                Data Mahasiswa
                 <i class="fas fa-angle-right right"></i>
               </p>
             </a>
@@ -94,7 +94,7 @@
             <a href="{{ url('admin/master/matakuliah') }}" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Master Matakuliah
+                Data Matakuliah
                 <i class="fas fa-angle-right right"></i>
               </p>
             </a>

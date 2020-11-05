@@ -46,7 +46,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{url('admin/master/mahasiswa/prosestambah')}}" role="form" method="post">
+              <form action="{{url('admin/master/mahasiswa/prosestambah')}}" role="form" method="post" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 @if (count($errors) > 0)
@@ -108,18 +108,16 @@
                     <input type="text" name="telepon" class="form-control" id="exampleInputTelepon" placeholder="Enter Telepon">
                   </div>
 
-                 <!--  <div class="form-group">
-                    <label for="exampleInputAngkatan">Angkatan</label>
+                  <div class="form-group">
+                    <label for="exampleInputTahunAkademik">Tahun Akademik</label>
                     <br>
-                    <select class="btn btn-primary dropdown-toggle" name="angkatan" data-toggle="dropdown" id="exampleInputAngkatan">
-                      {{ $now = date('Y') }}
-                      {{ $last = date('Y')-4 }}   
-                          <option value="">-- Pilih Tahun Angkatan --</option>
-                       @for ($i = $now; $i >= $last; $i--)
-                          <option value="{{ $i }}">{{ $i }}</option>
-                      @endfor
+                    <select class="btn btn-primary dropdown-toggle" name="tahun_akademik" data-toggle="dropdown" id="exampleInputTahunAkademik">
+                      <option value="">-- Pilih Tahun Akademik --</option>
+                       @foreach($tahun_akademik as $t)
+                        <option value="{{$t->idtahunakademik}}">{{$t->tahun}}</option>
+                       @endforeach
                     </select>
-                  </div> -->
+                  </div>
 
                   <div class="form-group">
                     <label for="exampleInputAlamat">Alamat</label>
@@ -148,12 +146,12 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputKodeJurusan">Kode Jurusan</label>
+                    <label for="exampleInputKodeJurusan">Jurusan</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="kode_jurusan" data-toggle="dropdown" id="exampleInputKodeJurusan">
                       <option value="">-- Pilih Jurusan --</option>
                        @foreach($jurusan as $j)
-                        <option value="{{$j->kodejurusan}}">{{$j->kodejurusan}} - {{$j->namajurusan}}</option>
+                        <option value="{{$j->idjurusan}}">{{$j->namajurusan}}</option>
                        @endforeach
                     </select>
                   </div>

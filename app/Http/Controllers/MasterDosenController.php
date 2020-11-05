@@ -1,5 +1,5 @@
 <?php
-
+ 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,6 +11,7 @@ use Illuminate\Database\QueryException;
 use DB;
 use Session;
 use File;
+
 use App\User;
 use App\Dosen;
 
@@ -77,8 +78,8 @@ class MasterDosenController extends Controller
             $telepon = $request->get('telepon');
             $status = $request->get('status');
             $kode_jurusan = $request->get('kode_jurusan');
-            $id_role = $request->get('id_role');
             $profil = $request->file('profil_pengguna');
+            $id_role = $request->get('id_role');
             $username = $request->get('username');
             $password = $request->get('password');
 
@@ -93,7 +94,6 @@ class MasterDosenController extends Controller
                 'status' => 'required',
                 'kode_jurusan' => 'required',
                 'profil_pengguna' =>'required|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
-                'id_role' => 'required',
                 'username' => 'required',
                 'password'=>'required|max:10'
             ]);
@@ -146,12 +146,9 @@ class MasterDosenController extends Controller
                     ->select('*')
                     ->get();
 
-            $role = DB::table('role')
-                    ->select('*')
-                    ->get();
-
+            
             $datadosen = DB::table('dosen')
-                    ->select('*')
+                    ->select('dosen.*','users.*')
                     ->join('users', 'users.username', '=', 'dosen.users_username')
                     ->where('dosen.npkdosen', $id)
                     ->get();
@@ -176,9 +173,6 @@ class MasterDosenController extends Controller
                 'nama_dosen' => 'required',
                 'email' => 'required|email',
                 'telepon' => 'required|numeric|min:12',
-                'status' => 'required',
-                'kode_jurusan' => 'required',
-                'id_role' => 'required',
                 'password'=>'required|max:8'
             ]);
 

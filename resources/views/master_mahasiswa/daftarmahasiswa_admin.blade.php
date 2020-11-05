@@ -16,7 +16,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Daftar Mahasiswa</h1>
+            <h1 class="m-0 text-dark">Daftar Data Mahasiswa</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -58,21 +58,20 @@
           
           <label for="exampleInputPencarian">Pencarian Data: </label>
 
-          <div class="form-group">
-            <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
-            
+          <div class="form-group">            
             <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
               <option value="nrpmahasiswa">NRP Mahasiswa</option>
               <option value="namamahasiswa">Nama</option>
               <option value="jeniskelamin">Jenis Kelamin</option>
               <option value="email">Email</option>
               <option value="telepon">Telepon</option>
-              <option value="angkatan">Angkatan</option>
-              <option value="alamat">Alamat</option>
+              <option value="tahunakademik">Tahun Akademik</option>
               <option value="status">Status</option>
               <option value="username">Username</option>
               <option value="dosenwali">Dosen Wali</option>
             </select>
+
+            <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
 
             <button type="submit" class="btn btn-light"><i class="fas fa-search"></i></button>
 
@@ -92,7 +91,7 @@
               <th width="1%">Jenis Kelamin</th>
               <th width="1%">Email</th>
               <th width="1%">Telepon</th>
-              <th width="1%">Angkatan</th>
+              <th width="1%">Tahun Akademik</th>
               <th width="1%">Status</th>
               <th width="1%">Username</th>
               <th width="1%">Dosen Wali</th>
@@ -109,7 +108,7 @@
               <td>{{$m->jeniskelamin}}</td>
               <td>{{$m->email}}</td>
               <td>{{$m->telepon}}</td>
-              <td>{{$m->angkatan}}</td>
+              <td>{{$m->tahun}}</td>
               <td>{{$m->status}}</td>
               <td>{{$m->users_username}}</td>
               <td>{{$m->namadosen}}  ({{$m->npkdosen}})</td>

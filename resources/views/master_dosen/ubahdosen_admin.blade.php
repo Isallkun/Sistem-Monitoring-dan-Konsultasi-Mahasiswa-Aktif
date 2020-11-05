@@ -117,7 +117,7 @@
                   </div>
 
                    <div class="form-group">
-                    <label for="exampleInputKodeJurusan">Kode Jurusan</label>
+                    <label for="exampleInputKodeJurusan">Jurusan</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="kode_jurusan" data-toggle="dropdown" id="exampleInputKodeJurusan">
                       @foreach($jurusan as $j)
@@ -138,7 +138,7 @@
                   </div>
 
                   <div class="form-group">
-                    <input type="hidden" name="id_role" id="exampleInputIdRole" value="2">
+                    <input type="hidden" name="id_role" id="exampleInputIdRole" value="{{$d->role_idrole}}">
                   </div>
 
                   <div class="form-group">

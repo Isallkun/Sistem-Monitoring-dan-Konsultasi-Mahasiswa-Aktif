@@ -1,5 +1,5 @@
 <?php
-
+ 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -9,8 +9,11 @@ use Illuminate\Database\QueryException;
 
 use DB;
 use Session;
+use File;
+
 use App\User;
 use App\Mahasiswa;
+use App\Gamifikasi;
 
 
 class MasterMahasiswaController extends Controller
@@ -29,8 +32,9 @@ class MasterMahasiswaController extends Controller
         if(Session::get('admin') != null)
         {
             $mahasiswa = DB::table('mahasiswa')
-            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
             ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+            ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
             ->paginate(10);
             
             return view('master_mahasiswa.daftarmahasiswa_admin', compact('mahasiswa'));
@@ -53,11 +57,15 @@ class MasterMahasiswaController extends Controller
                     ->select('*')
                     ->get();
 
+            $tahun_akademik = DB::table('tahun_akademik')
+                            -> select('*')
+                            ->get();
+
             $role = DB::table('role')
                     ->select('*')
                     ->get();
 
-            return view('master_mahasiswa.tambahmahasiswa_admin',compact('dosen','jurusan', 'role'));
+            return view('master_mahasiswa.tambahmahasiswa_admin',compact('dosen','jurusan', 'tahun_akademik', 'role'));
         }
         else
         {
@@ -76,17 +84,25 @@ class MasterMahasiswaController extends Controller
             $tempat_lahir = $request->get('tempat_lahir');
             $email=$request->get('email');
             $telepon=$request->get('telepon');
-            $angkatan = $request->get('angkatan');
+            $tahun_akademik = $request->get('tahun_akademik');
             $alamat = $request->get('alamat');
             $status = $request->get('status');
             $npk_dosenwali = $request->get('npk_dosenwali');
-            $kode_jurusan = $request->get('kode_jurusan');
+            $id_jurusan = $request->get('kode_jurusan');
+            $profil = $request->file('profil_pengguna');
             $id_role = $request->get('id_role');
             $username = $request->get('username');
             $password = $request->get('password');
 
             //Untuk proses enkripsi password
             $encrypted = Crypt::encryptString($password);
+
+
+             // isi dengan nama folder tempat kemana file diupload
+            $tujuan_upload = 'data_pengguna';
+            // ubah nama file gambar sesuai format yang diinginkan
+            $file_name = time()."_".$nrp_mahasiswa.".".$profil->getClientOriginalExtension();
+
 
             // Form Validasi Input User
             $this->validate($request,[
@@ -97,12 +113,12 @@ class MasterMahasiswaController extends Controller
                 'tempat_lahir'=>'required',
                 'email'=>'required|email',
                 'telepon' => 'required|numeric|min:12',
-                'angkatan' => 'required|numeric|min:4',
+                'tahun_akademik' => 'required',
                 'alamat'=>'required',
                 'status' => 'required',
                 'npk_dosenwali' => 'required',
                 'kode_jurusan' => 'required',
-                'id_role' => 'required',
+                'profil_pengguna' =>'required|image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
                 'username' => 'required',
                 'password'=>'required|max:10'
             ]);
@@ -113,6 +129,17 @@ class MasterMahasiswaController extends Controller
                'role_idrole'=>$id_role
             ]);
 
+            // Bronze - Silver - Gold
+            $gamifikasi = Gamifikasi::insert([
+                'poin' =>'0',
+                'level' =>'Bronze'
+            ]);
+            $select_gamifikasi = DB::table('gamifikasi')
+                                ->select('idgamifikasi')
+                                ->orderby('idgamifikasi','desc')
+                                ->limit(1)
+                                ->get();
+
             $tambahdata_mahasiswa= Mahasiswa::insert([
                 'nrpmahasiswa'=>$nrp_mahasiswa,
                 'namamahasiswa'=>$nama_mahasiswa,
@@ -121,14 +148,19 @@ class MasterMahasiswaController extends Controller
                 'tempatlahir'=>$tempat_lahir,
                 'email'=>$email,
                 'telepon'=>$telepon,
-                'angkatan'=>$angkatan,
                 'alamat'=>$alamat,
                 'status'=>$status,
-                'rate'=>'0',
+                'flag'=>'0',
+                'profil'=>$file_name,
                 'users_username'=>$username,
                 'dosen_npkdosen'=>$npk_dosenwali,
-                'jurusan_kodejurusan'=>$kode_jurusan
+                'jurusan_idjurusan'=>$id_jurusan,
+                'gamifikasi_idgamifikasi'=> $select_gamifikasi[0]->idgamifikasi,
+                'thnakademik_idthnakademik'=>$tahun_akademik
             ]);
+
+            // simpan upload gambar pada folder public
+            $profil->move($tujuan_upload,$file_name);
 
             return redirect('admin/master/mahasiswa')->with(['Success' => 'Berhasil Menambahkan Data']);
 
@@ -147,16 +179,16 @@ class MasterMahasiswaController extends Controller
                     ->select('*')
                     ->get();
 
-            $role = DB::table('role')
-                    ->select('*')
-                    ->get();
-
             $dosen = DB::table('dosen')
                     ->select('*')
                     ->get();
 
+            $tahun_akademik = DB::table('tahun_akademik')
+                            -> select('*')
+                            ->get();
+
             $datamahasiswa = DB::table('mahasiswa')
-                    ->select('*')
+                    ->select('mahasiswa.*','users.*')
                     ->join('users', 'users.username', '=', 'mahasiswa.users_username')
                     ->where('mahasiswa.nrpmahasiswa', $id)
                     ->get();
@@ -164,9 +196,7 @@ class MasterMahasiswaController extends Controller
 
             $decrypted = Crypt::decryptString($datamahasiswa[0]->password);   
 
-            // dd($datamahasiswa);
-
-            return view('master_mahasiswa.ubahmahasiswa_admin', compact('jurusan', 'role', 'dosen','datamahasiswa', 'decrypted'));
+            return view('master_mahasiswa.ubahmahasiswa_admin', compact('jurusan','tahun_akademik' ,'dosen','datamahasiswa', 'decrypted'));
         }
         else
         {
@@ -181,17 +211,11 @@ class MasterMahasiswaController extends Controller
             // Form Validasi Input User
             $this->validate($request,[
                 'nama_mahasiswa' =>'required',
-                'jenis_kelamin'=> 'required',
                 'tanggal_lahir'=>'required',
                 'tempat_lahir'=>'required',
                 'email'=>'required|email',
                 'telepon' => 'required|numeric|min:12',
-                'angkatan' => 'required|numeric|min:4',
                 'alamat' => 'required',
-                'status' => 'required',
-                'npk_dosenwali' => 'required',
-                'kode_jurusan' => 'required',
-                'id_role' => 'required',
                 'password'=>'required|max:10'
             ]);
 
@@ -204,7 +228,10 @@ class MasterMahasiswaController extends Controller
                         'role_idrole' => $request->get('id_role')
                     ]);
 
-            $mahasiswa = DB::table('mahasiswa') 
+            $profil_pengguna = $request->file('profil_pengguna');
+            if($profil_pengguna =="")
+            {
+                $mahasiswa = DB::table('mahasiswa') 
                     ->where('nrpmahasiswa',$request->get('nrp_mahasiswa'))
                     ->update([
                         'namamahasiswa' => $request->get('nama_mahasiswa'),
@@ -213,23 +240,53 @@ class MasterMahasiswaController extends Controller
                         'tempatlahir' =>$request->get('tempat_lahir'),
                         'email'=>$request->get('email'),
                         'telepon'=>$request->get('telepon'),
-                        'angkatan'=>$request->get('angkatan'),
                         'alamat'=>$request->get('alamat'),
                         'status'=>$request->get('status'),
                         'dosen_npkdosen'=>$request->get('npk_dosenwali'),
-                        'jurusan_kodejurusan'=>$request->get('kode_jurusan')
+                        'jurusan_idjurusan'=>$request->get('kode_jurusan'),
+                        'thnakademik_idthnakademik'=>$request->get('tahun_akademik')
                     ]);
+            }
+            else
+            {
+                $datamahasiswa = DB::table('mahasiswa')
+                            ->join('users', 'users.username', '=', 'mahasiswa.users_username')
+                            ->where('mahasiswa.nrpmahasiswa', $request->get('nrp_mahasiswa'))
+                            ->get();
+                //Hapus File gambar sebelumnya
+                File::delete('data_pengguna/'.$datamahasiswa[0]->profil);
 
+                // isi dengan nama folder tempat kemana file diupload
+                $tujuan_upload = 'data_pengguna';
+                // ubah nama file gambar sesuai format yang diinginkan
+                $file_name = time()."_".$request->get('nrp_mahasiswa').".".$profil_pengguna->getClientOriginalExtension();
+                
+                $mahasiswa = DB::table('mahasiswa') 
+                    ->where('nrpmahasiswa',$request->get('nrp_mahasiswa'))
+                    ->update([
+                        'namamahasiswa' => $request->get('nama_mahasiswa'),
+                        'jeniskelamin' => $request->get('jenis_kelamin'),
+                        'tanggallahir'=> $request->get('tanggal_lahir'),
+                        'tempatlahir' =>$request->get('tempat_lahir'),
+                        'email'=>$request->get('email'),
+                        'telepon'=>$request->get('telepon'),
+                        'alamat'=>$request->get('alamat'),
+                        'status'=>$request->get('status'),
+                        'profil' =>$file_name,
+                        'dosen_npkdosen'=>$request->get('npk_dosenwali'),
+                        'jurusan_idjurusan'=>$request->get('kode_jurusan'),
+                        'thnakademik_idthnakademik'=>$request->get('tahun_akademik')
+                    ]);  
 
-
+                // simpan upload gambar pada folder public
+                $profil_pengguna->move($tujuan_upload,$file_name);
+            }
 
             return redirect('admin/master/mahasiswa')->with(['Success' => 'Berhasil Mengubah Data '.$request->get('nama_mahasiswa')." - ".$request->get('nrp_mahasiswa')]);
-
-
-
         }
         catch(QueryException $e)
         {
+            dd($e);
             return redirect("admin/master/mahasiswa/ubah/{$request->get('nrp_mahasiswa')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_mahasiswa')." - ".$request->get('nrp_mahasiswa')]);
         }
     }
@@ -238,6 +295,14 @@ class MasterMahasiswaController extends Controller
     {
         try
         {
+            $datamahasiswa = DB::table('mahasiswa')
+                        ->join('users', 'users.username', '=', 'mahasiswa.users_username')
+                        ->where('mahasiswa.nrpmahasiswa', $id)
+                        ->get();
+            //Hapus File gambar 
+            File::delete('data_pengguna/'.$datamahasiswa[0]->profil);
+
+
             $dosen = DB::table('mahasiswa')
                 ->where('nrpmahasiswa',$id)
                 ->delete();
@@ -305,13 +370,15 @@ class MasterMahasiswaController extends Controller
                 ->where('mahasiswa.telepon',$keyword )
                 ->paginate(10);
         }
-        else if($jenis_pencarian == "angkatan")
+        else if($jenis_pencarian == "tahunakademik")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*','dosen.npkdosen', 'dosen.namadosen')
+                ->select('mahasiswa.*','dosen.npkdosen', 'dosen.namadosen','tahun_akademik.tahun')
                 ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->where('mahasiswa.angkatan',$keyword )
+                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=', 'mahasiswa.thnakademik_idthnakademik')
+                ->where('tahun_akademik.tahun',$keyword )
                 ->paginate(10);
+                // dd($mahasiswa);
         }
         else if($jenis_pencarian == "alamat")
         {
@@ -431,17 +498,17 @@ class MasterMahasiswaController extends Controller
                     $output .= '<li><a href="#">'.$row->telepon.'</a></li>';
                 }
             }
-            else if($pencarian == "angkatan")
+            else if($pencarian == "tahunakademik")
             {
                 $datamahasiswa = DB::table('mahasiswa')
-                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
-                                ->where('mahasiswa.angkatan', 'LIKE', "%{$query}%")
+                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen', 'tahun_akademik.tahun')
+                                ->where('tahun_akademik.tahun', 'LIKE', "%{$query}%")
                                 ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=', 'mahasiswa.thnakademik_idthnakademik')
                                 ->get();
-
                 foreach($datamahasiswa as $row)
                 {
-                    $output .= '<li><a href="#">'.$row->angkatan.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->tahun.'</a></li>';
                 }
             }
             else if($pencarian == "alamat")
