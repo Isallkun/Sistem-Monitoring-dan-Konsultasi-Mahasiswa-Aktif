@@ -75,18 +75,20 @@ Route::group(['prefix' => '/' ], function()
 		Route::get('master/matakuliah', 'MasterMatakuliahController@daftarmatakuliah');
 
 		//Tambah data matakuliah
-		Route::get('master/matakuliah/tambah', 'MasterMatakuliahController@tambahmatakuliah');
-		Route::post('master/matakuliah/prosestambah', 'MasterMatakuliahController@tambahmatakuliah_proses');
+		//Route::get('master/matakuliah/tambah', 'MasterMatakuliahController@tambahmatakuliah');
+		//Route::post('master/matakuliah/prosestambah', 'MasterMatakuliahController@tambahmatakuliah_proses');
 
 		//Ubah data matakuliah
-		Route::get('master/matakuliah/ubah/{id}', 'MasterMatakuliahController@ubahmatakuliah');
-		Route::post('master/matakuliah/ubahproses', 'MasterMatakuliahController@ubahmatakuliah_proses');
+		//Route::get('master/matakuliah/ubah/{id}', 'MasterMatakuliahController@ubahmatakuliah');
+		//Route::post('master/matakuliah/ubahproses', 'MasterMatakuliahController@ubahmatakuliah_proses');
 
 		//Hapus data matakuliah
-		Route::get('master/matakuliah/hapus/{id}', 'MasterMatakuliahController@hapusmatakuliah');
+		//Route::get('master/matakuliah/hapus/{id}', 'MasterMatakuliahController@hapusmatakuliah');
 
 		//Pencarian data Matakuliah
 		Route::get('master/matakuliah/prosescari', 'MasterMatakuliahController@carimatakuliah');
+		//Suggestion pencarian data matakuliah
+		Route::post('master/matakuliah/fetch', 'MasterMatakuliahController@fetch')->name('mastermatakuliah.fetch');
 
 	});
 

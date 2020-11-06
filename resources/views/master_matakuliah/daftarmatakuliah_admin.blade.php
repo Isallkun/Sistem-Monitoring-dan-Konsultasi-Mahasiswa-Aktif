@@ -51,8 +51,8 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <a href="{{ url('admin/master/matakuliah/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
-        <br><br><br>
+        <!-- <a href="{{ url('admin/master/matakuliah/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
+        <br><br><br> -->
 
         <form method="GET" action="{{url('admin/master/matakuliah/prosescari')}}" enctype="multipart/form-data">
           {{ csrf_field() }}
@@ -61,14 +61,17 @@
           <label for="exampleInputPencarian">Pencarian Data: </label>
 
           <div class="form-group">
-            <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
             
             <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
               <option value="kodematakuliah">Kode Matakuliah</option>
               <option value="namamatakuliah">Nama Matakuliah</option>
-              <option value="jenismatakuliah">Jenis Matakuliah</option>
               <option value="totalsks">Total SKS</option>
+              <option value="totalpertemuan">Total Pertemuan</option>
+              <option value="nisbi">Nisbi Minimal</option>
+              <option value="tahunakademik">Tahun Akademik</option>
             </select>
+
+             <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
 
             <button type="submit" class="btn btn-light"><i class="fas fa-search"></i></button>
 
@@ -85,10 +88,11 @@
               <th width="1%">No.</th>
               <th width="1%">Kode Matakuliah</th>
               <th width="1%">Nama Matakuliah</th>
-              <th width="1%">Jenis</th>
-              <th width="1%">Total SKS</th>
-              <th width="1%">Keterangan</th>
-              <th width="1%">Action</th>
+              <th width="1%">SKS</th>
+              <th width="1%">Total Pertemuan</th>
+              <th width="1%">Nisbi Minimal</th>
+              <th width="1%">Tahun Akademik</th>
+              <!-- <th width="1%">Action</th> -->
             </tr>
           </thead>
           <tbody>
@@ -97,10 +101,12 @@
               <td>{{$no+1}}</td>
               <td>{{$m->kodematakuliah}}</td>
               <td>{{$m->namamatakuliah}}</td>
-              <td>{{$m->jenis}}</td>
-              <td>{{$m->totalsks}}</td>
-              <td>{{$m->keterangan}}</td>
-              <td>
+              <td>{{$m->sks}}</td>
+              <td>{{$m->totalpertemuan}}</td>
+              <td>{{$m->nisbimin}}</td>
+              <td>{{$m->semester}} {{$m->tahun}}</td>
+            
+              <!-- <td>
                  <a href="{{url('admin/master/matakuliah/ubah/'.$m->kodematakuliah)}}" class="btn btn-warning">Ubah</a>
                  
                  <form method="get" action="{{url('admin/master/matakuliah/hapus/'.$m->kodematakuliah)}}">
@@ -108,7 +114,7 @@
                   <button type="submmit" class="btn btn-danger">Hapus</button>
                </form>
 
-              </td>
+              </td> -->
             </tr>
             @endforeach
           </tbody>
@@ -135,7 +141,7 @@ $(document).ready(function(){
          var _token = $('input[name="_token"]').val();
          var pencarian = document.getElementById("pencarian").value;
          $.ajax({
-          url:"#",
+          url:"{{ route('mastermatakuliah.fetch') }}",
           method:"POST",
           data:{query:query,_token:_token, jenis:pencarian},
           success:function(data){
