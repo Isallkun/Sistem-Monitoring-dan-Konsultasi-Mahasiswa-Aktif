@@ -134,7 +134,9 @@ class MasterDosenController extends Controller
        
         catch(QueryException $e)
         {
-            return redirect('admin/master/dosen/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database']);
+            $message= explode("in C:",$e);
+
+            return redirect('admin/master/dosen/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database. <br> Pesan Kesalahan: '.$message[0]]);
         }
     }
 
@@ -235,7 +237,9 @@ class MasterDosenController extends Controller
         }
         catch(QueryException $e)
         {
-            // return redirect("admin/master/dosen/ubah/{$request->get('npk_dosen')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')]);
+            $message= explode("in C:",$e);
+
+            return redirect("admin/master/dosen/ubah/{$request->get('npk_dosen')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_dosen')." - ".$request->get('npk_dosen')."<br> Pesan Kesalahan: ".$message[0]]);
         }
     }
 
@@ -264,7 +268,9 @@ class MasterDosenController extends Controller
 
         catch(QueryException $e)
         {
-            return redirect("admin/master/dosen")->with(['Error' => 'Gagal Menghapus Data '." ".$request->get('username')." - ".$id]);
+            $message= explode("in C:",$e);
+
+            return redirect("admin/master/dosen")->with(['Error' => 'Gagal Menghapus Data '." ".$request->get('username')." - ".$id."<br> Pesan Kesalahan: ".$message[0]]);
         }
      
     }

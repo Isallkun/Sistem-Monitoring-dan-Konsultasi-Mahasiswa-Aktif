@@ -42,7 +42,7 @@
             <!-- jquery validation -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Form Input Data Matakuliah</h3>
+                <h3 class="card-title">Form Input Data Konsultasi</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -81,7 +81,7 @@
 
                   <div class="form-group">
                     <label for="exampleInputSolusi">Solusi</label>
-                    <input type="text" name="solusi" class="form-control" id="exampleInputSolusi">
+                    <input type="text" name="solusi" class="form-control" id="exampleInputSolusi" placeholder="Enter Solusi">
                   </div>
 
                   <div class="form-group">

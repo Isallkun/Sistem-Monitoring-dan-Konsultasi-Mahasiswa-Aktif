@@ -125,7 +125,9 @@ class MasterKonsultasiController extends Controller
         }
         catch (QueryException $e)
         {
-            return redirect('admin/master/konsultasi/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database']);
+            $message= explode("in C:",$e);
+
+            return redirect('admin/master/konsultasi/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database <br> Pesan Kesalahan: '.$message[0]]);
         }
     }
 
@@ -211,7 +213,7 @@ class MasterKonsultasiController extends Controller
         }
         catch(QueryException $e)
         {
-            return redirect("admin/master/konsultasi/ubah/{$request->get('idkonsultasi')}")->with(['Error' => 'Gagal Mengubah Data Konsultasi (ID) '.$request->get('idkonsultasi')]);
+            return redirect("admin/master/konsultasi/ubah/{$request->get('idkonsultasi')}")->with(['Error' => 'Gagal Mengubah Data Konsultasi (ID) '.$request->get('idkonsultasi')."<br> Pesan Kesalahan: ".$message[0]]);
         }
     }
 
@@ -232,7 +234,9 @@ class MasterKonsultasiController extends Controller
 
         catch(QueryException $e)
         {
-            return redirect("admin/master/konsultasi")->with(['Error' => 'Gagal Menghapus Data '.$id]);
+            $message= explode("in C:",$e);
+
+            return redirect("admin/master/konsultasi")->with(['Error' => 'Gagal Menghapus Data '.$id."<br> Pesan Kesalahan: ".$message[0]]);
         }
     }
    

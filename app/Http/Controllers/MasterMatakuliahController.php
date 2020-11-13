@@ -92,7 +92,9 @@ class MasterMatakuliahController extends Controller
         }
         catch (QueryException $e)
         {
-            return redirect('admin/master/matakuliah/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database']);
+            $message= explode("in C:",$e);
+
+            return redirect('admin/master/matakuliah/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database <br> Pesan Kesalahan: '.$message[0]]);
         }
     }
 

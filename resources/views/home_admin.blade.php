@@ -13,7 +13,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Dashboard</h1>
+            <h1 class="m-0 text-dark">Dashboard Administrator</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -111,6 +111,14 @@
                 
                 <div class="chart">
                   <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  <br>
+                  <p style="font-size: 11px;">
+                    Keterangan:
+                    <br>
+                    Biru: Total seluruh konsultasi dalam setiap bulan.
+                    <br>
+                    Abu-abu: Total konsultasi saat ini (3 bulan).
+                  </p>
                 </div>
               </div>
               <!-- /.card-body -->

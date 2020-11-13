@@ -168,7 +168,9 @@ class MasterMahasiswaController extends Controller
         }
         catch (QueryException $e)
         {
-            return redirect('admin/master/mahasiswa/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database']);
+            $message= explode("in C:",$e);
+
+            return redirect('admin/master/mahasiswa/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database <br> Pesan Kesalahan: '.$message[0]]);
         }
     }
 
@@ -287,7 +289,9 @@ class MasterMahasiswaController extends Controller
         }
         catch(QueryException $e)
         {
-            return redirect("admin/master/mahasiswa/ubah/{$request->get('nrp_mahasiswa')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_mahasiswa')." - ".$request->get('nrp_mahasiswa')]);
+            $message= explode("in C:",$e);
+
+            return redirect("admin/master/mahasiswa/ubah/{$request->get('nrp_mahasiswa')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_mahasiswa')." - ".$request->get('nrp_mahasiswa')."<br> Pesan Kesalahan: ".$message[0]]);
         }
     }
 
@@ -318,7 +322,9 @@ class MasterMahasiswaController extends Controller
 
         catch(QueryException $e)
         {
-            return redirect("admin/master/mahasiswa")->with(['Error' => 'Gagal Menghapus Data '." ".$request->get('username')." - ".$id]);
+            $message= explode("in C:",$e);
+
+            return redirect("admin/master/mahasiswa")->with(['Error' => 'Gagal Menghapus Data '." ".$request->get('username')." - ".$id]."<br> Pesan Kesalahan: ".$message[0]);
         }
     }
 
