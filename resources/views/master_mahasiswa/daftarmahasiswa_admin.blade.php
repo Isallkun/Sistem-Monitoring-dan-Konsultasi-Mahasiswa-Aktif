@@ -7,10 +7,6 @@
 
 <!-- Isi dari yield -->
 @section('content')
-    
-   
-
-    
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -61,14 +57,12 @@
           <div class="form-group">            
             <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
               <option value="nrpmahasiswa">NRP Mahasiswa</option>
-              <option value="namamahasiswa">Nama</option>
-              <option value="jeniskelamin">Jenis Kelamin</option>
+              <option value="namamahasiswa">Nama Mahasiswa</option>
               <option value="email">Email</option>
               <option value="telepon">Telepon</option>
               <option value="tahunakademik">Tahun Akademik</option>
-              <option value="status">Status</option>
               <option value="username">Username</option>
-              <option value="dosenwali">Dosen Wali</option>
+              <option value="dosenwali">Nama Dosen</option>
             </select>
 
             <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
@@ -96,7 +90,6 @@
               <th width="1%">Username</th>
               <th width="1%">Dosen Wali</th>
               <th width="1%">Action</th>
-                     
             </tr>
           </thead>
           <tbody>
@@ -112,11 +105,13 @@
               <td>{{$m->status}}</td>
               <td>{{$m->users_username}}</td>
               <td>{{$m->namadosen}}  ({{$m->npkdosen}})</td>
+              
               <td>
                <a href="{{url('admin/master/mahasiswa/ubah/'.$m->nrpmahasiswa)}}" class="btn btn-warning">Ubah</a>
 
               <form method="get" action="{{url('admin/master/mahasiswa/hapus/'.$m->nrpmahasiswa)}}">
                  <input type="hidden" name="username" value="{{$m->users_username}}">
+                  <input type="hidden" name="idgamifikasi" value="{{$m->gamifikasi_idgamifikasi}}">
                  <button type="submmit" class="btn btn-danger">Hapus</button>
                </form>
               </td>

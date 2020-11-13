@@ -85,7 +85,7 @@
                         <option value="laki-laki" selected>Laki-laki</option>
                         <option value="perempuan" >Perempuan</option>
                       @else if($m->jeniskelamin == "perempuan")
-                      <option value="laki-laki">Laki-laki</option>
+                        <option value="laki-laki">Laki-laki</option>
                         <option value="perempuan" selected>Perempuan</option>
                       @endif
                     </select>
@@ -127,7 +127,7 @@
 
                   <div class="form-group">
                     <label for="exampleInputAlamat">Alamat</label>
-                    <input type="text" name="alamat" class="form-control" id="exampleInputAlamat" placeholder="Enter Alamat" value="{{$m->alamat}}">
+                    <textarea class="form-control" name="alamat" id="exampleInputAlamat" rows="3" placeholder="Enter Alamat">{{$m->alamat}}</textarea>
                   </div>
 
                   <div class="form-group">

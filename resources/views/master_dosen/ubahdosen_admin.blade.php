@@ -156,7 +156,6 @@
                   <input type="checkbox" onclick="myFunction()"> Show Password  
                 </div>
                 @endforeach
-                
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>

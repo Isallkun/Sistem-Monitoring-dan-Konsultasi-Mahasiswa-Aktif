@@ -51,8 +51,8 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <!-- <a href="{{ url('admin/master/matakuliah/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
-        <br><br><br> -->
+        <a href="{{ url('admin/master/matakuliah/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
+        <br><br>
 
         <form method="GET" action="{{url('admin/master/matakuliah/prosescari')}}" enctype="multipart/form-data">
           {{ csrf_field() }}
@@ -107,12 +107,13 @@
               <td>{{$m->semester}} {{$m->tahun}}</td>
             
               <!-- <td>
-                 <a href="{{url('admin/master/matakuliah/ubah/'.$m->kodematakuliah)}}" class="btn btn-warning">Ubah</a>
+                <a href="{{url('admin/master/matakuliah/ubah/'.$m->kodematakuliah)}}" class="btn btn-warning">Ubah
+                </a>
                  
-                 <form method="get" action="{{url('admin/master/matakuliah/hapus/'.$m->kodematakuliah)}}">
+                <form method="get" action="{{url('admin/master/matakuliah/hapus/'.$m->kodematakuliah)}}">
                   <input type="hidden" name="nama_matkauliah" value="{{$m->namamatakuliah}}">
                   <button type="submmit" class="btn btn-danger">Hapus</button>
-               </form>
+                </form>
 
               </td> -->
             </tr>

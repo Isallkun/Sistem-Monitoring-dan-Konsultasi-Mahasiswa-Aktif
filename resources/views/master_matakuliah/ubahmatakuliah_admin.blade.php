@@ -1,4 +1,4 @@
-<!--Wajib untuk inisialisasi file views/layouts/appadmin-->
+Wajib untuk inisialisasi file views/layouts/appadmin
 @extends('layouts.appadmin')
 
 @push('styles')
@@ -71,37 +71,102 @@
                 @foreach($datamatakuliah as $d)
                 <div class="card-body">
                   
-                  <input type="hidden" name="kode_matakuliah" value="{{ $d->kodematakuliah }}">
+                  <input type="hidden" name="kodematakuliah" value="{{ $d->kodematakuliah }}">
 
                   <div class="form-group">
                     <label for="exampleInputNamaMatakuliah">Nama Matakuliah</label>
-                    <input type="text" name="nama_matakuliah" class="form-control" id="exampleInputNamaMatakuliah" placeholder="Enter Nama Matakuliah" value="{{$d->namamatakuliah}}">
+                    <input type="text" name="namamatakuliah" class="form-control" id="exampleInputNamaMatakuliah" value="{{$d->namamatakuliah}}">
+                  </div>
+                 
+                  <div class="form-group">
+                    <label for="exampleInputTotalSKS">Total SKS</label>
+                    <input type="number" name="totalsks" class="form-control" id="exampleInputTotalSKS" value="{{$d->sks}}" min="1" max="10">
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputJenis">Jenis</label>
+                    <label for="exampleInputTotalPertemuan">Total Pertemuan</label>
+                    <input type="number" name="totalpertemuan" class="form-control" id="exampleInputTotalPertemuan" value="{{$d->totalpertemuan}}" min="1" max="5">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputNisbi">Nisbi Minimal</label>
                     <br>
-                    <select class="btn btn-primary dropdown-toggle" name="jenis" data-toggle="dropdown" id="exampleInputJenis">
-                      @if($d->jenis == "wajib")
-                        <option value="wajib" selected>Wajib</option>
-                        <option value="pilihan" >Pilihan</option>
-                      @else if($d->jenis == "pilihan")
-                        <option value="wajib">Wajib</option>
-                        <option value="pilihan" selected>Pilihan</option>
+                    <select class="btn btn-primary dropdown-toggle" name="nisbi" data-toggle="dropdown" id="exampleInputNisbi">
+                      @if($d->nisbimin == "A")
+                        <option value="A" selected>A</option>
+                        <option value="AB">AB</option>
+                        <option value="B">B</option>
+                        <option value="BC">BC</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                      @elseif($d->nisbimin == "AB")
+                        <option value="AB" selected>AB</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="BC">BC</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                      @elseif($d->nisbimin == "B")
+                        <option value="B" selected>B</option>
+                        <option value="A">A</option>
+                        <option value="AB">AB</option>
+                        <option value="BC">BC</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                      @elseif($d->nisbimin == "BC")
+                        <option value="BC" selected>BC</option>
+                        <option value="A">A</option>
+                        <option value="AB">AB</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                      @elseif($d->nisbimin == "C")
+                        <option value="C" selected>C</option>
+                        <option value="A">A</option>
+                        <option value="AB">AB</option>
+                        <option value="B">B</option>
+                        <option value="BC">BC</option>
+                        <option value="D">D</option>
+                      @elseif($d->nisbimin == "D")
+                        <option value="D" selected>D</option>
+                        <option value="A" >A</option>
+                        <option value="AB">AB</option>
+                        <option value="B">B</option>
+                        <option value="BC">BC</option>
+                        <option value="C">C</option>
                       @endif
                     </select>
                   </div>
 
-                  <div class="form-group">
-                    <label for="exampleInputTotalSKS">Total SKS</label>
-                    <input type="number" name="totalsks" class="form-control" id="exampleInputTotalSKS" value="{{$d->totalsks}}">
+                    <div class="form-group">
+                    <label for="exampleInputSemester">Semester</label>
+                    <br>
+                    <select class="btn btn-primary dropdown-toggle" name="semester" data-toggle="dropdown" id="exampleInputSemester">
+                      @foreach($semester as $s)
+                        @if($d->semester_idsemester == $s->idsemester)
+                          <option value="{{$s->idsemester}}" selected>{{$s->semester}}</option>
+                        @else
+                          <option value="{{$s->idsemester}}">{{$s->semester}}</option>
+                        @endif
+                        
+                      @endforeach
+                    </select>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputKeterangan">Keterangan</label>
-                    <textarea class="form-control" name="keterangan" rows="5" id="exampleInputKeterangan" placeholder="Enter Nama Matakuliah">{{$d->keterangan}}</textarea>
+                    <label for="exampleInputTahunAkademik">Tahun Akademik</label>
+                    <br>
+                    <select class="btn btn-primary dropdown-toggle" name="tahunakademik" data-toggle="dropdown" id="exampleInputTahunAkademik">
+                       @foreach($tahun_akademik as $t)
+                        @if($d->thnakademik_idthnakademik == $t->idtahunakademik)
+                           <option value="{{$t->idtahunakademik}}" selected>{{$t->tahun}}</option>
+                        @else
+                          <option value="{{$t->idtahunakademik}}">{{$t->tahun}}</option>
+                        @endif
+                       
+                       @endforeach
+                    </select>
                   </div>
-                
                 </div>
                 @endforeach
                 

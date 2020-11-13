@@ -20,13 +20,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Tambah Data Matakuliah</h1>
+            <h1>Ubah Data Konsultasi</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('admin')}}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{url('admin/master/matakuliah')}}">Daftar Matakuliah</a></li>
-              <li class="breadcrumb-item active">Tambah Data Matakuliah</li>
+              <li class="breadcrumb-item"><a href="{{url('admin/master/konsultasi')}}">Daftar Konsultasi</a></li>
+              <li class="breadcrumb-item active">Ubah Data Konsultasi</li>
             </ol>
           </div>
         </div>
@@ -42,11 +42,11 @@
             <!-- jquery validation -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Form Input Data Matakuliah</h3>
+                <h3 class="card-title">Form Input Data Konsultasi</h3>
               </div>
               <!-- /.card-header -->
-              <!-- form start -->
-              <form action="{{url('admin/master/matakuliah/prosestambah')}}" role="form" method="post">
+              <!-- form start --> 
+              <form action="{{url('admin/master/konsultasi/ubahproses')}}" role="form" method="post">
                 {{ csrf_field() }}
 
                 @if (count($errors) > 0)
@@ -66,39 +66,58 @@
                     </ul>
                   </div>
                 @endif
-               
-                <div class="card-body">
-                  <div class="form-group">
-                    <label for="exampleInputKodeMatakuliah">Kode Matakuliah</label>
-                    <input type="text" name="kodematakuliah" class="form-control" id="exampleInputKodeMatakuliah" placeholder="Enter Kode Matakuliah">
-                  </div>
                 
+                @foreach($datakonsultasi as $m)
+                <div class="card-body">
+                  <input type="hidden" name="idkonsultasi" value="{{ $m->idkonsultasi }}">
+
+                  <input type="hidden" name="idtopik" value="{{ $m->idtopikkonsultasi }}">
+
                   <div class="form-group">
-                    <label for="exampleInputNamaMatakuliah">Nama Matakuliah</label>
-                    <input type="text" name="namamatakuliah" class="form-control" id="exampleInputNamaMatakuliah" placeholder="Enter Nama Matakuliah">
+                    <label for="exampleInputTopik">Topik Konsultasi</label>
+                    <input type="text" name="topik_konsultasi" class="form-control" id="exampleInputTopik" placeholder="Enter Topik" value="{{$m->namatopik}}">
                   </div>
                  
                   <div class="form-group">
-                    <label for="exampleInputTotalSKS">Total SKS</label>
-                    <input type="number" name="totalsks" class="form-control" id="exampleInputTotalSKS" value="1" min="1" max="10">
+                    <label for="exampleInputPermasalahan">Permasalahan</label>
+                     <textarea class="form-control" name="permasalahan" id="exampleInputPermasalahan" rows="3" placeholder="Enter Permasalahan">{{$m->permasalahan}}</textarea>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputTotalPertemuan">Total Pertemuan</label>
-                    <input type="number" name="totalpertemuan" class="form-control" id="exampleInputTotalPertemuan" value="1" min="1" max="5">
+                    <label for="exampleInputSolusi">Solusi</label>
+                    <input type="text" name="solusi" class="form-control" id="exampleInputSolusi" value="{{$m->solusi}}">
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputNisbi">Nisbi Minimal</label>
+                    <label for="exampleInputKonsultasiSelanjutnya">Konsultasi Selanjutnya</label>
+                    <input type="date" name="konsultasi_selanjutnya" class="form-control" id="exampleInputKonsultasiSelanjutnya" value="{{$m->konsultasiselanjutnya}}" >
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputDosen">Dosen</label>
                     <br>
-                    <select class="btn btn-primary dropdown-toggle" name="nisbi" data-toggle="dropdown" id="exampleInputNisbi">
-                      <option value="">-- Pilih Nisbi --</option>
-                      <option value="A">A</option>
-                      <option value="AB">AB</option>
-                      <option value="B">B</option>
-                      <option value="BC">BC</option>
-                      <option value="C">C</option>
-                      <option value="D">D</option>
+                    <select class="btn btn-primary dropdown-toggle" name="dosen" data-toggle="dropdown" id="exampleInputDosen">
+                       @foreach($dosen as $d)
+                        @if($d->npkdosen == $m->npkdosen)
+                          <option value="{{$d->npkdosen}}" selected>{{$d->npkdosen}} - {{$d->namadosen}}</option>
+                        @else 
+                          <option value="{{$d->npkdosen}}">{{$d->npkdosen}} - {{$d->namadosen}}</option>
+                        @endif
+                      @endforeach
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputMahasiswa">Mahasiswa</label>
+                    <br>
+                    <select class="btn btn-primary dropdown-toggle" name="mahasiswa" data-toggle="dropdown" id="exampleInputMahasiswa">
+                      @foreach($mahasiswa as $mh)
+                        @if($mh->nrpmahasiswa == $m->nrpmahasiswa)
+                          <option value="{{$mh->nrpmahasiswa}}" selected>{{$mh->nrpmahasiswa}} - {{$mh->namamahasiswa}}</option>
+                        @else 
+                           <option value="{{$mh->nrpmahasiswa}}">{{$mh->nrpmahasiswa}} - {{$mh->namamahasiswa}}</option>
+                        @endif
+                      @endforeach
                     </select>
                   </div>
 
@@ -106,25 +125,30 @@
                     <label for="exampleInputSemester">Semester</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="semester" data-toggle="dropdown" id="exampleInputSemester">
-                      <option value="">-- Pilih Semester --</option>
-                       @foreach($semester as $s)
-                        <option value="{{$s->idsemester}}">{{$s->semester}}</option>
-                       @endforeach
+                      @foreach($semester as $s)
+                        @if($s->idsemester == $m->idsemester)
+                          <option value="{{$s->idsemester}}" selected>{{$s->semester}}</option>
+                        @else 
+                          <option value="{{$s->idsemester}}">{{$s->semester}}</option>
+                        @endif
+                      @endforeach
                     </select>
                   </div>
 
                   <div class="form-group">
                     <label for="exampleInputTahunAkademik">Tahun Akademik</label>
                     <br>
-                    <select class="btn btn-primary dropdown-toggle" name="tahunakademik" data-toggle="dropdown" id="exampleInputTahunAkademik">
-                      <option value="">-- Pilih Tahun Akademik --</option>
-                       @foreach($tahun_akademik as $t)
-                        <option value="{{$t->idtahunakademik}}">{{$t->tahun}}</option>
-                       @endforeach
+                    <select class="btn btn-primary dropdown-toggle" name="tahun_akademik" data-toggle="dropdown" id="exampleInputTahunAkademik">
+                      @foreach($tahun_akademik as $th)
+                        @if($th->idtahunakademik == $m->idtahunakademik)
+                          <option value="{{$th->idtahunakademik}}" selected>{{$th->tahun}}</option>
+                        @else 
+                          <option value="{{$th->idtahunakademik}}">{{$th->tahun}}</option>
+                        @endif
+                      @endforeach
                     </select>
                   </div>
-
-
+                @endforeach
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

@@ -121,7 +121,7 @@
 
                   <div class="form-group">
                     <label for="exampleInputAlamat">Alamat</label>
-                    <input type="text" name="alamat" class="form-control" id="exampleInputAlamat" placeholder="Enter Alamat">
+                    <textarea class="form-control" name="alamat" id="exampleInputAlamat" rows="3" placeholder="Enter Alamat"></textarea>
                   </div>
 
                   <div class="form-group">

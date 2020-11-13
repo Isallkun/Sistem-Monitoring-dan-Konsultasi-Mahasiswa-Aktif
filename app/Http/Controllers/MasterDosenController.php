@@ -173,7 +173,7 @@ class MasterDosenController extends Controller
                 'nama_dosen' => 'required',
                 'email' => 'required|email',
                 'telepon' => 'required|numeric|min:12',
-                'password'=>'required|max:8'
+                'password'=>'required|max:10'
             ]);
 
             $encrypted = Crypt::encryptString($request->get('password'));
@@ -283,43 +283,39 @@ class MasterDosenController extends Controller
         if($jenis_pencarian == "npkdosen")
         {
             $dosen = DB::table('dosen')
-                ->select('*')
+                ->select('dosen.*','jurusan.namajurusan')
+                ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
                 ->where('npkdosen',$keyword )
                 ->paginate(10);
         }
         else if ($jenis_pencarian == "namadosen")
         {
             $dosen = DB::table('dosen')
-                ->select('*')
+                ->select('dosen.*','jurusan.namajurusan')
+                ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
                 ->where('namadosen',$keyword )
-                ->paginate(10);
-        }
-        else if($jenis_pencarian =="jeniskelamin")
-        {
-             $dosen = DB::table('dosen')
-                ->select('*')
-                ->where('jeniskelamin',$keyword )
                 ->paginate(10);
         }
         else if($jenis_pencarian =="email")
         {
              $dosen = DB::table('dosen')
-                ->select('*')
+                ->select('dosen.*','jurusan.namajurusan')
+                ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
                 ->where('email',$keyword )
                 ->paginate(10);
         }
         else if ($jenis_pencarian=="telepon")
         {
             $dosen = DB::table('dosen')
-                ->select('*')
-                ->where('telepon',$keyword )
+                ->select('dosen.*','jurusan.namajurusan')
+                ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
                 ->paginate(10);
         }
         else if($jenis_pencarian=="jurusan")
         {
             $dosen = DB::table('dosen')
-                ->select('jurusan.namajurusan')
-                 ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
+                ->select('dosen.*','jurusan.namajurusan')
+                ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
                 ->where('jurusan.namajurusan',$keyword )
                 ->paginate(10);
 
@@ -327,11 +323,12 @@ class MasterDosenController extends Controller
         else if ($jenis_pencarian=="username")
         {
             $dosen = DB::table('dosen')
-                ->select('*')
-                ->where('users_username',$keyword )
+                ->select('dosen.*','jurusan.namajurusan')
+                ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
+                ->where('dosen.users_username',$keyword )
                 ->paginate(10);
         }
-        else
+        else 
         {
            return redirect("admin/master/dosen")->with(['Error' => 'Gagal melakukan proses pencarian']);
         }
@@ -350,8 +347,10 @@ class MasterDosenController extends Controller
 
             if($pencarian == 'npkdosen')
             {
-                 $datadosen = DB::table('dosen')
+                $datadosen = DB::table('dosen')
+                ->select('npkdosen')
                 ->where('npkdosen', 'LIKE', "%{$query}%")
+                ->groupBy('npkdosen')
                 ->get();
             
                 foreach($datadosen as $row)
@@ -362,7 +361,9 @@ class MasterDosenController extends Controller
             else if( $pencarian== 'namadosen')
             {
                 $datadosen = DB::table('dosen')
+                ->select('namadosen')
                 ->where('namadosen', 'LIKE', "%{$query}%")
+                ->groupBy('namadosen')
                 ->get();
 
                 foreach($datadosen as $row)
@@ -370,21 +371,12 @@ class MasterDosenController extends Controller
                     $output .= '<li><a href="#">'.$row->namadosen.'</a></li>';
                 }
             }    
-            else if( $pencarian== 'jeniskelamin')
-            {
-                $datadosen = DB::table('dosen')
-                ->where('jeniskelamin', 'LIKE', "%{$query}%")
-                ->get();
-
-                foreach($datadosen as $row)
-                {
-                    $output .= '<li><a href="#">'.$row->jeniskelamin.'</a></li>';
-                }
-            }   
             else if( $pencarian== 'email')
             {
                 $datadosen = DB::table('dosen')
+                ->select('email')
                 ->where('email', 'LIKE', "%{$query}%")
+                ->groupBy('email')
                 ->get();
 
                 foreach($datadosen as $row)
@@ -395,7 +387,9 @@ class MasterDosenController extends Controller
             else if( $pencarian== 'telepon')
             {
                 $datadosen = DB::table('dosen')
+                ->select('telepon')
                 ->where('telepon', 'LIKE', "%{$query}%")
+                ->groupBy('telepon')
                 ->get();
 
                 foreach($datadosen as $row)
@@ -406,8 +400,10 @@ class MasterDosenController extends Controller
             else if( $pencarian== 'jurusan')
             {
                 $datadosen = DB::table('dosen')
+                ->select('jurusan.namajurusan')
                 ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
                 ->where('jurusan.namajurusan', 'LIKE', "%{$query}%")
+                ->groupBy('jurusan.namajurusan')
                 ->get();
 
                 foreach($datadosen as $row)
@@ -418,12 +414,15 @@ class MasterDosenController extends Controller
             else if($pencarian== 'username')
             {
                 $datadosen = DB::table('dosen')
-                ->where('users_username', 'LIKE', "%{$query}%")
+                ->select('users.username')
+                ->join('users', 'users.username', '=', 'dosen.users_username')
+                ->where('users.username', 'LIKE', "%{$query}%")
+                ->groupBy('users.username')
                 ->get();
 
                 foreach($datadosen as $row)
                 {
-                    $output .= '<li><a href="#">'.$row->users_username.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->username.'</a></li>';
                 }
             }    
            

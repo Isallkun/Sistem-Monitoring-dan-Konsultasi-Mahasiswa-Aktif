@@ -35,84 +35,92 @@ class MasterMatakuliahController extends Controller
         }
     }
 
-    //START TAMBAH MATAKULIAH
-        // public function tambahmatakuliah()
-        // {
-        //     if(Session::get('admin') != null)
-        //     {
-        //         return view('master_matakuliah.tambahmatakuliah_admin');
-        //     }
-        //     else
-        //     {
-        //         return redirect("/");
-        //     }
-        // }
-    //END START TAMBAH MATAKULIAH
 
-    //START TAMBAH MATAKULIAH (PROSES)
-        // public function tambahmatakuliah_proses (Request $request)
-        // {
-        //     try
-        //     {
-        //         $kode_matakuliah = $request->get('kode_matakuliah');
-        //         $nama_matakuliah = $request->get('nama_matakuliah');
-        //         $jenis = $request->get('jenis');
-        //         $totalsks = $request->get('totalsks');
-                
-        //         if($request->get('keterangan') == "")
-        //         {
-        //             $keterangan = "-";
-        //         }
-        //         else
-        //         {
-        //             $keterangan = $request->get('keterangan');   
-        //         }
-                
+    public function tambahmatakuliah()
+    {
+        if(Session::get('admin') != null)
+        {
+            $semester = DB::table('semester')
+                        ->get();
+            
+            $tahun_akademik = DB::table('tahun_akademik')
+                              ->get();
 
-        //         $this->validate($request,[
-        //             'kode_matakuliah' =>'required|min:8',
-        //             'nama_matakuliah' =>'required',
-        //             'jenis' => 'required',
-        //             'totalsks' =>'required|numeric|max:10',
-        //         ]);
+            return view('master_matakuliah.tambahmatakuliah_admin', compact('semester','tahun_akademik'));
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
 
-        //         $tambahdata_matakuliah= Matakuliah::insert([
-        //             'kodematakuliah'=> $kode_matakuliah,
-        //             'namamatakuliah'=> $nama_matakuliah,
-        //             'jenis'=> $jenis,
-        //             'totalsks'=>$totalsks,
-        //             'keterangan'=> $keterangan
-        //         ]);
+    public function tambahmatakuliah_proses (Request $request)
+    {
+        try
+        {
+            $kodematakuliah = $request->get('kodematakuliah');
+            $namamatakuliah = $request->get('namamatakuliah');
+            $totalsks = $request->get('totalsks');
+            $totalpertemuan = $request->get('totalpertemuan');
+            $nisbi =$request->get('nisbi');
+            $semester=$request->get('semester');
+            $tahunakademik=$request->get('tahunakademik');
 
-        //         return redirect('admin/master/matakuliah')->with(['Success' => 'Berhasil Menambahkan Data']);
+            $this->validate($request,[
+                'kodematakuliah' =>'required|min:8',
+                'namamatakuliah' =>'required',
+                'totalsks' =>'required|numeric|min:1|max:10',
+                'totalpertemuan' =>'required|numeric|min:1|max:10',
+                'nisbi' =>'required',
+                'semester'=>'required',
+                'tahunakademik'=>'required'
+            ]);
 
-        //     }
-        //     catch (QueryException $e)
-        //     {
-        //         return redirect('admin/master/matakuliah/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database']);
-        //     }
-        // }
-    //END START TAMBAH MATAKULIAH (PROSES)
 
-    //START UBAH MATAKULIAH
-        // public function ubahmatakuliah ($id)
-        // {
-        //     if(Session::get('admin') != null)
-        //     {
-        //         $datamatakuliah = DB::table('matakuliah')
-        //                     ->select('*')
-        //                     ->where('kodematakuliah', $id)
-        //                     ->get();
+            $tambahdata_matakuliah= Matakuliah::insert([
+                'kodematakuliah'=> $kodematakuliah,
+                'namamatakuliah'=> $namamatakuliah,
+                'sks'=>$totalsks,
+                'totalpertemuan'=>$totalpertemuan,
+                'nisbimin'=>$nisbi,
+                'thnakademik_idthnakademik'=>$tahunakademik,
+                'semester_idsemester'=>$semester
+            ]);
 
-        //         return view('master_matakuliah.ubahmatakuliah_admin', compact('datamatakuliah'));
-        //     }
-        //     else
-        //     {
-        //         return redirect("/");
-        //     }
-        // }
-    //END START UBAH MATAKULIAH
+            return redirect('admin/master/matakuliah')->with(['Success' => 'Berhasil Menambahkan Data']);
 
+        }
+        catch (QueryException $e)
+        {
+            return redirect('admin/master/matakuliah/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database']);
+        }
+    }
+
+    public function ubahmatakuliah ($id)
+    {
+        if(Session::get('admin') != null)
+        {
+            $semester = DB::table('semester')
+                        ->get();
+            
+            $tahun_akademik = DB::table('tahun_akademik')
+                              ->get();
+
+            $datamatakuliah = DB::table('matakuliah')
+                        ->select('matakuliah.*', 'semester.semester', 'tahun_akademik.tahun')
+                        ->join('semester', 'semester.idsemester','=', 'matakuliah.semester_idsemester')
+                        ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=', 'matakuliah.thnakademik_idthnakademik')
+                        ->where('kodematakuliah', $id)
+                        ->get();
+
+            return view('master_matakuliah.ubahmatakuliah_admin', compact('semester','tahun_akademik','datamatakuliah'));
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
+  
     //START UBAH MATAKULIAH (PROSES)
         // public function ubahmatakuliah_proses(Request $request)
         // {
@@ -261,8 +269,9 @@ class MasterMatakuliahController extends Controller
             if($pencarian == 'kodematakuliah')
             {
                 $matakuliah = DB::table('matakuliah')
-                ->select('*')
+                ->select('kodematakuliah')
                 ->where('kodematakuliah','LIKE', "%{$query}%")
+                ->groupBy('kodematakuliah')
                 ->get();
                 
                 foreach($matakuliah as $row)
@@ -273,8 +282,9 @@ class MasterMatakuliahController extends Controller
             else if( $pencarian== 'namamatakuliah')
             {
                 $matakuliah = DB::table('matakuliah')
-                ->select('*')
+                ->select('namamatakuliah')
                 ->where('namamatakuliah','LIKE', "%{$query}%")
+                ->groupBy('namamatakuliah')
                 ->get();
                 
                 foreach($matakuliah as $row)
@@ -285,7 +295,9 @@ class MasterMatakuliahController extends Controller
             else if( $pencarian== 'totalsks')
             {
                 $matakuliah = DB::table('matakuliah')
+                ->select('sks')
                 ->where('sks', 'LIKE', "%{$query}%")
+                ->groupBy('sks')
                 ->get();
         
                 foreach($matakuliah as $row)
@@ -296,7 +308,9 @@ class MasterMatakuliahController extends Controller
             else if( $pencarian== 'totalpertemuan')
             {
                 $matakuliah = DB::table('matakuliah')
+                ->select('totalpertemuan')
                 ->where('totalpertemuan', 'LIKE', "%{$query}%")
+                ->groupBy('totalpertemuan')
                 ->get();
         
                 foreach($matakuliah as $row)
@@ -307,7 +321,9 @@ class MasterMatakuliahController extends Controller
             else if( $pencarian== 'nisbi')
             {
                 $matakuliah = DB::table('matakuliah')
+                ->select('nisbimin')
                 ->where('nisbimin', 'LIKE', "%{$query}%")
+                ->groupBy('nisbimin')
                 ->get();
         
                 foreach($matakuliah as $row)
@@ -318,13 +334,12 @@ class MasterMatakuliahController extends Controller
             else if( $pencarian== 'tahunakademik')
             {
                 $matakuliah = DB::table('matakuliah')
-                ->select('matakuliah.*', 'semester.semester', 'tahun_akademik.tahun')
-                ->join('semester', 'semester.idsemester','=', 'matakuliah.semester_idsemester')
+                ->select('tahun_akademik.tahun')
                 ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=', 'matakuliah.thnakademik_idthnakademik')
-                ->where('semester.semester','LIKE',"%{$query}%" )
-                ->orwhere('tahun_akademik.tahun','LIKE',"%{$query}%" )
+                ->where('tahun_akademik.tahun','LIKE',"%{$query}%" )
+                ->groupBy('tahun_akademik.tahun')
                 ->get();
-
+                // dd($matakuliah);
                 foreach($matakuliah as $row)
                 {
                     $output .= '<li><a href="#">'.$row->tahun.'</a></li>';

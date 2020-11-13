@@ -20,13 +20,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Tambah Data Matakuliah</h1>
+            <h1>Tambah Data Konsultasi</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('admin')}}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{url('admin/master/matakuliah')}}">Daftar Matakuliah</a></li>
-              <li class="breadcrumb-item active">Tambah Data Matakuliah</li>
+              <li class="breadcrumb-item"><a href="{{url('admin/master/konsultasi')}}">Daftar Konsultasi</a></li>
+              <li class="breadcrumb-item active">Tambah Data Konsultasi</li>
             </ol>
           </div>
         </div>
@@ -46,7 +46,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{url('admin/master/matakuliah/prosestambah')}}" role="form" method="post">
+              <form action="{{url('admin/master/konsultasi/prosestambah')}}" role="form" method="post">
                 {{ csrf_field() }}
 
                 @if (count($errors) > 0)
@@ -68,37 +68,46 @@
                 @endif
                
                 <div class="card-body">
+        
                   <div class="form-group">
-                    <label for="exampleInputKodeMatakuliah">Kode Matakuliah</label>
-                    <input type="text" name="kodematakuliah" class="form-control" id="exampleInputKodeMatakuliah" placeholder="Enter Kode Matakuliah">
-                  </div>
-                
-                  <div class="form-group">
-                    <label for="exampleInputNamaMatakuliah">Nama Matakuliah</label>
-                    <input type="text" name="namamatakuliah" class="form-control" id="exampleInputNamaMatakuliah" placeholder="Enter Nama Matakuliah">
+                    <label for="exampleInputTopik">Topik Konsultasi</label>
+                    <input type="text" name="topik_konsultasi" class="form-control" id="exampleInputTopik" placeholder="Enter Topik">
                   </div>
                  
                   <div class="form-group">
-                    <label for="exampleInputTotalSKS">Total SKS</label>
-                    <input type="number" name="totalsks" class="form-control" id="exampleInputTotalSKS" value="1" min="1" max="10">
+                    <label for="exampleInputPermasalahan">Permasalahan</label>
+                     <textarea class="form-control" name="permasalahan" id="exampleInputPermasalahan" rows="3" placeholder="Enter Permasalahan"></textarea>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputTotalPertemuan">Total Pertemuan</label>
-                    <input type="number" name="totalpertemuan" class="form-control" id="exampleInputTotalPertemuan" value="1" min="1" max="5">
+                    <label for="exampleInputSolusi">Solusi</label>
+                    <input type="text" name="solusi" class="form-control" id="exampleInputSolusi">
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputNisbi">Nisbi Minimal</label>
+                    <label for="exampleInputKonsultasiSelanjutnya">Konsultasi Selanjutnya</label>
+                    <input type="date" name="konsultasi_selanjutnya" class="form-control" id="exampleInputKonsultasiSelanjutnya" >
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputDosen">Dosen</label>
                     <br>
-                    <select class="btn btn-primary dropdown-toggle" name="nisbi" data-toggle="dropdown" id="exampleInputNisbi">
-                      <option value="">-- Pilih Nisbi --</option>
-                      <option value="A">A</option>
-                      <option value="AB">AB</option>
-                      <option value="B">B</option>
-                      <option value="BC">BC</option>
-                      <option value="C">C</option>
-                      <option value="D">D</option>
+                    <select class="btn btn-primary dropdown-toggle" name="dosen" data-toggle="dropdown" id="exampleInputDosen">
+                      <option value="">-- Pilih Dosen --</option>
+                       @foreach($dosen as $d)
+                        <option value="{{$d->npkdosen}}">{{$d->npkdosen}} - {{$d->namadosen}}</option>
+                       @endforeach
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputMahasiswa">Mahasiswa</label>
+                    <br>
+                    <select class="btn btn-primary dropdown-toggle" name="mahasiswa" data-toggle="dropdown" id="exampleInputMahasiswa">
+                      <option value="">-- Pilih Mahasiswa --</option>
+                       @foreach($mahasiswa as $m)
+                        <option value="{{$m->nrpmahasiswa}}">{{$m->nrpmahasiswa}} - {{$m->namamahasiswa}}</option>
+                       @endforeach
                     </select>
                   </div>
 
@@ -116,14 +125,13 @@
                   <div class="form-group">
                     <label for="exampleInputTahunAkademik">Tahun Akademik</label>
                     <br>
-                    <select class="btn btn-primary dropdown-toggle" name="tahunakademik" data-toggle="dropdown" id="exampleInputTahunAkademik">
+                    <select class="btn btn-primary dropdown-toggle" name="tahun_akademik" data-toggle="dropdown" id="exampleInputTahunAkademik">
                       <option value="">-- Pilih Tahun Akademik --</option>
-                       @foreach($tahun_akademik as $t)
-                        <option value="{{$t->idtahunakademik}}">{{$t->tahun}}</option>
+                       @foreach($tahun_akademik as $th)
+                        <option value="{{$th->idtahunakademik}}">{{$th->tahun}}</option>
                        @endforeach
                     </select>
                   </div>
-
 
                 </div>
                 <!-- /.card-body -->

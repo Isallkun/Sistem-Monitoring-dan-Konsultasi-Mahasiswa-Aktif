@@ -63,8 +63,7 @@
           <div class="form-group">
             <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
               <option value="npkdosen">NPK Dosen</option>
-              <option value="namadosen">Nama</option>
-              <option value="jeniskelamin">Jenis Kelamin</option>
+              <option value="namadosen">Nama Dosen</option>
               <option value="email">Email</option>
               <option value="telepon">Telepon</option>
               <option value="jurusan">Jurusan</option>

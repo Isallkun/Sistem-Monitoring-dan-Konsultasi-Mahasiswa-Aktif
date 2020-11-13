@@ -51,7 +51,18 @@
           <img src="{{url('data_pengguna/'. Session::get('profil') )}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{Session::get('admin')}}</a>
+          <a href='#'>{{Session::get('admin')}}</a>
+          <br>
+          
+          <a href="#" style="font-size: 14px">
+          @if(Session::get('admin') != "")
+          <i class="fa fa-circle text-success"></i>
+          &nbsp Online
+          @else
+          <i class="fa fa-circle text-danger"></i>
+          &nbsp Offline
+          @endif
+          </a>
         </div>
       </div>
 
@@ -95,6 +106,16 @@
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Data Matakuliah
+                <i class="fas fa-angle-right right"></i>
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item has-treeview">
+            <a href="{{ url('admin/master/konsultasi') }}" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Data Konsultasi 
                 <i class="fas fa-angle-right right"></i>
               </p>
             </a>

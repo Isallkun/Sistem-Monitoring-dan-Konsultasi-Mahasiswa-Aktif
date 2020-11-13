@@ -70,17 +70,17 @@ Route::group(['prefix' => '/' ], function()
 		Route::post('master/mahasiswa/fetch', 'MasterMahasiswaController@fetch')->name('mastermahasiswa.fetch');
 
 
-		//1. MASTER MATAKULIAH
+		//3. MASTER MATAKULIAH
 		//localhost:8000/admin/matakuliah
 		Route::get('master/matakuliah', 'MasterMatakuliahController@daftarmatakuliah');
 
 		//Tambah data matakuliah
-		//Route::get('master/matakuliah/tambah', 'MasterMatakuliahController@tambahmatakuliah');
-		//Route::post('master/matakuliah/prosestambah', 'MasterMatakuliahController@tambahmatakuliah_proses');
+		Route::get('master/matakuliah/tambah', 'MasterMatakuliahController@tambahmatakuliah');
+		Route::post('master/matakuliah/prosestambah', 'MasterMatakuliahController@tambahmatakuliah_proses');
 
 		//Ubah data matakuliah
-		//Route::get('master/matakuliah/ubah/{id}', 'MasterMatakuliahController@ubahmatakuliah');
-		//Route::post('master/matakuliah/ubahproses', 'MasterMatakuliahController@ubahmatakuliah_proses');
+		// Route::get('master/matakuliah/ubah/{id}', 'MasterMatakuliahController@ubahmatakuliah');
+		// Route::post('master/matakuliah/ubahproses', 'MasterMatakuliahController@ubahmatakuliah_proses');
 
 		//Hapus data matakuliah
 		//Route::get('master/matakuliah/hapus/{id}', 'MasterMatakuliahController@hapusmatakuliah');
@@ -90,6 +90,27 @@ Route::group(['prefix' => '/' ], function()
 		//Suggestion pencarian data matakuliah
 		Route::post('master/matakuliah/fetch', 'MasterMatakuliahController@fetch')->name('mastermatakuliah.fetch');
 
+
+		//4. MASTER KONSULTASI
+		//localhost:8000/admin/konsultasi
+		Route::get('master/konsultasi', 'MasterKonsultasiController@daftarkonsultasi');
+
+		//Tambah data konsultasi
+		Route::get('master/konsultasi/tambah', 'MasterKonsultasiController@tambahkonsultasi');
+		Route::post('master/konsultasi/prosestambah', 'MasterKonsultasiController@tambahkonsultasi_proses');
+
+		//Ubah data konsultasi
+		Route::get('master/konsultasi/ubah/{id}', 'MasterKonsultasiController@ubahkonsultasi');
+		Route::post('master/konsultasi/ubahproses', 'MasterKonsultasiController@ubahkonsultasi_proses');
+
+		//Hapus data matakuliah
+		Route::get('master/konsultasi/hapus/{id}', 'MasterKonsultasiController@hapuskonsultasi');
+
+		//Pencarian data konsultasi
+		Route::get('master/konsultasi/prosescari', 'MasterKonsultasiController@carikonsultasi');
+		//Suggestion pencarian data konsultasi
+		Route::post('master/konsultasi/fetch', 'MasterKonsultasiController@fetch')->name('masterkonsultasi.fetch');
+		
 	});
 
 	//localhost:8000/dosen/

@@ -32,8 +32,9 @@ class MasterMahasiswaController extends Controller
         if(Session::get('admin') != null)
         {
             $mahasiswa = DB::table('mahasiswa')
-            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan')
             ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+            ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
             ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
             ->paginate(10);
             
@@ -286,7 +287,6 @@ class MasterMahasiswaController extends Controller
         }
         catch(QueryException $e)
         {
-            dd($e);
             return redirect("admin/master/mahasiswa/ubah/{$request->get('nrp_mahasiswa')}")->with(['Error' => 'Gagal Mengubah Data '.$request->get('nama_mahasiswa')." - ".$request->get('nrp_mahasiswa')]);
         }
     }
@@ -296,19 +296,21 @@ class MasterMahasiswaController extends Controller
         try
         {
             $datamahasiswa = DB::table('mahasiswa')
-                        ->join('users', 'users.username', '=', 'mahasiswa.users_username')
                         ->where('mahasiswa.nrpmahasiswa', $id)
                         ->get();
             //Hapus File gambar 
             File::delete('data_pengguna/'.$datamahasiswa[0]->profil);
 
-
-            $dosen = DB::table('mahasiswa')
+            $mahasiswa = DB::table('mahasiswa')
                 ->where('nrpmahasiswa',$id)
                 ->delete();
 
             $user = DB::table('users')
                 ->where('username',$request->get('username'))
+                ->delete();
+
+            $gamifikasi = DB::table('gamifikasi')
+                ->where('idgamifikasi',$request->get('idgamifikasi'))
                 ->delete();
 
             return redirect('admin/master/mahasiswa')->with(['Success' => 'Berhasil Menghapus Data '." ".$request->get('username')." - ".$id]);
@@ -333,49 +335,45 @@ class MasterMahasiswaController extends Controller
         if($jenis_pencarian == "nrpmahasiswa")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*','dosen.npkdosen' ,'dosen.namadosen')
+                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
                 ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
                 ->where('mahasiswa.nrpmahasiswa',$keyword )
                 ->paginate(10);
         }
         else if($jenis_pencarian == "namamahasiswa")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*','dosen.npkdosen','dosen.namadosen')
+                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
                 ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
                 ->where('mahasiswa.namamahasiswa',$keyword )
-                ->paginate(10);
-        }
-        else if($jenis_pencarian == "jeniskelamin")
-        {
-            $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*','dosen.npkdosen', 'dosen.namadosen')
-                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->where('mahasiswa.jeniskelamin',$keyword )
                 ->paginate(10);
         }
         else if($jenis_pencarian == "email")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
+                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
                 ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
                 ->where('mahasiswa.email',$keyword )
                 ->paginate(10);
         }
         else if($jenis_pencarian == "telepon")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen', 'dosen.namadosen')
+                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
                 ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
                 ->where('mahasiswa.telepon',$keyword )
                 ->paginate(10);
         }
         else if($jenis_pencarian == "tahunakademik")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*','dosen.npkdosen', 'dosen.namadosen','tahun_akademik.tahun')
+                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
                 ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=', 'mahasiswa.thnakademik_idthnakademik')
+                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
                 ->where('tahun_akademik.tahun',$keyword )
                 ->paginate(10);
                 // dd($mahasiswa);
@@ -383,34 +381,29 @@ class MasterMahasiswaController extends Controller
         else if($jenis_pencarian == "alamat")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
+                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
                 ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
                 ->where('mahasiswa.alamat',$keyword )
-                ->paginate(10);
-        }
-        else if($jenis_pencarian == "status")
-        {
-            $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*','dosen.npkdosen', 'dosen.namadosen')
-                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->where('mahasiswa.status',$keyword )
                 ->paginate(10);
         }
         else if($jenis_pencarian == "username")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*','dosen.npkdosen', 'dosen.namadosen')
+                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
                 ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->where('mahasiswa.username',$keyword )
+                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+                ->where('mahasiswa.users_username',$keyword )
                 ->paginate(10);
         }
         else if($jenis_pencarian == "dosenwali")
         {
-            $sub_keyword=explode('-',$keyword);
+            $sub_keyword=explode(' ',$keyword);
 
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
+                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
                 ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
                 ->where('dosen.npkdosen',$sub_keyword[0])
                 ->paginate(10);
         }
@@ -435,9 +428,9 @@ class MasterMahasiswaController extends Controller
             if($pencarian == 'nrpmahasiswa')
             {
                 $datamahasiswa = DB::table('mahasiswa')
-                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
+                                ->select('mahasiswa.nrpmahasiswa')
                                 ->where('nrpmahasiswa', 'LIKE', "%{$query}%")
-                                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                                ->groupBy('mahasiswa.nrpmahasiswa')
                                 ->get();
             
                 foreach($datamahasiswa as $row)
@@ -449,9 +442,9 @@ class MasterMahasiswaController extends Controller
             else if($pencarian == "namamahasiswa")
             {
                 $datamahasiswa = DB::table('mahasiswa')
-                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
+                                ->select('mahasiswa.namamahasiswa')
                                 ->where('namamahasiswa', 'LIKE', "%{$query}%")
-                                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                                ->groupBy('mahasiswa.namamahasiswa')
                                 ->get();
 
                 foreach($datamahasiswa as $row)
@@ -459,25 +452,12 @@ class MasterMahasiswaController extends Controller
                     $output .= '<li><a href="#">'.$row->namamahasiswa.'</a></li>';
                 }
             }
-            else if($pencarian == "jeniskelamin")
-            {
-                $datamahasiswa = DB::table('mahasiswa')
-                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
-                                ->where('mahasiswa.jeniskelamin', 'LIKE', "%{$query}%")
-                                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                                ->get();
-
-                foreach($datamahasiswa as $row)
-                {
-                    $output .= '<li><a href="#">'.$row->jeniskelamin.'</a></li>';
-                }
-            }
             else if($pencarian == "email")
             {
                 $datamahasiswa = DB::table('mahasiswa')
-                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
-                                ->where('mahasiswa.email', 'LIKE', "%{$query}%")
-                                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                                ->select('mahasiswa.email')
+                                ->where('email', 'LIKE', "%{$query}%")
+                                ->groupBy('mahasiswa.email')
                                 ->get();
 
                 foreach($datamahasiswa as $row)
@@ -488,9 +468,9 @@ class MasterMahasiswaController extends Controller
             else if($pencarian == "telepon")
             {
                 $datamahasiswa = DB::table('mahasiswa')
-                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
+                                ->select('mahasiswa.telepon')
                                 ->where('mahasiswa.telepon', 'LIKE', "%{$query}%")
-                                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                                ->groupBy('mahasiswa.telepon')
                                 ->get();
 
                 foreach($datamahasiswa as $row)
@@ -501,10 +481,10 @@ class MasterMahasiswaController extends Controller
             else if($pencarian == "tahunakademik")
             {
                 $datamahasiswa = DB::table('mahasiswa')
-                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen', 'tahun_akademik.tahun')
-                                ->where('tahun_akademik.tahun', 'LIKE', "%{$query}%")
-                                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                                ->select('tahun_akademik.tahun')
                                 ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=', 'mahasiswa.thnakademik_idthnakademik')
+                                ->where('tahun_akademik.tahun', 'LIKE', "%{$query}%")
+                                ->groupBy('tahun_akademik.tahun')
                                 ->get();
                 foreach($datamahasiswa as $row)
                 {
@@ -514,9 +494,9 @@ class MasterMahasiswaController extends Controller
             else if($pencarian == "alamat")
             {
                 $datamahasiswa = DB::table('mahasiswa')
-                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
+                                ->select('mahasiswa.alamat')
                                 ->where('mahasiswa.alamat', 'LIKE', "%{$query}%")
-                                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                                ->groupBy('mahasiswa.alamat')
                                 ->get();
 
                 foreach($datamahasiswa as $row)
@@ -524,45 +504,34 @@ class MasterMahasiswaController extends Controller
                     $output .= '<li><a href="#">'.$row->alamat.'</a></li>';
                 }
             }
-            else if($pencarian == "status")
-            {
-                $datamahasiswa = DB::table('mahasiswa')
-                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
-                                ->where('mahasiswa.status', 'LIKE', "%{$query}%")
-                                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                                ->get();
-
-                foreach($datamahasiswa as $row)
-                {
-                    $output .= '<li><a href="#">'.$row->status.'</a></li>';
-                }
-            }
             else if($pencarian == "username")
             {
                 $datamahasiswa = DB::table('mahasiswa')
-                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
-                                ->where('mahasiswa.users_username', 'LIKE', "%{$query}%")
-                                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                                ->select('users.username')
+                                ->join('users', 'users.username', '=', 'mahasiswa.users_username')
+                                ->where('users.username', 'LIKE', "%{$query}%")
+                                ->groupBy('users.username')
                                 ->get();
 
                 foreach($datamahasiswa as $row)
                 {
-                    $output .= '<li><a href="#">'.$row->users_username.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->username.'</a></li>';
                 }
             }
            
             else if($pencarian == "dosenwali")
             {
                 $datamahasiswa = DB::table('mahasiswa')
-                                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen')
-                                ->where('dosen.namadosen', 'LIKE', "%{$query}%")
-                                ->orwhere('dosen.npkdosen', 'LIKE', "%{$query}%")
+                                ->select('dosen.npkdosen','dosen.namadosen')
                                 ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+                                ->where('dosen.namadosen', 'LIKE', "%{$query}%")
+                                ->groupBy('dosen.npkdosen')
+                                ->groupBy('dosen.namadosen')
                                 ->get();
-
+                
                 foreach($datamahasiswa as $row)
                 {
-                    $output .= '<li><a href="#">'.$row->npkdosen." - ".$row->namadosen.'</a></li>';
+                    $output .= '<li><a href="#">'.$row->npkdosen." ".$row->namadosen.'</a></li>';
                 }
             }
 
