@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\QueryException;
@@ -247,23 +246,45 @@ class MasterDosenController extends Controller
     {
         try
         {
-            $datadosen = DB::table('dosen')
+            $konsultasi = DB::table('konsultasi_dosenwali')
+            ->join('dosen','dosen.npkdosen','=','konsultasi_dosenwali.dosen_npkdosen')
+            ->where('konsultasi_dosenwali.dosen_npkdosen',$id)
+            ->count();
+
+            $hukuman = DB::table('hukuman')
+            ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
+            ->where('hukuman.dosen_npkdosen',$id)
+            ->count();
+
+
+            if($konsultasi == 0 && $hukuman == 0)
+            {
+                $datadosen = DB::table('dosen')
                         ->join('users', 'users.username', '=', 'dosen.users_username')
                         ->where('dosen.npkdosen', $id)
                         ->get();
-            //Hapus File gambar 
-            File::delete('data_pengguna/'.$datadosen[0]->profil);
+                //Hapus File gambar 
+                File::delete('data_pengguna/'.$datadosen[0]->profil);
 
 
-            $dosen = DB::table('dosen')
+                $dosen = DB::table('dosen')
                 ->where('npkdosen',$id)
                 ->delete();
 
-            $user = DB::table('users')
+                $user = DB::table('users')
                 ->where('username',$request->get('username'))
                 ->delete();
 
-            return redirect('admin/master/dosen')->with(['Success' => 'Berhasil Menghapus Data '." ".$request->get('username')." - ".$id]);
+                return redirect('admin/master/dosen')->with(['Success' => 'Berhasil Menghapus Data '." ".$request->get('username')." - ".$id]);
+            }
+            else
+            {
+                return redirect('admin/master/dosen')->with(['Failed' => "Tidak Dapat Melakukan Hapus Data <br> Pesan Kesalahan: Dosen masih memiliki data yang terhubung dengan tabel lain"]);
+            }
+
+            // dd($konsultasi);
+            
+            
         }
 
         catch(QueryException $e)

@@ -26,7 +26,7 @@ Route::group(['prefix' => '/' ], function()
 	Route::group(['prefix' => 'admin'], function()
 	{
 		//localhost:8000/admin/(halaman home admin)
-		Route::get('/', 'HomeController@index');
+		Route::get('/', 'HomeController@index_admin');
 		
 		//1. MASTER DOSEN
 		//localhost:8000/admin/dosen
@@ -116,9 +116,21 @@ Route::group(['prefix' => '/' ], function()
 	//localhost:8000/dosen/
 	Route::group(['prefix' => 'dosen'], function()
 	{
-		Route::get('/', 'HomeDosenController@index');
+		//localhost:8000/admin/(halaman home dosen)
+		Route::get('/', 'HomeController@index_dosen');
 
+		//1. Data Mahasiswa
+		//localhost:8000/dosen/mahasiswa
+		Route::get('data/mahasiswa', 'DataMahasiswaController@daftarmahasiswa');
+		
+		//Ubah Flag
+		Route::get('data/mahasiswa/ubahflag/{id}', 'DataMahasiswaController@ubahflag');
 
+		//2. PROFILE DOSEN
+		//Menampilkan halaman profile dosen
+		Route::get('profil/profildosen', 'profildosenController@profil_dosen');
+		//Ubah Halaman Profile Dosen
+		Route::post('profil/profildosen/ubahproses', 'profildosenController@ubahprofildosen_proses');
 	});
 
 });

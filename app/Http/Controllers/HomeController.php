@@ -25,7 +25,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index_admin()
     {
         if(Session::get('admin') != null)
         {
@@ -64,14 +64,12 @@ class HomeController extends Controller
             ->orderBy('bulan','DESC')
             ->get();
 
-            // dd($total_konsultasi_sekarang);
-
             return view('home_admin',compact('dosen_aktif', 'mahasiswa_aktif', 'matakuliah','konsultasi','total_konsultasi','total_konsultasi_sekarang'));
 
             //Untuk Multi login user (dengan hak akses berbeda)
             // if(Session::get('dosen') != null)
             // {
-            //     return redirect('homem');  
+            //     return view('home_dosen');
             // }
             // else if(Session::get('mahasiswa') != null)
             // {
@@ -82,6 +80,47 @@ class HomeController extends Controller
         else
         {
             return redirect('/');  
+        }
+    }
+
+    public function index_dosen()
+    {
+        if(Session::get('dosen') != null)
+        {
+            $dosen = DB::table('dosen')
+            ->join('users','users.username','=', 'dosen.users_username')
+            ->where('users.username', Session::get('dosen'))
+            ->get();
+
+
+            $mahasiswa = DB::table('mahasiswa')
+            ->join('dosen','dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+            ->where('mahasiswa.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->where('mahasiswa.status','aktif')
+            ->count();
+
+            $hukuman = DB::table('hukuman')
+            ->join('dosen','dosen.npkdosen','=', 'hukuman.dosen_npkdosen')
+            ->where('hukuman.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->count();
+
+            $konsultasi = DB::table('konsultasi_dosenwali')
+            ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
+            ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->count();
+
+            $konsultasi_berikutnya = DB::table('konsultasi_dosenwali')
+            ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
+            ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
+            ->count();
+
+            return view('home_dosen', compact('mahasiswa','hukuman','konsultasi','konsultasi_berikutnya'));
+            
+        }
+        else
+        {
+            return redirect('/');
         }
     }
 }

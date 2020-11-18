@@ -1,5 +1,5 @@
 <!--Wajib untuk inisialisasi file views/layouts/appadmin-->
-@extends('layouts.appadmin')
+@extends('layouts.appdosen')
 
 @push('styles')
   <!-- Untuk menambahkan style baru -->
@@ -12,12 +12,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Daftar Data Mahasiswa</h1>
+            <h1 class="m-0 text-dark">Daftar Data Mahasiswa Wali</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{url('admin')}}">Home</a></li>
-              <li class="breadcrumb-item active">Daftar Mahasiswa</li>
+              <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
+              <li class="breadcrumb-item active">Daftar mahasiswa Wali</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -41,22 +41,12 @@
         </ul>
       </div>
     @endif
-
-    @if (\Session::has('Failed'))
-      <div class="alert alert-warning alert-block">
-        <ul>
-            <li>{!! \Session::get('Failed') !!}</li>
-        </ul>
-      </div>
-    @endif
     
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <a href="{{ url('admin/master/mahasiswa/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
-        <br><br><br>
 
-        <form method="GET" action="{{url('admin/master/mahasiswa/prosescari')}}" enctype="multipart/form-data">
+        <form method="GET" action="#" enctype="multipart/form-data">
           {{ csrf_field() }}
           <input type="hidden" name="_token" value="{{csrf_token() }}"> 
           
@@ -66,11 +56,7 @@
             <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
               <option value="nrpmahasiswa">NRP Mahasiswa</option>
               <option value="namamahasiswa">Nama Mahasiswa</option>
-              <option value="email">Email</option>
-              <option value="telepon">Telepon</option>
-              <option value="tahunakademik">Tahun Akademik</option>
-              <option value="username">Username</option>
-              <option value="dosenwali">Nama Dosen</option>
+              <option value="angkatan">Angkatan</option>
             </select>
 
             <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
@@ -83,20 +69,33 @@
 
         </form>
         
+        <div style="font-size: 12px">
+          <b>Keterangan:</b>
+          <br>
+          <a href="#" class="btn btn-danger btn-sm"></a> 
+          Keadaan mahasiswa membutuhkan perhatian lebih/khusus. 
+          <br>
+          <a href="#" class="btn btn-warning btn-sm"></a> 
+          Keadaan mahasiswa dalam proses pemantauan/pengawasan. 
+          <br>
+          <a href="#" class="btn btn-success btn-sm"></a> 
+          Keadaan mahasiswa dalam kondisi cukup baik.
+        
+          
+        </div>
+        <br>
         <!-- Small boxes (Stat box) -->
         <table class="table table-bordered table-striped">
           <thead>
             <tr> 
               <th width="1%">No.</th>
-              <th width="1%">NRP</th>
               <th width="1%">Nama</th>
-              <th width="1%">Jenis Kelamin</th>
-              <th width="1%">Email</th>
-              <th width="1%">Telepon</th>
-              <th width="1%">Tahun Akademik</th>
-              <th width="1%">Status</th>
-              <th width="1%">Username</th>
-              <th width="1%">Dosen Wali</th>
+              <th width="1%">NRP</th>
+              <th width="1%">Angkatan</th>
+              <th width="1%">SKS Kumulatif</th>
+              <th width="1%">IPK</th>
+              <th width="1%">IPS Terakhir</th>
+              <th width="1%">Informasi</th>
               <th width="1%">Action</th>
             </tr>
           </thead>
@@ -104,24 +103,39 @@
             @foreach($mahasiswa as $no => $m)
             <tr>
               <td>{{$no+1}}</td>
-              <td>{{$m->nrpmahasiswa}}</td>
               <td>{{$m->namamahasiswa}}</td>
-              <td>{{$m->jeniskelamin}}</td>
-              <td>{{$m->email}}</td>
-              <td>{{$m->telepon}}</td>
+              <td>{{$m->nrpmahasiswa}}</td>
               <td>{{$m->tahun}}</td>
-              <td>{{$m->status}}</td>
-              <td>{{$m->users_username}}</td>
-              <td>{{$m->namadosen}}  ({{$m->npkdosen}})</td>
               
-              <td>
-               <a href="{{url('admin/master/mahasiswa/ubah/'.$m->nrpmahasiswa)}}" class="btn btn-warning">Ubah</a>
+              @if($m->totalsks != null)
+                <td>{{$m->totalsks}}</td>
+                @else
+                <td>-</td>
+              @endif
 
-              <form method="get" action="{{url('admin/master/mahasiswa/hapus/'.$m->nrpmahasiswa)}}">
-                 <input type="hidden" name="username" value="{{$m->users_username}}">
-                  <input type="hidden" name="idgamifikasi" value="{{$m->gamifikasi_idgamifikasi}}">
-                 <button type="submmit" class="btn btn-danger">Hapus</button>
-               </form>
+              @if($m->ipk != null)
+                <td>{{$m->ipk}}</td>
+                @else
+                <td>-</td>
+              @endif
+
+              @if($m->ips != null)
+                <td>{{$m->ips}}</td>
+                @else
+                <td>-</td>
+              @endif
+
+              <td>
+               @if($m->flag == 0)
+               <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-success btn-sm">Normal</a>
+               @elseif($m->flag == 1)
+                <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-warning btn-sm">Waspada</a>
+               @else
+                <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-danger btn-sm">Kurang</a>
+               @endif
+              </td>
+              <td>
+               <a href="{{url('admin/master/mahasiswa/ubah/'.$m->nrpmahasiswa)}}" class="btn btn-primary">Detail</a>
               </td>
             </tr>
             @endforeach

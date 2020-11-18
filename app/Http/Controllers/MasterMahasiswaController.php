@@ -299,25 +299,43 @@ class MasterMahasiswaController extends Controller
     {
         try
         {
-            $datamahasiswa = DB::table('mahasiswa')
+            $konsultasi = DB::table('konsultasi_dosenwali')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->where('konsultasi_dosenwali.mahasiswa_nrpmahasiswa',$id)
+            ->count();
+
+            $hukuman = DB::table('hukuman')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
+            ->where('hukuman.mahasiswa_nrpmahasiswa',$id)
+            ->count();
+
+            if($konsultasi == 0 && $hukuman == 0)
+            {
+                $datamahasiswa = DB::table('mahasiswa')
                         ->where('mahasiswa.nrpmahasiswa', $id)
                         ->get();
-            //Hapus File gambar 
-            File::delete('data_pengguna/'.$datamahasiswa[0]->profil);
+                //Hapus File gambar 
+                File::delete('data_pengguna/'.$datamahasiswa[0]->profil);
 
-            $mahasiswa = DB::table('mahasiswa')
-                ->where('nrpmahasiswa',$id)
-                ->delete();
+                $mahasiswa = DB::table('mahasiswa')
+                    ->where('nrpmahasiswa',$id)
+                    ->delete();
 
-            $user = DB::table('users')
-                ->where('username',$request->get('username'))
-                ->delete();
+                $user = DB::table('users')
+                    ->where('username',$request->get('username'))
+                    ->delete();
 
-            $gamifikasi = DB::table('gamifikasi')
-                ->where('idgamifikasi',$request->get('idgamifikasi'))
-                ->delete();
+                $gamifikasi = DB::table('gamifikasi')
+                    ->where('idgamifikasi',$request->get('idgamifikasi'))
+                    ->delete();
 
-            return redirect('admin/master/mahasiswa')->with(['Success' => 'Berhasil Menghapus Data '." ".$request->get('username')." - ".$id]);
+                return redirect('admin/master/mahasiswa')->with(['Success' => 'Berhasil Menghapus Data '." ".$request->get('username')." - ".$id]);
+            }
+            else
+            {
+                 return redirect('admin/master/mahasiswa')->with(['Failed' => "Tidak Dapat Melakukan Hapus Data <br> Pesan Kesalahan: Mahasiswa masih memiliki data yang terhubung dengan tabel lain"]);
+            }
+           
         }
 
         catch(QueryException $e)

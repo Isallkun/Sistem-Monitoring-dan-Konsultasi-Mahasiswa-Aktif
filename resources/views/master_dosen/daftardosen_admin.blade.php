@@ -46,6 +46,13 @@
       </div>
     @endif
 
+    @if (\Session::has('Failed'))
+      <div class="alert alert-warning alert-block">
+        <ul>
+            <li>{!! \Session::get('Failed') !!}</li>
+        </ul>
+      </div>
+    @endif
     
     
     <!-- Main content -->

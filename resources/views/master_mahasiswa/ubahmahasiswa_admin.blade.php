@@ -174,7 +174,7 @@
 
                   <div class="form-group">
                     <b>Profil Pengguna</b><br/>
-                    <img src="{{url('data_pengguna/'.$m->profil )}}" class="img-thumbnail" style="width: 200px; height: 200px">
+                    <img src="{{url('data_pengguna/'.$m->profil )}}" class="img-thumbnail" style="width: 200px; height: 200px" alt='No User Image'>
                     <br><br>
                     <input type="file" name="profil_pengguna" accept="image/*">
                   </div>

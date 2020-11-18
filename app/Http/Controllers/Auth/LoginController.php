@@ -66,22 +66,28 @@ class LoginController extends Controller
 
                     return redirect('admin/');
                 }
+
                 else if($hasil[0]->role_idrole == "2")
                 {
-                    Session::put('dosen',$hasil[0]->username);
-
                     $hasil_profil = DB::table('dosen')
                                     -> where('users_username', $hasil[0]->username)
                                     -> get();
+
+                    Session::put('dosen',$hasil[0]->username);
                     Session::put('profil',$hasil_profil[0]->profil);
 
-                    return view('...', compact('username'));    
+
+                    return redirect('dosen/');    
                 }   
-                else if($hasil[0]->role_idrole == "3")
+                // else if($hasil[0]->role_idrole == "3")
+                // {
+                //     Session::put('mahasiswa',$hasil[0]->username);
+                //     return view('...', compact('username'));    
+                // }  
+                else
                 {
-                    Session::put('mahasiswa',$hasil[0]->username);
-                    return view('...', compact('username'));    
-                }   
+                    return redirect()->back()->with('Info', 'ID Role tidak dapat ditemukan adalam Database');
+                } 
             }
             else
             { 
