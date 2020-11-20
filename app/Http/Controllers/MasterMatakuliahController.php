@@ -67,7 +67,7 @@ class MasterMatakuliahController extends Controller
             $tahunakademik=$request->get('tahunakademik');
 
             $this->validate($request,[
-                'kodematakuliah' =>'required|min:8',
+                'kodematakuliah' =>'required|max:8',
                 'namamatakuliah' =>'required',
                 'totalsks' =>'required|numeric|min:1|max:10',
                 'totalpertemuan' =>'required|numeric|min:1|max:10',

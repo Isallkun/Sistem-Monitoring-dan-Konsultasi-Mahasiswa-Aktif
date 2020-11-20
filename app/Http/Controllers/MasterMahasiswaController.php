@@ -32,12 +32,13 @@ class MasterMahasiswaController extends Controller
         if(Session::get('admin') != null)
         {
             $mahasiswa = DB::table('mahasiswa')
-            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan')
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan','gamifikasi.*')
             ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
             ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
             ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
             ->paginate(10);
-            
+
             return view('master_mahasiswa.daftarmahasiswa_admin', compact('mahasiswa'));
         }
         else
@@ -358,78 +359,94 @@ class MasterMahasiswaController extends Controller
 
         if($jenis_pencarian == "nrpmahasiswa")
         {
+
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
-                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
-                ->where('mahasiswa.nrpmahasiswa',$keyword )
-                ->paginate(10);
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan','gamifikasi.*')
+            ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+            ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
+            ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+            ->where('mahasiswa.nrpmahasiswa',$keyword )
+            ->paginate(10);
         }
         else if($jenis_pencarian == "namamahasiswa")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
-                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
-                ->where('mahasiswa.namamahasiswa',$keyword )
-                ->paginate(10);
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan','gamifikasi.*')
+            ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+            ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
+            ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+            ->where('mahasiswa.namamahasiswa',$keyword )
+            ->paginate(10);
         }
         else if($jenis_pencarian == "email")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
-                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
-                ->where('mahasiswa.email',$keyword )
-                ->paginate(10);
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan','gamifikasi.*')
+            ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+            ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
+            ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+            ->where('mahasiswa.email',$keyword )
+            ->paginate(10);
         }
         else if($jenis_pencarian == "telepon")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
-                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
-                ->where('mahasiswa.telepon',$keyword )
-                ->paginate(10);
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan','gamifikasi.*')
+            ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+            ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
+            ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+            ->where('mahasiswa.telepon',$keyword )
+            ->paginate(10);
         }
         else if($jenis_pencarian == "tahunakademik")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
-                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
-                ->where('tahun_akademik.tahun',$keyword )
-                ->paginate(10);
-                // dd($mahasiswa);
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan','gamifikasi.*')
+            ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+            ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
+            ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+            ->where('tahun_akademik.tahun',$keyword )
+            ->paginate(10);
         }
         else if($jenis_pencarian == "alamat")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
-                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
-                ->where('mahasiswa.alamat',$keyword )
-                ->paginate(10);
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan','gamifikasi.*')
+            ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+            ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
+            ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+            ->where('mahasiswa.alamat',$keyword )
+            ->paginate(10);
         }
         else if($jenis_pencarian == "username")
         {
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
-                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
-                ->where('mahasiswa.users_username',$keyword )
-                ->paginate(10);
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan','gamifikasi.*')
+            ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+            ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
+            ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+            ->where('mahasiswa.users_username',$keyword )
+            ->paginate(10);
         }
         else if($jenis_pencarian == "dosenwali")
         {
             $sub_keyword=explode(' ',$keyword);
 
             $mahasiswa = DB::table('mahasiswa')
-                ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun')
-                ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-                ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
-                ->where('dosen.npkdosen',$sub_keyword[0])
-                ->paginate(10);
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan','gamifikasi.*')
+            ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
+            ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
+            ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+            ->where('dosen.npkdosen',$sub_keyword[0])
+            ->paginate(10);
         }
         else
         {
@@ -558,9 +575,6 @@ class MasterMahasiswaController extends Controller
                     $output .= '<li><a href="#">'.$row->npkdosen." ".$row->namadosen.'</a></li>';
                 }
             }
-
-
-           
            
             $output .= '</ul>';
             echo $output;

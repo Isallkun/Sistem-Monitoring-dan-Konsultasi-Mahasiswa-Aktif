@@ -37,7 +37,7 @@
               <div class="inner">
                 <h3>{{$mahasiswa}}</h3>
 
-                <p>Total Mahasiswa</p>
+                <p>Total Mahasiswa Wali</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-people"></i>

@@ -171,7 +171,6 @@
                      <th>Tahun akademik:</th>
                      <td>{{$d->semester}} {{$d->tahun}}</td>
                     </tr>
-                    <tr>
                   </table>
                 </div>
                 <!-- footer modal -->

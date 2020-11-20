@@ -17,7 +17,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
-              <li class="breadcrumb-item active">Daftar mahasiswa Wali</li>
+              <li class="breadcrumb-item active">Daftar Mahasiswa Wali</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -46,29 +46,6 @@
     <section class="content">
       <div class="container-fluid">
 
-        <form method="GET" action="#" enctype="multipart/form-data">
-          {{ csrf_field() }}
-          <input type="hidden" name="_token" value="{{csrf_token() }}"> 
-          
-          <label for="exampleInputPencarian">Pencarian Data: </label>
-
-          <div class="form-group">            
-            <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
-              <option value="nrpmahasiswa">NRP Mahasiswa</option>
-              <option value="namamahasiswa">Nama Mahasiswa</option>
-              <option value="angkatan">Angkatan</option>
-            </select>
-
-            <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
-
-            <button type="submit" class="btn btn-light"><i class="fas fa-search"></i></button>
-
-            <div id="mahasiswaList"></div>
-          
-          </div>
-
-        </form>
-        
         <div style="font-size: 12px">
           <b>Keterangan:</b>
           <br>
@@ -95,7 +72,7 @@
               <th width="1%">SKS Kumulatif</th>
               <th width="1%">IPK</th>
               <th width="1%">IPS Terakhir</th>
-              <th width="1%">Informasi</th>
+              <th width="1%">Kondisi</th>
               <th width="1%">Action</th>
             </tr>
           </thead>
@@ -105,25 +82,11 @@
               <td>{{$no+1}}</td>
               <td>{{$m->namamahasiswa}}</td>
               <td>{{$m->nrpmahasiswa}}</td>
-              <td>{{$m->tahun}}</td>
+              <td>{{$m->tahun}}</td>   
+              <td>{{$m->totalsks}}</td>
+              <td>{{$m->ipk}}</td>
+              <td>{{$m->ips}}</td>
               
-              @if($m->totalsks != null)
-                <td>{{$m->totalsks}}</td>
-                @else
-                <td>-</td>
-              @endif
-
-              @if($m->ipk != null)
-                <td>{{$m->ipk}}</td>
-                @else
-                <td>-</td>
-              @endif
-
-              @if($m->ips != null)
-                <td>{{$m->ips}}</td>
-                @else
-                <td>-</td>
-              @endif
 
               <td>
                @if($m->flag == 0)
@@ -135,7 +98,7 @@
                @endif
               </td>
               <td>
-               <a href="{{url('admin/master/mahasiswa/ubah/'.$m->nrpmahasiswa)}}" class="btn btn-primary">Detail</a>
+               <a href="{{url('dosen/data/mahasiswa/detail/'.$m->nrpmahasiswa)}}" class="btn btn-primary">Detail</a>
               </td>
             </tr>
             @endforeach
@@ -152,33 +115,5 @@
 @endsection
  
 @push('scripts')
-<script>
-$(document).ready(function(){
 
- $('#keyword').keyup(function(){ 
-        var query = $(this).val();
-
-        if(query != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         var pencarian = document.getElementById("pencarian").value;
-         $.ajax({
-          url:"{{ route('mastermahasiswa.fetch') }}",
-          method:"POST",
-          data:{query:query,_token:_token, jenis:pencarian},
-          success:function(data){
-            $('#mahasiswaList').fadeIn();  
-              $('#mahasiswaList').html(data);
-          }
-         });
-        }
-    });
-
-    $(document).on('click', 'li', function(){  
-        $('#keyword').val($(this).text());  
-        $('#mahasiswaList').fadeOut();  
-    });  
-
-});
-</script>
 @endpush

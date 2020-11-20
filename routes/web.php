@@ -122,15 +122,21 @@ Route::group(['prefix' => '/' ], function()
 		//1. Data Mahasiswa
 		//localhost:8000/dosen/mahasiswa
 		Route::get('data/mahasiswa', 'DataMahasiswaController@daftarmahasiswa');
-		
+	
 		//Ubah Flag
 		Route::get('data/mahasiswa/ubahflag/{id}', 'DataMahasiswaController@ubahflag');
+
+		//Menampilkan Detail Mahasiswa
+		Route::get('data/mahasiswa/detail/{id}', 'DataMahasiswaController@detailmahasiswa');
+
 
 		//2. PROFILE DOSEN
 		//Menampilkan halaman profile dosen
 		Route::get('profil/profildosen', 'profildosenController@profil_dosen');
 		//Ubah Halaman Profile Dosen
 		Route::post('profil/profildosen/ubahproses', 'profildosenController@ubahprofildosen_proses');
+
+		
 	});
 
 });

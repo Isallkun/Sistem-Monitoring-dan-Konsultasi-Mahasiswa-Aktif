@@ -3,8 +3,15 @@
 
 @push('styles')
   <!-- Untuk menambahkan style baru -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  <style type="text/css">
+  .checked {
+    color: orange;
+  }
+  </style>
 @endpush
-
+ 
 <!-- Isi dari yield -->
 @section('content')
     <!-- Content Header (Page header) -->
@@ -96,7 +103,7 @@
               <th width="1%">Tahun Akademik</th>
               <th width="1%">Status</th>
               <th width="1%">Username</th>
-              <th width="1%">Dosen Wali</th>
+              <th width="1%">Detail</th>
               <th width="1%">Action</th>
             </tr>
           </thead>
@@ -112,7 +119,9 @@
               <td>{{$m->tahun}}</td>
               <td>{{$m->status}}</td>
               <td>{{$m->users_username}}</td>
-              <td>{{$m->namadosen}}  ({{$m->npkdosen}})</td>
+              <td>
+                <a href="{{url('admin/master/mahasiswa/detail_mahasiswa/'.$m->nrpmahasiswa)}}" class="fas fa-eye" data-toggle="modal" data-target="#detailMahasiswa_{{$m->nrpmahasiswa}}"></a>
+              </td>
               
               <td>
                <a href="{{url('admin/master/mahasiswa/ubah/'.$m->nrpmahasiswa)}}" class="btn btn-warning">Ubah</a>
@@ -133,6 +142,74 @@
         Data Per Halaman : {{$mahasiswa->perPage()}} <br/>
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
+
+      @foreach($mahasiswa as $m)
+          <div id="detailMahasiswa_{{$m->nrpmahasiswa}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <!-- konten modal-->
+              <div class="modal-content">
+                <!-- heading modal -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Detail Mahasiswa</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- body modal -->
+                <div class="modal-body">
+                  <p><b>{{$m->namamahasiswa}} - {{$m->nrpmahasiswa}}</b></p>
+                  <table class="table table-bordered table-hover">
+                    <tr>
+                     <th>Tempat, Tanggal Lahir</th>
+                     <td>{{$m->tempatlahir}}, {{$m->tanggallahir}}</td>
+                    </tr>
+                    <tr>
+                     <th>Alamat</th>
+                     <td>{{$m->alamat}}</td>
+                    </tr>
+                    <tr>
+                     <th>Jurusan</th>
+                     <td>{{$m->namajurusan}}</td>
+                    </tr>
+                    <tr>
+                     <th>Dosen Wali</th>
+                     <td>{{$m->namadosen}} ({{$m->npkdosen}})</td>
+                    </tr>
+
+                    <tr>
+                     <th>Level</th>
+                     <td>
+                      
+                      <a class="float-left">
+                        @if($m->level == "Bronze")
+                        <img src="{{url('rank_pictures/Bronze.png')}}" class="rounded mx-auto d-block" alt="rank image">
+                        @elseif($m->level == "Silver")
+                        <img src="{{url('rank_pictures/Silver.png')}}" class="rounded mx-auto d-block" alt="rank image">
+                        @else
+                        <img src="{{url('rank_pictures/Gold.png')}}" class="rounded mx-auto d-block" alt="rank image">
+                        @endif
+                        Rating:
+                        @if($m->poin != "0")
+                          @for($i=0; $i <= $m->poin; $i++)
+                            <span class="fa fa-star checked"></span>
+                          @endfor
+                        @else
+                          sorry, no rating 
+                        @endif 
+                      </a>
+                     </td>
+                    </tr>
+
+
+                   
+                  </table>
+                </div>
+                <!-- footer modal -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        @endforeach
     </section>
     
 @endsection
