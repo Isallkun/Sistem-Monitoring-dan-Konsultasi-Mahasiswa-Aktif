@@ -213,6 +213,8 @@ class MasterKonsultasiController extends Controller
         }
         catch(QueryException $e)
         {
+            $message= explode("in C:",$e);
+            
             return redirect("admin/master/konsultasi/ubah/{$request->get('idkonsultasi')}")->with(['Error' => 'Gagal Mengubah Data Konsultasi (ID) '.$request->get('idkonsultasi')."<br> Pesan Kesalahan: ".$message[0]]);
         }
     }
@@ -324,7 +326,7 @@ class MasterKonsultasiController extends Controller
         return view('master_konsultasi.daftarkonsultasi_admin', compact('konsultasi'));
     }
 
-     function fetch(Request $request)
+    function fetch(Request $request)
     {
         $query = $request->get('query');
         $pencarian =$request->get('jenis');

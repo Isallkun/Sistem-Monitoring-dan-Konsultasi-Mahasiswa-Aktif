@@ -10,6 +10,7 @@ use Illuminate\Database\QueryException;
 use DB;
 use Session;
 use File;
+use Mail;
 
 use App\User;
 use App\Mahasiswa;
@@ -31,22 +32,22 @@ class DataMahasiswaController extends Controller
             ->where('users.username', Session::get('dosen'))
             ->get();
 
+            //START Query Cadangan
+                // $ks_mahasiswa1 = DB::table('kartu_studi')
+                // ->distinct()
+                // ->get();
+                // $kartustudi1=[];
+                // foreach ($ks_mahasiswa1 as $key => $value) 
+                // {
+                // 	$kartustudi1[] = $value->mahasiswa_nrpmahasiswa;
+                // }
 
-            // $ks_mahasiswa1 = DB::table('kartu_studi')
-            // ->distinct()
-            // ->get();
-            // $kartustudi1=[];
-            // foreach ($ks_mahasiswa1 as $key => $value) 
-            // {
-            // 	$kartustudi1[] = $value->mahasiswa_nrpmahasiswa;
-            // }
+                // $mahasiswa_kosong = DB::table('mahasiswa')
+                // ->select('nrpmahasiswa','namamahasiswa', DB::raw("'0' as totalsks,'0.0' as ips,'0.0' as ipk,'0.0' as ipkm"))
+                // ->whereNotIn('nrpmahasiswa',$kartustudi1)
+                // ->get();
+            //END START Query Cadangan
 
-            // $mahasiswa_kosong = DB::table('mahasiswa')
-            // ->select('nrpmahasiswa','namamahasiswa', DB::raw("'0' as totalsks,'0.0' as ips,'0.0' as ipk,'0.0' as ipkm"))
-            // ->whereNotIn('nrpmahasiswa',$kartustudi1)
-            // ->get();
-
-            //---------------------------------------
 
             $kartu_studi= DB::table('kartu_studi')
             ->select(DB::raw("max(idkartustudi) as idkartustudi"))
@@ -59,16 +60,17 @@ class DataMahasiswaController extends Controller
             }
 
             $mahasiswa = DB::table('mahasiswa')
-            ->select('mahasiswa.*','tahun_akademik.tahun', 'kartu_studi.*')
+            ->select('mahasiswa.*','tahun_akademik.tahun', 'kartu_studi.*','gamifikasi.*')
             ->join('dosen','dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
             ->join('kartu_studi','kartu_studi.mahasiswa_nrpmahasiswa','=','mahasiswa.nrpmahasiswa')
+            ->join('gamifikasi','idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
             ->where('mahasiswa.dosen_npkdosen',$dosen[0]->npkdosen )
             ->where('mahasiswa.status','aktif')
             ->whereIn('kartu_studi.idkartustudi', $whereinCondition) // wherein condition [1,2,3,4]
-            ->orderBy('kartu_studi.idkartustudi','DESC')
+            ->orderBy('poin','DESC')
             ->paginate(10);
-
+            
             return view('data_mahasiswa.daftarmahasiswa_dosen', compact('mahasiswa'));
         }
         else
@@ -124,7 +126,7 @@ class DataMahasiswaController extends Controller
         if(Session::get('dosen') != null)
         {
             //1. Detail Informasi Mahasiswa
-            //a. informasi dalam bentuk total angka
+            //1a. informasi dalam bentuk total angka
             $total_konsultasi = DB::table('konsultasi_dosenwali')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
             ->where('mahasiswa.nrpmahasiswa',$id)
@@ -161,7 +163,7 @@ class DataMahasiswaController extends Controller
             ->get();
             $sisasks = $total_sks[0]->sisasks;
 
-            //b. informasi dalam bentuk grafik 
+            //1b. informasi dalam bentuk grafik 
             $grafik_akademik= DB::table('kartu_studi')
             ->select('ipk','ips','semester','tahun','totalsks')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
@@ -181,8 +183,19 @@ class DataMahasiswaController extends Controller
             ->get();
 
 
+            //4. Detail Konsultasi Mahasiswa
+            $data_konsultasi = DB::table('konsultasi_dosenwali')
+            ->join('dosen','dosen.npkdosen','=','konsultasi_dosenwali.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->join('topik_konsultasi','topik_konsultasi.idtopikkonsultasi','=','konsultasi_dosenwali.topik_idtopikkonsultasi')
+              ->join('semester','semester.idsemester','=','konsultasi_dosenwali.semester_idsemester')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','konsultasi_dosenwali.thnakademik_idthnakademik')
+            ->where('mahasiswa.nrpmahasiswa',$id)
+            ->orderBy('konsultasi_dosenwali.idkonsultasi','DESC')
+            ->paginate(10);
+            
 
-            //5. Detail Hukuman
+            //5. Detail Hukuman Mahasiswa
             $data_hukuman = DB::table('hukuman')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
@@ -190,7 +203,7 @@ class DataMahasiswaController extends Controller
             ->paginate(10);
             
             
-            return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_hukuman'));
+            return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_hukuman'));
         }
         else
         {

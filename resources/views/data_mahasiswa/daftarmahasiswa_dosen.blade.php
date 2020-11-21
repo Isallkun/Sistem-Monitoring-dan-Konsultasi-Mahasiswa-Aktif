@@ -3,6 +3,13 @@
 
 @push('styles')
   <!-- Untuk menambahkan style baru -->
+  link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  
+  <style type="text/css">
+  .checked {
+    color: orange;
+  }
+  </style>
 @endpush
 
 <!-- Isi dari yield -->
@@ -73,6 +80,7 @@
               <th width="1%">IPK</th>
               <th width="1%">IPS Terakhir</th>
               <th width="1%">Kondisi</th>
+              <th width="1%">Rating</th>
               <th width="1%">Action</th>
             </tr>
           </thead>
@@ -86,8 +94,6 @@
               <td>{{$m->totalsks}}</td>
               <td>{{$m->ipk}}</td>
               <td>{{$m->ips}}</td>
-              
-
               <td>
                @if($m->flag == 0)
                <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-success btn-sm">Normal</a>
@@ -97,6 +103,11 @@
                 <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-danger btn-sm">Kurang</a>
                @endif
               </td>
+              <td> 
+                <span class="fa fa-star checked" ></span>
+                +{{$m->poin}}
+              </td>
+
               <td>
                <a href="{{url('dosen/data/mahasiswa/detail/'.$m->nrpmahasiswa)}}" class="btn btn-primary">Detail</a>
               </td>

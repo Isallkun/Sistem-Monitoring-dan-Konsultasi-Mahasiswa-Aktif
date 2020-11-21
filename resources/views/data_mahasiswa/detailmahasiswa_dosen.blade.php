@@ -55,7 +55,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <div class="card card-primary card-tabs">
+            <div class="card card-info card-tabs">
               <div class="card-header p-0 pt-0">
                 <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
                   <li class="pt-2 px-3" style="background-color: black"><h3 class="card-title">{{$data_mahasiswa[0]->namamahasiswa}} - {{$data_mahasiswa[0]->nrpmahasiswa}}</h3></li>
@@ -69,7 +69,7 @@
                     <a class="nav-link" id="custom-tabs-two-akademik-tab" data-toggle="pill" href="#custom-tabs-two-akademik" role="tab" aria-controls="custom-tabs-two-akademik" aria-selected="false">Akademik</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-two-settings-tab" data-toggle="pill" href="#custom-tabs-two-settings" role="tab" aria-controls="custom-tabs-two-settings" aria-selected="false">Settings</a>
+                    <a class="nav-link" id="custom-tabs-two-konsultasi-tab" data-toggle="pill" href="#custom-tabs-two-konsultasi" role="tab" aria-controls="custom-tabs-two-konsultasi" aria-selected="false">Konsultasi</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-two-hukuman-tab" data-toggle="pill" href="#custom-tabs-two-hukuman" role="tab" aria-controls="custom-tabs-two-hukuman" aria-selected="false">Hukuman</a>
@@ -284,10 +284,39 @@
                     @endforeach
                   </div>
                   <div class="tab-pane fade" id="custom-tabs-two-akademik" role="tabpanel" aria-labelledby="custom-tabs-two-akademik-tab">
-                     Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac ornare magna. 
+                    Akademik
                   </div>
-                  <div class="tab-pane fade" id="custom-tabs-two-settings" role="tabpanel" aria-labelledby="custom-tabs-two-settings-tab">
-                     Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis. 
+                  <div class="tab-pane fade" id="custom-tabs-two-konsultasi" role="tabpanel" aria-labelledby="custom-tabs-two-konsultasi-tab">
+                    <table class="table table-bordered table-striped">
+                      <thead>
+                        <tr> 
+                          <th width="1%">No.</th>
+                          <th width="1%">Tanggal Konsultasi</th>
+                          <th width="1%">Topik Konsultasi</th>
+                          <th width="1%">Tahun Akademik</th>
+                          <th width="1%">Konsultasi Selanjutnya</th>
+                          <th width="1%">Detail</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach($data_konsultasi as $no => $dk)
+                        <tr>
+                          <td>{{$no+1}}</td>
+                          <td>{{$dk->tanggalkonsultasi}}</td>
+                          <td>{{$dk->namatopik}}</td>
+                          <td>{{$dk->semester}} {{$dk->tahun}}</td>
+                          <td>{{$dk->konsultasiselanjutnya}}</td>
+                          <td>
+                            <a href="{{url('dosen/data/mahasiswa/detail/'.$dk->idkonsultasi)}}" class="fas fa-eye" data-toggle="modal" data-target="#detailKonsultasi_{{$dk->idkonsultasi}}"></a>
+                          </td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                      <br/>
+                      Halaman : {{$data_konsultasi->currentPage()}} <br/>
+                      Jumlah Data : {{$data_konsultasi->total()}} <br/>
+                      Data Per Halaman : {{$data_konsultasi->perPage()}} <br/>
                   </div>
                   <div class="tab-pane fade" id="custom-tabs-two-hukuman" role="tabpanel" aria-labelledby="custom-tabs-two-hukuman-tab">
                     <table class="table table-bordered table-striped">
@@ -304,31 +333,31 @@
                         </tr>
                       </thead>
                       <tbody>
-                        @foreach($data_hukuman as $no => $d)
+                        @foreach($data_hukuman as $no => $dh)
                         <tr>
                           <td>{{$no+1}}</td>
-                          <td>{{$d->namadosen}} ({{$d->npkdosen}})</td>
-                          <td>{{$d->tanggalinput}}</td>
-                          <td>{{$d->keterangan}}</td>
+                          <td>{{$dh->namadosen}} ({{$dh->npkdosen}})</td>
+                          <td>{{$dh->tanggalinput}}</td>
+                          <td>{{$dh->keterangan}}</td>
                           <td>
-                            @if($d->status != "0")
+                            @if($dh->status != "0")
                               Belum Selesai
                             @else
                               Selesai
                             @endif
                           </td>
                           <td>
-                            @if($d->penilaian == "kurang")
+                            @if($dh->penilaian == "kurang")
                               <i class="btn btn-danger btn-sm">Kurang</i>
-                            @elseif ($d->penilaian == "cukup")
+                            @elseif ($dh->penilaian == "cukup")
                               <i class="btn btn-warning btn-sm">Cukup</i>
                             @else 
                               <i class="btn btn-success btn-sm">Baik</i>
                             @endif
                             
                           </td>   
-                          <td>{{$d->tanggalkonfirmasi}}</td>   
-                          <td>{{$d->masaberlaku}}</td>      
+                          <td>{{$dh->tanggalkonfirmasi}}</td>   
+                          <td>{{$dh->masaberlaku}}</td>      
                         </tr>
                         @endforeach
                       </tbody>
@@ -348,6 +377,60 @@
        
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
+
+      @foreach($data_konsultasi as $dk)
+          <div id="detailKonsultasi_{{$dk->idkonsultasi}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <!-- konten modal-->
+              <div class="modal-content">
+                <!-- heading modal -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Detail Konsultasi</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- body modal -->
+                <div class="modal-body">
+                  <p><b>{{$dk->namatopik}}</b></p>
+                  <table class="table table-bordered table-hover">
+                    <tr>
+                     <th>Tanggal</th>
+                     <td>{{$dk->tanggalkonsultasi}}</td>
+                    </tr>
+                    <tr>
+                     <th>Permasalahan</th>
+                     <td>{{$dk->permasalahan}}</td>
+                    </tr>
+                    <tr>
+                     <th>Solusi:</th>
+                     <td>{{$dk->solusi}}</td>
+                    </tr>
+                    <tr>
+                     <th>Konsultasi Berikutnya:</th>
+                     <td>{{$dk->konsultasiselanjutnya}}</td>
+                    </tr>
+                    <tr>
+                    @if($dk->konfirmasi == 0)
+                      <th>Status Konfirmasi:</th>
+                      <td>Belum Disetujui</td>
+                    @else
+                      <th>Status Konfirmasi:</th>
+                      <td>Disetujui</td>
+                    @endif
+                    </tr>
+                    <tr>
+                     <th>Tahun akademik:</th>
+                     <td>{{$dk->semester}} {{$dk->tahun}}</td>
+                    </tr>
+                  </table>
+                </div>
+                <!-- footer modal -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        @endforeach
     </section>
     
 @endsection
