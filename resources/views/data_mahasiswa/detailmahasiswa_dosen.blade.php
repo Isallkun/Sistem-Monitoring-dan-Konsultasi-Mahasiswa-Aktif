@@ -295,6 +295,7 @@
                           <th width="1%">Topik Konsultasi</th>
                           <th width="1%">Tahun Akademik</th>
                           <th width="1%">Konsultasi Selanjutnya</th>
+                          <th width="1%">Konfirmasi</th>
                           <th width="1%">Detail</th>
                         </tr>
                       </thead>
@@ -306,6 +307,13 @@
                           <td>{{$dk->namatopik}}</td>
                           <td>{{$dk->semester}} {{$dk->tahun}}</td>
                           <td>{{$dk->konsultasiselanjutnya}}</td>
+                          <td>
+                            @if($dk->konfirmasi == "0")
+                            <i class="fas fa-thumbs-down btn btn-danger btn-sm"></i>
+                            @else
+                            <i class="fas fa-thumbs-up btn btn-success btn-sm"></i>
+                            @endif
+                          </td>
                           <td>
                             <a href="{{url('dosen/data/mahasiswa/detail/'.$dk->idkonsultasi)}}" class="fas fa-eye" data-toggle="modal" data-target="#detailKonsultasi_{{$dk->idkonsultasi}}"></a>
                           </td>

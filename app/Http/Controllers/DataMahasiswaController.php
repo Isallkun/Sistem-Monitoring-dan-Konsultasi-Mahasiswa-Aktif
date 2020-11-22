@@ -32,45 +32,42 @@ class DataMahasiswaController extends Controller
             ->where('users.username', Session::get('dosen'))
             ->get();
 
-            //START Query Cadangan
-                // $ks_mahasiswa1 = DB::table('kartu_studi')
-                // ->distinct()
-                // ->get();
-                // $kartustudi1=[];
-                // foreach ($ks_mahasiswa1 as $key => $value) 
-                // {
-                // 	$kartustudi1[] = $value->mahasiswa_nrpmahasiswa;
-                // }
 
-                // $mahasiswa_kosong = DB::table('mahasiswa')
-                // ->select('nrpmahasiswa','namamahasiswa', DB::raw("'0' as totalsks,'0.0' as ips,'0.0' as ipk,'0.0' as ipkm"))
-                // ->whereNotIn('nrpmahasiswa',$kartustudi1)
-                // ->get();
-            //END START Query Cadangan
+            // $kartu_studi= DB::table('kartu_studi')
+            // ->select(DB::raw("max(idkartustudi) as idkartustudi"))
+            // ->groupBy('mahasiswa_nrpmahasiswa')
+            // ->get();  // [ 0=>idkartustudi=>1 , 1=>idkartustudi=>2 ]
+            // $whereinCondition=[];
+            // foreach ($kartu_studi as $key => $value) 
+            // {
+            //  $whereinCondition[] = $value->idkartustudi;
+            // }
 
 
-            $kartu_studi= DB::table('kartu_studi')
-            ->select(DB::raw("max(idkartustudi) as idkartustudi"))
-            ->groupBy('mahasiswa_nrpmahasiswa')
-            ->get();  // [ 0=>idkartustudi=>1 , 1=>idkartustudi=>2 ]
-            $whereinCondition=[];
-            foreach ($kartu_studi as $key => $value) 
-            {
-             $whereinCondition[] = $value->idkartustudi;
-            }
+            $smtAktif = DB::table('semester')
+            ->select('idsemester')
+            ->where('status', '1')
+            ->get();
+
+            $thnAktif = DB::table('tahun_akademik')
+            ->select('idtahunakademik')
+            ->where('status', '1')
+            ->get();
 
             $mahasiswa = DB::table('mahasiswa')
-            ->select('mahasiswa.*','tahun_akademik.tahun', 'kartu_studi.*','gamifikasi.*')
+            ->select('mahasiswa.*', 'kartu_studi.*','gamifikasi.*','tahun_akademik.*')
             ->join('dosen','dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
-            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
             ->join('kartu_studi','kartu_studi.mahasiswa_nrpmahasiswa','=','mahasiswa.nrpmahasiswa')
             ->join('gamifikasi','idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
             ->where('mahasiswa.dosen_npkdosen',$dosen[0]->npkdosen )
             ->where('mahasiswa.status','aktif')
-            ->whereIn('kartu_studi.idkartustudi', $whereinCondition) // wherein condition [1,2,3,4]
+            ->where('kartu_studi.thnakademik_idthnakademik', $thnAktif[0]->idtahunakademik)
+            ->where('kartu_studi.semester_idsemester', $smtAktif[0]->idsemester)
             ->orderBy('poin','DESC')
             ->paginate(10);
-            
+            // ->get();
+
             return view('data_mahasiswa.daftarmahasiswa_dosen', compact('mahasiswa'));
         }
         else
