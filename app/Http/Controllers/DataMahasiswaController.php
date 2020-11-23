@@ -33,24 +33,23 @@ class DataMahasiswaController extends Controller
             ->get();
 
 
-            // $kartu_studi= DB::table('kartu_studi')
-            // ->select(DB::raw("max(idkartustudi) as idkartustudi"))
-            // ->groupBy('mahasiswa_nrpmahasiswa')
-            // ->get();  // [ 0=>idkartustudi=>1 , 1=>idkartustudi=>2 ]
-            // $whereinCondition=[];
-            // foreach ($kartu_studi as $key => $value) 
-            // {
-            //  $whereinCondition[] = $value->idkartustudi;
-            // }
+            // KS untuk mendapatkan MAHALA
+            $kartu_studi= DB::table('kartu_studi')
+            ->select(DB::raw("max(idkartustudi) as idkartustudi"))
+            ->join('semester','semester.idsemester','=','kartu_studi.semester_idsemester')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
+            ->where('semester.status','0')
+            ->groupBy('mahasiswa_nrpmahasiswa')
+            ->get();  // [ 0=>idkartustudi=>1 , 1=>idkartustudi=>2 ]
+            $whereinCondition=[];
+            foreach ($kartu_studi as $key => $value) 
+            {
+             $whereinCondition[] = $value->idkartustudi;
+            }
 
-
-            $smtAktif = DB::table('semester')
-            ->select('idsemester')
-            ->where('status', '1')
-            ->get();
-
-            $thnAktif = DB::table('tahun_akademik')
-            ->select('idtahunakademik')
+            // KS untuk mendapatkan MAHARU
+            $tahunakademik_aktif = DB::table('tahun_akademik')
+            ->select('idtahunakademik','tahun')
             ->where('status', '1')
             ->get();
 
@@ -62,11 +61,13 @@ class DataMahasiswaController extends Controller
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
             ->where('mahasiswa.dosen_npkdosen',$dosen[0]->npkdosen )
             ->where('mahasiswa.status','aktif')
-            ->where('kartu_studi.thnakademik_idthnakademik', $thnAktif[0]->idtahunakademik)
-            ->where('kartu_studi.semester_idsemester', $smtAktif[0]->idsemester)
-            ->orderBy('poin','DESC')
-            ->paginate(10);
-            // ->get();
+            //Where In untuk mendapatkan KS mahasiswa lama
+            ->whereIn('kartu_studi.idkartustudi', $whereinCondition)
+            //Where untuk mendapatkan KS mahasiswa baru
+            ->orwhere('mahasiswa.thnakademik_idthnakademik',$tahunakademik_aktif[0]->idtahunakademik)
+            ->groupBy('mahasiswa_nrpmahasiswa')
+            ->orderBy('mahasiswa_nrpmahasiswa','ASC')
+            ->get();
 
             return view('data_mahasiswa.daftarmahasiswa_dosen', compact('mahasiswa'));
         }
@@ -179,6 +180,29 @@ class DataMahasiswaController extends Controller
             ->where('idkartustudi',$whereinCondition)
             ->get();
 
+            //3. Detail Akademik
+            $semester = DB::table('semester')
+            ->get();
+            $tahunakademik = DB::table('tahun_akademik')
+            ->get();
+
+            // Kartu Studi
+            $semester_aktif = DB::table('semester')
+            ->select('idsemester','semester')
+            ->where('status', '1')
+            ->get();
+            $tahunakademik_aktif = DB::table('tahun_akademik')
+            ->select('idtahunakademik','tahun')
+            ->where('status', '1')
+            ->get();
+
+            $data_kartustudi = DB::table('kartu_studi')
+            ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
+            ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
+            ->where('kartu_studi.semester_idsemester',$semester_aktif[0]->idsemester)
+            ->where('kartu_studi.thnakademik_idthnakademik',$tahunakademik_aktif[0]->idtahunakademik)
+            ->paginate(10);
+            
 
             //4. Detail Konsultasi Mahasiswa
             $data_konsultasi = DB::table('konsultasi_dosenwali')
@@ -200,7 +224,7 @@ class DataMahasiswaController extends Controller
             ->paginate(10);
             
             
-            return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_hukuman'));
+            return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_kartustudi','data_hukuman','semester','tahunakademik'));
         }
         else
         {

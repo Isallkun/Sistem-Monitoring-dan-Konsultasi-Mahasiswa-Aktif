@@ -7,10 +7,6 @@
 
 <!-- Isi dari yield -->
 @section('content')
-    
-   
-
-    
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -54,119 +50,67 @@
       </div>
     @endif
     
-    
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <a href="{{ url('admin/master/dosen/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
-        <br><br><br>
+        <br><br>
 
-        <form method="GET" action="{{url('admin/master/dosen/prosescari')}}" enctype="multipart/form-data">
-          {{ csrf_field() }}
-          <input type="hidden" name="_token" value="{{csrf_token() }}"> 
-          
-          <label for="exampleInputPencarian">Pencarian Data: </label>
-
-          <div class="form-group">
-            <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
-              <option value="npkdosen">NPK Dosen</option>
-              <option value="namadosen">Nama Dosen</option>
-              <option value="email">Email</option>
-              <option value="telepon">Telepon</option>
-              <option value="jurusan">Jurusan</option>
-              <option value="username">Username</option>
-            </select>
-
-            <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
-
-            <button type="submit" class="btn btn-light"><i class="fas fa-search"></i></button>
-
-            <div id="dosenList"></div>
-          
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Data Dosen Wali</h3>
           </div>
 
-        </form>
-        
-        <!-- Small boxes (Stat box) -->
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr> 
-              <th width="1%">No.</th>
-              <th width="1%">NPK</th>
-              <th width="1%">Nama</th>
-              <th width="1%">Jenis Kelamin</th>
-              <th width="1%">Email</th>
-              <th width="1%">Telepon</th>
-              <th width="1%">Status</th>
-              <th width="1%">Jurusan</th>
-              <th width="1%">Username</th>     
-              <th width="1%">Action</th>
-                     
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($dosen as $no => $d)
-            <tr>
-              <td>{{$no+1}}</td>
-              <td>{{$d->npkdosen}}</td>
-              <td>{{$d->namadosen}}</td>
-              <td>{{$d->jeniskelamin}}</td>
-              <td>{{$d->email}}</td>
-              <td>{{$d->telepon}}</td>
-              <td>{{$d->status}}</td>
-              <td>{{$d->namajurusan}}</td>
-              <td>{{$d->users_username}}</td>
-              <td>
-                 <a href="{{url('admin/master/dosen/ubah/'.$d->npkdosen)}}" class="btn btn-warning">Ubah</a>
+          <div class="card-body">
+            <table id="tabel_dosen" class="table table-bordered table-striped">
+              <thead>
+                <tr> 
+                  <th>No.</th>
+                  <th>NPK</th>
+                  <th>Nama</th>
+                  <th>Jenis Kelamin</th>
+                  <th>Email</th>
+                  <th>Telepon</th>
+                  <th>Status</th>
+                  <th>Jurusan</th>
+                  <th>Username</th>     
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($dosen as $no => $d)
+                <tr>
+                  <td>{{$no+1}}</td>
+                  <td>{{$d->npkdosen}}</td>
+                  <td>{{$d->namadosen}}</td>
+                  <td>{{$d->jeniskelamin}}</td>
+                  <td>{{$d->email}}</td>
+                  <td>{{$d->telepon}}</td>
+                  <td>{{$d->status}}</td>
+                  <td>{{$d->namajurusan}}</td>
+                  <td>{{$d->users_username}}</td>
+                  <td>
+                    <a href="{{url('admin/master/dosen/ubah/'.$d->npkdosen)}}" class="btn btn-warning">Ubah</a>
 
-                 <form method="get" action="{{url('admin/master/dosen/hapus/'.$d->npkdosen)}}">
-                   <input type="hidden" name="username" value="{{$d->users_username}}">
-                   <button type="submmit" class="btn btn-danger">Hapus</button>
-                 </form>
-
-              </td>
-            </tr>
-            @endforeach
-          </tbody>
-        </table>
-          <br/>
-        Halaman : {{$dosen->currentPage()}} <br/>
-        Jumlah Data : {{$dosen->total()}} <br/>
-        Data Per Halaman : {{$dosen->perPage()}} <br/>
-        <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
+                    <form method="get" action="{{url('admin/master/dosen/hapus/'.$d->npkdosen)}}">
+                      <input type="hidden" name="username" value="{{$d->users_username}}">
+                      <button type="submmit" class="btn btn-danger">Hapus</button>
+                    </form>
+                  </td>
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </section>
-
 @endsection
  
 @push('scripts')
 <script>
-$(document).ready(function(){
-
- $('#keyword').keyup(function(){ 
-        var query = $(this).val();
-
-        if(query != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         var pencarian = document.getElementById("pencarian").value;
-         $.ajax({
-          url:"{{ route('masterdosen.fetch') }}",
-          method:"POST",
-          data:{query:query,_token:_token, jenis:pencarian},
-          success:function(data){
-            $('#dosenList').fadeIn();  
-              $('#dosenList').html(data);
-          }
-         });
-        }
-    });
-
-    $(document).on('click', 'li', function(){  
-        $('#keyword').val($(this).text());  
-        $('#dosenList').fadeOut();  
-    });  
-
-});
+  $(function () {
+    $('#tabel_dosen').DataTable();
+  });
 </script>
 @endpush

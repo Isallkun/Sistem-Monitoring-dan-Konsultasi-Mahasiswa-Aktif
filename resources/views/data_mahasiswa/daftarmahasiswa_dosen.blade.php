@@ -64,67 +64,71 @@
           <br>
           <a href="#" class="btn btn-success btn-sm"></a> 
           Keadaan mahasiswa dalam kondisi cukup baik.
-        
-          
         </div>
-        <br>
-        <!-- Small boxes (Stat box) -->
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr> 
-              <th width="1%">No.</th>
-              <th width="1%">Nama</th>
-              <th width="1%">NRP</th>
-              <th width="1%">Angkatan</th>
-              <th width="1%">SKS Kumulatif</th>
-              <th width="1%">IPK</th>
-              <th width="1%">IPS Terakhir</th>
-              <th width="1%">Kondisi</th>
-              <th width="1%">Rating</th>
-              <th width="1%">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($mahasiswa as $no => $m)
-            <tr>
-              <td>{{$no+1}}</td>
-              <td>{{$m->namamahasiswa}}</td>
-              <td>{{$m->nrpmahasiswa}}</td>
-              <td>{{$m->tahun}}</td>   
-              <td>{{$m->totalsks}}</td>
-              <td>{{$m->ipk}}</td>
-              <td>{{$m->ips}}</td>
-              <td>
-               @if($m->flag == 0)
-               <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-success btn-sm">Normal</a>
-               @elseif($m->flag == 1)
-                <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-warning btn-sm">Waspada</a>
-               @else
-                <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-danger btn-sm">Kurang</a>
-               @endif
-              </td>
-              <td> 
-                <span class="fa fa-star checked" ></span>
-                +{{$m->poin}}
-              </td>
+        <br><br>
 
-              <td>
-               <a href="{{url('dosen/data/mahasiswa/detail/'.$m->nrpmahasiswa)}}" class="btn btn-primary">Detail</a>
-              </td>
-            </tr>
-            @endforeach
-          </tbody>
-        </table>
-          <br/>
-        Halaman : {{$mahasiswa->currentPage()}} <br/>
-        Jumlah Data : {{$mahasiswa->total()}} <br/>
-        Data Per Halaman : {{$mahasiswa->perPage()}} <br/>
-        <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Data Mahasiswa</h3>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table id="tabel_mahasiswa" class="table table-bordered table-striped">
+              <thead>
+                <tr> 
+                  <th>No.</th>
+                  <th>Nama</th>
+                  <th>NRP</th>
+                  <th>Angkatan</th>
+                  <th>SKS Kumulatif</th>
+                  <th>IPK</th>
+                  <th>IPS Terakhir</th>
+                  <th>Kondisi</th>
+                  <th>Rating</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($mahasiswa as $no => $m)
+                <tr>
+                    <td>{{$no+1}}</td>
+                    <td>{{$m->namamahasiswa}}</td>
+                    <td>{{$m->nrpmahasiswa}}</td>
+                    <td>{{$m->tahun}}</td>   
+                    <td>{{$m->totalsks}}</td>
+                    <td>{{$m->ipk}}</td>
+                    <td>{{$m->ips}}</td>
+                    <td>
+                     @if($m->flag == 0)
+                     <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-success btn-sm">Normal</a>
+                     @elseif($m->flag == 1)
+                      <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-warning btn-sm">Waspada</a>
+                     @else
+                      <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-danger btn-sm">Kurang</a>
+                     @endif
+                    </td>
+                    <td> 
+                      <span class="fa fa-star checked" ></span>
+                      +{{$m->poin}}
+                    </td>
+
+                    <td>
+                     <a href="{{url('dosen/data/mahasiswa/detail/'.$m->nrpmahasiswa)}}" class="btn btn-primary">Detail</a>
+                    </td>
+                  </tr>
+                  @endforeach
+              </tbody>
+            </table>  
+          </div>
+        </div>
+      </div>
     </section>
-    
 @endsection
  
 @push('scripts')
-
+<script>
+  $(function () {
+    $('#tabel_mahasiswa').DataTable();
+  });
+</script>
 @endpush

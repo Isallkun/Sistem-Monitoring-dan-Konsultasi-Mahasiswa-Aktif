@@ -3,14 +3,11 @@
 
 @push('styles')
   <!-- Untuk menambahkan style baru -->
+
 @endpush
 
 <!-- Isi dari yield -->
-@section('content')
-    
-   
-
-    
+@section('content')    
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -54,110 +51,50 @@
         <a href="{{ url('admin/master/matakuliah/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
         <br><br>
 
-        <form method="GET" action="{{url('admin/master/matakuliah/prosescari')}}" enctype="multipart/form-data">
-          {{ csrf_field() }}
-          <input type="hidden" name="_token" value="{{csrf_token() }}"> 
-          
-          <label for="exampleInputPencarian">Pencarian Data: </label>
-
-          <div class="form-group">
-            
-            <select class="btn btn-primary dropdown-toggle btn-sm" name="pencarian" id="pencarian" data-toggle="dropdown">
-              <option value="kodematakuliah">Kode Matakuliah</option>
-              <option value="namamatakuliah">Nama Matakuliah</option>
-              <option value="totalsks">Total SKS</option>
-              <option value="totalpertemuan">Total Pertemuan</option>
-              <option value="nisbi">Nisbi Minimal</option>
-              <option value="tahunakademik">Tahun Akademik</option>
-            </select>
-
-             <input type="text" name="keyword" id="keyword" placeholder="Enter Keyword">
-
-            <button type="submit" class="btn btn-light"><i class="fas fa-search"></i></button>
-
-            <div id="matakuliahList"></div>
-          
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Data Mata Kuliah</h3>
           </div>
-
-        </form>
-        
-        <!-- Small boxes (Stat box) -->
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr> 
-              <th width="1%">No.</th>
-              <th width="1%">Kode Matakuliah</th>
-              <th width="1%">Nama Matakuliah</th>
-              <th width="1%">SKS</th>
-              <th width="1%">Total Pertemuan</th>
-              <th width="1%">Nisbi Minimal</th>
-              <th width="1%">Tahun Akademik</th>
-              <!-- <th width="1%">Action</th> -->
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($matakuliah as $no => $m)
-            <tr>
-              <td>{{$no+1}}</td>
-              <td>{{$m->kodematakuliah}}</td>
-              <td>{{$m->namamatakuliah}}</td>
-              <td>{{$m->sks}}</td>
-              <td>{{$m->totalpertemuan}}</td>
-              <td>{{$m->nisbimin}}</td>
-              <td>{{$m->semester}} {{$m->tahun}}</td>
-            
-              <!-- <td>
-                <a href="{{url('admin/master/matakuliah/ubah/'.$m->kodematakuliah)}}" class="btn btn-warning">Ubah
-                </a>
-                 
-                <form method="get" action="{{url('admin/master/matakuliah/hapus/'.$m->kodematakuliah)}}">
-                  <input type="hidden" name="nama_matkauliah" value="{{$m->namamatakuliah}}">
-                  <button type="submmit" class="btn btn-danger">Hapus</button>
-                </form>
-
-              </td> -->
-            </tr>
-            @endforeach
-          </tbody>
-        </table>
-          <br/>
-        Halaman : {{$matakuliah->currentPage()}} <br/>
-        Jumlah Data : {{$matakuliah->total()}} <br/>
-        Data Per Halaman : {{$matakuliah->perPage()}} <br/>
-        <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table id="tabel_matakuliah" class="table table-bordered table-striped">
+              <thead>
+                <tr> 
+                  <th>No.</th>
+                  <th>Kode Matakuliah</th>
+                  <th>Nama Matakuliah</th>
+                  <th>SKS</th>
+                  <th>Total Pertemuan</th>
+                  <th>Nisbi Minimal</th>
+                  <th>Tahun Akademik</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($matakuliah as $no => $m)
+                <tr>
+                  <td>{{$no+1}}</td>
+                  <td>{{$m->kodematakuliah}}</td>
+                  <td>{{$m->namamatakuliah}}</td>
+                  <td>{{$m->sks}}</td>
+                  <td>{{$m->totalpertemuan}}</td>
+                  <td>{{$m->nisbimin}}</td>
+                  <td>{{$m->semester}} {{$m->tahun}}</td>
+                </tr>
+                @endforeach
+              </tbody>
+            </table>  
+          </div>
+        </div>
+      </div>
     </section>
 
 @endsection
  
 @push('scripts')
+<!-- page script -->
 <script>
-$(document).ready(function(){
-
- $('#keyword').keyup(function(){ 
-        var query = $(this).val();
-
-        if(query != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         var pencarian = document.getElementById("pencarian").value;
-         $.ajax({
-          url:"{{ route('mastermatakuliah.fetch') }}",
-          method:"POST",
-          data:{query:query,_token:_token, jenis:pencarian},
-          success:function(data){
-            $('#matakuliahList').fadeIn();  
-              $('#matakuliahList').html(data);
-          }
-         });
-        }
-    });
-
-    $(document).on('click', 'li', function(){  
-        $('#keyword').val($(this).text());  
-        $('#matakuliahList').fadeOut();  
-    });  
-
-});
+  $(function () {
+    $('#tabel_matakuliah').DataTable();
+  });
 </script>
 @endpush

@@ -32,7 +32,7 @@ class MasterKonsultasiController extends Controller
             ->join('topik_konsultasi', 'topik_konsultasi.idtopikkonsultasi','=', 'konsultasi_dosenwali.topik_idtopikkonsultasi')
             ->join('semester', 'semester.idsemester','=', 'konsultasi_dosenwali.semester_idsemester')
             ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=', 'konsultasi_dosenwali.thnakademik_idthnakademik')
-            ->paginate(10);
+            ->get();
             
             return view('master_konsultasi.daftarkonsultasi_admin', compact('konsultasi'));
         }

@@ -37,7 +37,7 @@ class MasterMahasiswaController extends Controller
             ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
             ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
             ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
-            ->paginate(10);
+            ->get();
 
             return view('master_mahasiswa.daftarmahasiswa_admin', compact('mahasiswa'));
         }

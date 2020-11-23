@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="{{url('asset/plugins/summernote/summernote-bs4.css')}}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
   <!--Untuk menambahkan CSS tambahan-->
   @stack('styles')
 </head>
@@ -195,6 +196,19 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{url('asset/dist/js/demo.js')}}"></script>
 
+
+<script src="{{url('asset/plugins/jquery/jquery.min.js')}}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{url('asset/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- DataTables -->
+<script src="{{url('asset/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{url('asset/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{url('asset/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{url('asset/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{url('asset/dist/js/adminlte.min.js')}}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{{url('asset/dist/js/demo.js')}}"></script>
  <!--Untuk menambahkan JS/Jquery tambahan-->
 @stack('scripts')
 </body>

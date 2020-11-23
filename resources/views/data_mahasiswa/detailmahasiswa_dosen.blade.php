@@ -55,10 +55,10 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
-            <div class="card card-info card-tabs">
+            <div class="card card-primary card-tabs">
               <div class="card-header p-0 pt-0">
                 <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
-                  <li class="pt-2 px-3" style="background-color: black"><h3 class="card-title">{{$data_mahasiswa[0]->namamahasiswa}} - {{$data_mahasiswa[0]->nrpmahasiswa}}</h3></li>
+                  <li class="pt-2 px-3"><h3 class="card-title">{{$data_mahasiswa[0]->namamahasiswa}} - {{$data_mahasiswa[0]->nrpmahasiswa}}</h3></li>
                   <li class="nav-item">
                     <a class="nav-link active" id="custom-tabs-two-informasi-tab" data-toggle="pill" href="#custom-tabs-two-informasi" role="tab" aria-controls="custom-tabs-two-informasi" aria-selected="true">Informasi</a>
                   </li>
@@ -284,19 +284,76 @@
                     @endforeach
                   </div>
                   <div class="tab-pane fade" id="custom-tabs-two-akademik" role="tabpanel" aria-labelledby="custom-tabs-two-akademik-tab">
-                    Akademik
-                  </div>
-                  <div class="tab-pane fade" id="custom-tabs-two-konsultasi" role="tabpanel" aria-labelledby="custom-tabs-two-konsultasi-tab">
+                    <form method="GET" action="{{url('admin/master/dosen/prosescari')}}" enctype="multipart/form-data">
+                      {{ csrf_field() }}
+                      <input type="hidden" name="_token" value="{{csrf_token() }}"> 
+                      
+                     
+                      <div class="form-group">
+                        <label for="exampleInputTahunAkademik">Tahun Akademik: </label>
+                        <select class="btn btn-info dropdown-toggle btn-sm" name="tahunakademik" id="tahunakademik" data-toggle="dropdown">
+                          <option value="">-- Pilih Tahun Akademik --</option>
+                          @foreach($tahunakademik as $thn)
+                          <option value="{{$thn->idtahunakademik}}">{{$thn->tahun}}</option>
+                          @endforeach
+                        </select>
+                        <br>
+                        <label for="exampleInputSemester">Semester: </label>
+                        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                        <select class="btn btn-info dropdown-toggle btn-sm" name="semester" id="Semester" data-toggle="dropdown">
+                          <option value="">-- Pilih Semester --</option>
+                          @foreach($semester as $smt)
+                          <option value="{{$smt->idsemester}}">{{$smt->semester}}</option>
+                          @endforeach
+                        </select>
+
+                        <button type="submit" class="btn btn-light">Tampilkan</button>
+                      </div>
+                    </form>
+
                     <table class="table table-bordered table-striped">
                       <thead>
                         <tr> 
-                          <th width="1%">No.</th>
-                          <th width="1%">Tanggal Konsultasi</th>
-                          <th width="1%">Topik Konsultasi</th>
-                          <th width="1%">Tahun Akademik</th>
-                          <th width="1%">Konsultasi Selanjutnya</th>
-                          <th width="1%">Konfirmasi</th>
-                          <th width="1%">Detail</th>
+                          <th width="1%">Kode Mata Kuliah</th>
+                          <th width="1%">Nama Mata Kuliah</th>
+                          <th width="1%">NTS</th>
+                          <th width="1%">NAS</th>
+                          <th width="1%">NA</th>
+                          <th width="1%">NISBI</th>
+                          <th width="1%">Proporsi Nilai</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach($data_kartustudi as $dks)
+                        <tr>
+                          <td>{{$dks->kodematakuliah}}</td>
+                          <td>{{$dks->namamatakuliah}}</td>
+                          <td>{{$dks->nts}}</td>
+                          <td>{{$dks->nas}}</td>
+                          <td>{{$dks->na}}</td>
+                          <td>{{$dks->nisbi}}</td>
+                          <td>NA = 40% NTS + 60% NAS</td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                      <br/>
+                    Halaman : {{$data_kartustudi->currentPage()}} <br/>
+                    Jumlah Data : {{$data_kartustudi->total()}} <br/>
+                    Data Per Halaman : {{$data_kartustudi->perPage()}} <br/>
+                  </div>
+
+                  <div class="tab-pane fade" id="custom-tabs-two-konsultasi" role="tabpanel" aria-labelledby="custom-tabs-two-konsultasi-tab">
+                    <table id="tabel_konsultasi" class="table table-bordered table-striped">
+                      <thead>
+                        <tr> 
+                          <th>No.</th>
+                          <th>Tanggal Konsultasi</th>
+                          <th>Topik Konsultasi</th>
+                          <th>Tahun Akademik</th>
+                          <th>Konsultasi Selanjutnya</th>
+                          <th>Konfirmasi</th>
+                          <th>Detail</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -320,24 +377,21 @@
                         </tr>
                         @endforeach
                       </tbody>
-                    </table>
-                      <br/>
-                      Halaman : {{$data_konsultasi->currentPage()}} <br/>
-                      Jumlah Data : {{$data_konsultasi->total()}} <br/>
-                      Data Per Halaman : {{$data_konsultasi->perPage()}} <br/>
+                    </table>  
                   </div>
+                  
                   <div class="tab-pane fade" id="custom-tabs-two-hukuman" role="tabpanel" aria-labelledby="custom-tabs-two-hukuman-tab">
-                    <table class="table table-bordered table-striped">
+                    <table id="tabel_hukuman" class="table table-bordered table-striped">
                       <thead>
                         <tr> 
-                          <th width="1%">No.</th>
-                          <th width="1%">Dosen</th>
-                          <th width="1%">Tanggal Input Hukuman</th>
-                          <th width="1%">Keterangan</th>
-                          <th width="1%">Status</th>
-                          <th width="1%">Nilai</th>
-                          <th width="1%">Tanggal Konfirmasi</th>
-                          <th width="1%">Masa Berlaku</th>
+                          <th>No.</th>
+                          <th>Dosen</th>
+                          <th>Tanggal Input Hukuman</th>
+                          <th>Keterangan</th>
+                          <th>Status</th>
+                          <th>Nilai</th>
+                          <th>Tanggal Konfirmasi</th>
+                          <th>Masa Berlaku</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -369,11 +423,7 @@
                         </tr>
                         @endforeach
                       </tbody>
-                    </table>
-                      <br/>
-                      Halaman : {{$data_hukuman->currentPage()}} <br/>
-                      Jumlah Data : {{$data_hukuman->total()}} <br/>
-                      Data Per Halaman : {{$data_hukuman->perPage()}} <br/>
+                    </table>  
                   </div>
                 </div>
               </div>
@@ -570,5 +620,15 @@
       options: areaChartOptions
     })
   })
+</script>
+
+<script>
+  $(function () {
+    $('#tabel_hukuman').DataTable();
+  });
+
+  $(function () {
+    $('#tabel_konsultasi').DataTable();
+  });
 </script>
 @endpush
