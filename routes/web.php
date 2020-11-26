@@ -91,10 +91,13 @@ Route::group(['prefix' => '/' ], function()
 	{
 		//localhost:8000/admin/(halaman home dosen)
 		Route::get('/', 'HomeController@index_dosen');
+		//Tampilkan MataKuliah
+		Route::get('tampilkanmatakuliah', 'HomeController@tampilkan_matakuliah');
 
 		//1. Data Mahasiswa
 		//localhost:8000/dosen/mahasiswa
 		Route::get('data/mahasiswa', 'DataMahasiswaController@daftarmahasiswa');
+		
 	
 		//Ubah Flag
 		Route::get('data/mahasiswa/ubahflag/{id}', 'DataMahasiswaController@ubahflag');

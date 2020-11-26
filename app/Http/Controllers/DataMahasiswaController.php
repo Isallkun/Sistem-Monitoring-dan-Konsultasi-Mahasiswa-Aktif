@@ -163,13 +163,13 @@ class DataMahasiswaController extends Controller
 
             //1b. informasi dalam bentuk grafik 
             $grafik_akademik= DB::table('kartu_studi')
-            ->select('ipk','ips','semester','tahun','totalsks')
+            ->select('idkartustudi','ipk','ips','semester','tahun','totalsks')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('semester','semester.idsemester','=','kartu_studi.semester_idsemester')
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
             ->where('mahasiswa.nrpmahasiswa',$id)
+            ->orderBy('idkartustudi','ASC')
             ->get();
-           
 
             //2. Detail Profil Mahasiswa
             $data_mahasiswa = DB::table('kartu_studi')
@@ -315,13 +315,13 @@ class DataMahasiswaController extends Controller
 
         //1b. informasi dalam bentuk grafik 
         $grafik_akademik= DB::table('kartu_studi')
-        ->select('ipk','ips','semester','tahun','totalsks')
+        ->select('idkartustudi','ipk','ips','semester','tahun','totalsks')
         ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
         ->join('semester','semester.idsemester','=','kartu_studi.semester_idsemester')
         ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
         ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->orderBy('idkartustudi','ASC')
         ->get();
-       
 
         //2. Detail Profil Mahasiswa
         $data_mahasiswa = DB::table('kartu_studi')

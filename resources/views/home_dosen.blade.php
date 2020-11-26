@@ -95,7 +95,7 @@
         </div>
         <div class="row">
           <!-- Left col -->
-          <section class="col-lg-6 connectedSortable">
+          <section class="col-md-6 connectedSortable">
             <!-- Custom tabs (Charts with tabs)-->
             <div class="card card-warning">
               <div class="card-header">
@@ -106,6 +106,48 @@
                   <canvas id="barChart1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                 </div>
               </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </section>
+
+          <section class="col-lg-6 connectedSortable">
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">Grafik NISBI Mahasiswa</h3>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <form method="GET" name="formmatakuliah" action="{{url('dosen/tampilkanmatakuliah')}}" enctype="multipart/form-data">
+                    {{ csrf_field() }}
+                   
+                    <div class="form-group"> 
+                      <select class="btn btn-primary dropdown-toggle btn-sm" name="matakuliah" id="matakuliah" data-toggle="dropdown" onchange="formmatakuliah.submit();">
+                        <option value="">-- Pilih Mata Kuliah --</option>
+                        @foreach($matakuliah as $mk)
+                          <option value="{{$mk->kodematakuliah}}">{{$mk->namamatakuliah}}</option>
+                        @endforeach
+                      </select>                 
+                    </div>
+                  </form>
+                </div>
+
+                <div class="chart">
+                  <canvas id="barChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+
+                 <p style="font-size: 12px">Menampilkan Data Mata Kuliah:
+                  @foreach($data_nisbi as $dn)
+                    @if($dn->namamatakuliah == " ")
+                      
+                    @else
+                      {{$dn->namamatakuliah}}
+                    @endif
+                  @endforeach
+                 </p>
+              </div>
+
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
@@ -324,6 +366,63 @@
       options: barChartOptions
     })
   })
+
+$(function () {
+    
+    var nisbi = new Array();
+    var total = new Array();
+
+    @foreach($data_nisbi as $n)
+      nisbi.push('{{$n->nisbi}}');    
+      total.push({{$n->total}});    
+    @endforeach
+
+    var barChartCanvas = $('#barChart2').get(0).getContext('2d')
+    var barChartData = {
+      labels  : nisbi ,
+      datasets: [
+        {
+          label               : 'Total Mahasiswa ',
+          backgroundColor     : 'rgba(60,141,188,0.9)',
+          borderColor         : 'rgba(60,141,188,0.8)',
+          pointRadius          : true,
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : total
+        },
+      ],
+    }
+
+    var barChartOptions = {
+      maintainAspectRatio : false,
+      responsive : true,
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          gridLines : {
+            display : true,
+          }
+        }],
+        yAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }]
+      }
+    }
+
+    // This will get the first returned node in the jQuery collection.
+    var barChart       = new Chart(barChartCanvas, { 
+      type: 'bar',
+      data: barChartData, 
+      options: barChartOptions
+    })
+  })
+
 
    
 </script>
