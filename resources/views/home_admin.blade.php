@@ -102,10 +102,6 @@
             <div class="card card-primary">
               <div class="card-header">
                 <h3 class="card-title">Monitoring Konsultasi Dosen Wali</h3>
-
-                <div class="card-tools">
-  
-                </div>
               </div>
               <div class="card-body">
                 
@@ -115,9 +111,11 @@
                   <p style="font-size: 11px;">
                     Keterangan:
                     <br>
-                    Biru: Total seluruh konsultasi dalam setiap bulan.
+                    <a href="#" class="btn btn-primary btn-sm"></a> 
+                    Total seluruh konsultasi dalam setiap bulan.
                     <br>
-                    Abu-abu: Total konsultasi saat ini (3 bulan).
+                    <a href="#" class="btn btn-secondary btn-sm"></a> 
+                    Total konsultasi saat ini (3 bulan).
                   </p>
                 </div>
               </div>

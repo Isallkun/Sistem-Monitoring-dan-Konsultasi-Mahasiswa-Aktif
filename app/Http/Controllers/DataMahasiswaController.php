@@ -180,13 +180,14 @@ class DataMahasiswaController extends Controller
             ->where('idkartustudi',$whereinCondition)
             ->get();
 
-            //3. Detail Akademik
+            //3. Kartu Hasil Studi
+            // Menampilkan data semester dan tahun akademik di Combobox
             $semester = DB::table('semester')
             ->get();
             $tahunakademik = DB::table('tahun_akademik')
             ->get();
 
-            // Kartu Studi
+            // Mendapatkan semester dan tahun akademik (AKTIF)
             $semester_aktif = DB::table('semester')
             ->select('idsemester','semester')
             ->where('status', '1')
@@ -197,14 +198,34 @@ class DataMahasiswaController extends Controller
             ->get();
 
             $data_kartustudi = DB::table('kartu_studi')
+            ->join('mahasiswa','nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
             ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
             ->where('kartu_studi.semester_idsemester',$semester_aktif[0]->idsemester)
             ->where('kartu_studi.thnakademik_idthnakademik',$tahunakademik_aktif[0]->idtahunakademik)
-            ->paginate(10);
-            
+            ->where('kartu_studi.mahasiswa_nrpmahasiswa',$id)
+            ->get();
 
-            //4. Detail Konsultasi Mahasiswa
+            //4. Transkrip
+            $tahunakademik_tidakaktif = DB::table('tahun_akademik')
+            ->select('idtahunakademik','tahun')
+            ->where('status', '0')
+            ->get();
+            $whereinTahun=[];
+            foreach ($tahunakademik_tidakaktif as $key => $value) 
+            {
+                $whereinTahun[] = $value->idtahunakademik;
+            }
+            $data_transkrip = DB::table('kartu_studi')
+            ->join('mahasiswa','nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
+            ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
+            ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
+            ->whereIn('kartu_studi.thnakademik_idthnakademik', $whereinTahun)
+            ->where('kartu_studi.mahasiswa_nrpmahasiswa',$id)
+            ->get();
+
+
+            //5. Detail Konsultasi Mahasiswa
             $data_konsultasi = DB::table('konsultasi_dosenwali')
             ->join('dosen','dosen.npkdosen','=','konsultasi_dosenwali.dosen_npkdosen')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
@@ -213,23 +234,149 @@ class DataMahasiswaController extends Controller
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','konsultasi_dosenwali.thnakademik_idthnakademik')
             ->where('mahasiswa.nrpmahasiswa',$id)
             ->orderBy('konsultasi_dosenwali.idkonsultasi','DESC')
-            ->paginate(10);
+            ->get();
             
 
-            //5. Detail Hukuman Mahasiswa
+            //6. Detail Hukuman Mahasiswa
             $data_hukuman = DB::table('hukuman')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
             ->where('mahasiswa.nrpmahasiswa',$id)
-            ->paginate(10);
+            ->get();
             
             
-            return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_kartustudi','data_hukuman','semester','tahunakademik'));
+            return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_kartustudi','data_transkrip','data_hukuman','semester','tahunakademik'));
         }
         else
         {
             return redirect("/");
         }
+    }
+
+    public function carikartustudi (Request $request)
+    {
+        $nrpmahasiswa = $request->get('nrpmahasiswa');
+        $semester = $request->get('semester');
+        $tahun_akademik = $request->get('tahunakademik');
+       
+        
+        $this->validate($request,[
+            'semester' => 'required',
+            'tahunakademik' =>'required'
+        ]);
+
+        $data_kartustudi = DB::table('kartu_studi')
+        ->join('mahasiswa','nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
+        ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
+        ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
+        ->where('kartu_studi.semester_idsemester',$semester)
+        ->where('kartu_studi.thnakademik_idthnakademik',$tahun_akademik)
+        ->where('kartu_studi.mahasiswa_nrpmahasiswa',$nrpmahasiswa)
+        ->get();
+            
+    
+         //1. Detail Informasi Mahasiswa
+        //1a. informasi dalam bentuk total angka
+        $total_konsultasi = DB::table('konsultasi_dosenwali')
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+        ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->count();
+
+        $total_hukuman = DB::table('hukuman')
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
+        ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->count();
+
+        $total_nisbi_d = DB::table('kartu_studi')
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
+        ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
+        ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->where('detail_kartu_studi.nisbi','D')
+        ->count();
+
+        $kartu_studi= DB::table('kartu_studi')
+        ->select(DB::raw("max(idkartustudi) as idkartustudi"))
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=','kartu_studi.mahasiswa_nrpmahasiswa')
+        ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->groupBy('mahasiswa_nrpmahasiswa')
+        ->get();  // [ 0=>idkartustudi=>1 , 1=>idkartustudi=>2 ]
+        $whereinCondition=[];
+        foreach ($kartu_studi as $key => $value) 
+        {
+         $whereinCondition[] = $value->idkartustudi;
+        }
+        $total_sks = DB::table('kartu_studi')
+        ->select('idkartustudi',DB::raw("(144-totalsks) as sisasks"))
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
+        ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->whereIn('kartu_studi.idkartustudi', $whereinCondition)
+        ->get();
+        $sisasks = $total_sks[0]->sisasks;
+
+        //1b. informasi dalam bentuk grafik 
+        $grafik_akademik= DB::table('kartu_studi')
+        ->select('ipk','ips','semester','tahun','totalsks')
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
+        ->join('semester','semester.idsemester','=','kartu_studi.semester_idsemester')
+        ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
+        ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->get();
+       
+
+        //2. Detail Profil Mahasiswa
+        $data_mahasiswa = DB::table('kartu_studi')
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
+        ->join('jurusan','jurusan.idjurusan','=','mahasiswa.jurusan_idjurusan')
+        ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+        ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->where('idkartustudi',$whereinCondition)
+        ->get();
+
+        //3. Detail Akademik
+        //Load data isi combobox
+        $semester = DB::table('semester')
+        ->get();
+        $tahunakademik = DB::table('tahun_akademik')
+        ->get();
+
+        //4. Transkrip
+        $tahunakademik_tidakaktif = DB::table('tahun_akademik')
+        ->select('idtahunakademik','tahun')
+        ->where('status', '0')
+        ->get();
+        $whereinTahun=[];
+        foreach ($tahunakademik_tidakaktif as $key => $value) 
+        {
+            $whereinTahun[] = $value->idtahunakademik;
+        }
+        $data_transkrip = DB::table('kartu_studi')
+        ->join('mahasiswa','nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
+        ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
+        ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
+        ->whereIn('kartu_studi.thnakademik_idthnakademik', $whereinTahun)
+        ->where('kartu_studi.mahasiswa_nrpmahasiswa',$id)
+        ->get();
+        
+        //5. Detail Konsultasi Mahasiswa
+        $data_konsultasi = DB::table('konsultasi_dosenwali')
+        ->join('dosen','dosen.npkdosen','=','konsultasi_dosenwali.dosen_npkdosen')
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+        ->join('topik_konsultasi','topik_konsultasi.idtopikkonsultasi','=','konsultasi_dosenwali.topik_idtopikkonsultasi')
+          ->join('semester','semester.idsemester','=','konsultasi_dosenwali.semester_idsemester')
+        ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','konsultasi_dosenwali.thnakademik_idthnakademik')
+        ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->orderBy('konsultasi_dosenwali.idkonsultasi','DESC')
+        ->get();
+        
+        //6. Detail Hukuman Mahasiswa
+        $data_hukuman = DB::table('hukuman')
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
+        ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
+        ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->get();
+            
+            
+         return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_kartustudi','data_transkrip','data_hukuman','semester','tahunakademik'));
     }
 
    

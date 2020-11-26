@@ -128,7 +128,9 @@
 @push('scripts')
 <script>
   $(function () {
-    $('#tabel_mahasiswa').DataTable();
+    $('#tabel_mahasiswa').DataTable({
+      "dom": '<"pull-right"f><"pull-left"l>tip'
+    });
   });
 </script>
 @endpush

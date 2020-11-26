@@ -3,12 +3,9 @@
 
 @push('styles')
   <!-- Untuk menambahkan style baru -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  
   <style type="text/css">
-  .checked {
-    color: orange;
-  }
+  .checked 
+  { color: orange; }
   </style>
 @endpush
  
@@ -24,7 +21,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('admin')}}">Home</a></li>
-              <li class="breadcrumb-item active">Daftar Mahasiswa</li>
+              <li class="breadcrumb-item active">Daftar Data Mahasiswa</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -187,7 +184,9 @@
 @push('scripts')
 <script>
   $(function () {
-    $('#tabel_mahasiswa').DataTable();
+    $('#tabel_mahasiswa').DataTable({
+      "dom": '<"pull-right"f><"pull-left"l>tip'
+    });
   });
 </script>
 @endpush

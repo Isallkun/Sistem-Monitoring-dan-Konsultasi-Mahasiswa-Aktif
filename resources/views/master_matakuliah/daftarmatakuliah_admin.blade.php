@@ -13,12 +13,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Daftar Mata Kuliah</h1>
+            <h1 class="m-0 text-dark">Daftar Data Mata Kuliah</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('admin')}}">Home</a></li>
-              <li class="breadcrumb-item active">Daftar Matakuliah</li>
+              <li class="breadcrumb-item active">Daftar Data Matakuliah</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -94,7 +94,9 @@
 <!-- page script -->
 <script>
   $(function () {
-    $('#tabel_matakuliah').DataTable();
+    $('#tabel_matakuliah').DataTable({
+      "dom": '<"pull-right"f><"pull-left"l>tip'
+    });
   });
 </script>
 @endpush

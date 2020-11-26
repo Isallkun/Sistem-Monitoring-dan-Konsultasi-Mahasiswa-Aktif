@@ -48,20 +48,19 @@ class HomeController extends Controller
                         ->count();
 
             $total_konsultasi = DB::table('konsultasi_dosenwali')
-            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan'))
-            ->groupBy('bulan')
-            ->orderBy('bulan','DESC')
+            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan,MONTH(tanggalkonsultasi) as bln'))
+            ->groupBy('bln')
+            ->orderBy('bln','DESC')
             ->get();
 
             $start=Carbon::now()->month-3;
             $end=Carbon::now()->month;
-
             $total_konsultasi_sekarang = DB::table('konsultasi_dosenwali')
-            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan'))
+            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan,MONTH(tanggalkonsultasi) as bln'))
             ->whereBetween(DB::raw('MONTH(tanggalkonsultasi)'),[$start,$end])
-            ->whereYear('tanggalkonsultasi',Carbon::now()->year)
-            ->groupBy('bulan')
-            ->orderBy('bulan','DESC')
+            ->whereYear('tanggalkonsultasi','=',Carbon::now()->year)
+            ->groupBy('bln')
+            ->orderBy('bln','DESC')
             ->get();
 
             return view('home_admin',compact('dosen_aktif', 'mahasiswa_aktif', 'matakuliah','konsultasi','total_konsultasi','total_konsultasi_sekarang'));
@@ -115,7 +114,81 @@ class HomeController extends Controller
             ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
             ->count();
 
-            return view('home_dosen', compact('mahasiswa','hukuman','konsultasi','konsultasi_berikutnya'));
+
+
+            // Grafik IP mahasiswa berdasarkan range
+            // IPS Mahasiswa
+            $ips1_mahasiswa = DB::table('kartu_studi')
+            ->select(DB::raw('COUNT(*) as total, round((ips),0) as ips'))
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
+            ->whereBetween('kartu_studi.ips',[0,2]);
+            $ips2_mahasiswa = DB::table('kartu_studi')
+            ->select(DB::raw('COUNT(*) as total, round((ips),0) as ips'))
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
+            ->whereBetween('kartu_studi.ips',[3,4]);
+            $results_ips = $ips2_mahasiswa->union($ips1_mahasiswa)->orderBy("ips")->get();
+         
+            //IPK Mahasiswa
+            $ipk1_mahasiswa = DB::table('kartu_studi')
+            ->select(DB::raw('COUNT(*) as total, round((ipk),0) as ipk'))
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
+            ->whereBetween('kartu_studi.ipk',[0,2]);
+            $ipk2_mahasiswa = DB::table('kartu_studi')
+            ->select(DB::raw('COUNT(*) as total, round((ipk),0) as ipk'))
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
+            ->whereBetween('kartu_studi.ipk',[3,4]);
+            $results_ipk = $ipk2_mahasiswa->union($ipk1_mahasiswa)->orderBy("ipk")->get();
+          
+            //IPKM Mahasiswa
+            $ipkm1_mahasiswa = DB::table('kartu_studi')
+            ->select(DB::raw('COUNT(*) as total, round((ipkm),0) as ipkm'))
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
+            ->whereBetween('kartu_studi.ipkm',[0,2]);
+            $ipkm2_mahasiswa = DB::table('kartu_studi')
+            ->select(DB::raw('COUNT(*) as total, round((ipkm),0) as ipkm'))
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
+            ->whereBetween('kartu_studi.ipkm',[3,4]);
+            $results_ipkm = $ipkm2_mahasiswa->union($ipkm1_mahasiswa)->orderBy("ipkm")->get();
+          
+
+
+
+
+
+           
+           
+
+
+            // Grafik Total Konsultasi Dosen
+            // Total konsultasi seluruh
+            $total_konsultasi = DB::table('konsultasi_dosenwali')
+            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan, MONTH(tanggalkonsultasi) as bln'))
+            ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
+            ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->groupBy('bln')
+            ->orderBy('bln','DESC')
+            ->get();
+            //Total konsultasi sekarang
+            $start=Carbon::now()->month-3;
+            $end=Carbon::now()->month;
+            $total_konsultasi_sekarang = DB::table('konsultasi_dosenwali')
+            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan, MONTH(tanggalkonsultasi) as bln'))
+            ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
+            ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->whereBetween(DB::raw('MONTH(tanggalkonsultasi)'),[$start,$end])
+            ->whereYear('tanggalkonsultasi','=',Carbon::now()->year)
+            ->groupBy('bln')
+            ->orderBy('bln','DESC')
+            ->get();
+            
+
+            return view('home_dosen', compact('mahasiswa','hukuman','konsultasi','konsultasi_berikutnya','results_ips','results_ipk','results_ipkm','total_konsultasi','total_konsultasi_sekarang'));
             
         }
         else

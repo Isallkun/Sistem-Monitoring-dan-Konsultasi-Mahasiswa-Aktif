@@ -66,7 +66,10 @@
                     <a class="nav-link" id="custom-tabs-two-profil-tab" data-toggle="pill" href="#custom-tabs-two-profil" role="tab" aria-controls="custom-tabs-two-profil" aria-selected="false">Profil Mahasiswa</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-two-akademik-tab" data-toggle="pill" href="#custom-tabs-two-akademik" role="tab" aria-controls="custom-tabs-two-akademik" aria-selected="false">Akademik</a>
+                    <a class="nav-link" id="custom-tabs-two-kartuhasilstudi-tab" data-toggle="pill" href="#custom-tabs-two-kartuhasilstudi" role="tab" aria-controls="custom-tabs-two-kartuhasilstudi" aria-selected="false">Kartu Hasil Studi</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-two-transkrip-tab" data-toggle="pill" href="#custom-tabs-two-transkrip" role="tab" aria-controls="custom-tabs-two-transkrip" aria-selected="false">Transkrip</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-two-konsultasi-tab" data-toggle="pill" href="#custom-tabs-two-konsultasi" role="tab" aria-controls="custom-tabs-two-konsultasi" aria-selected="false">Konsultasi</a>
@@ -79,7 +82,6 @@
               <div class="card-body">
                 <div class="tab-content" id="custom-tabs-two-tabContent">
                   <div class="tab-pane fade show active" id="custom-tabs-two-informasi" role="tabpanel" aria-labelledby="custom-tabs-two-informasi-tab">
-                    
                     <div class="row">
                       <div class="col-lg-3 col-6">
                         <!-- small box -->
@@ -283,13 +285,22 @@
                     </div>
                     @endforeach
                   </div>
-                  <div class="tab-pane fade" id="custom-tabs-two-akademik" role="tabpanel" aria-labelledby="custom-tabs-two-akademik-tab">
-                    <form method="GET" action="{{url('admin/master/dosen/prosescari')}}" enctype="multipart/form-data">
+                  <div class="tab-pane fade" id="custom-tabs-two-kartuhasilstudi" role="tabpanel" aria-labelledby="custom-tabs-two-kartuhasilstudi-tab">
+                    <form method="GET" action="{{url('dosen/data/mahasiswa/prosescari/')}}" enctype="multipart/form-data">
                       {{ csrf_field() }}
                       <input type="hidden" name="_token" value="{{csrf_token() }}"> 
                       
-                     
+                      <input type="hidden" name="nrpmahasiswa" value="{{$data_mahasiswa[0]->nrpmahasiswa}}">
                       <div class="form-group">
+                        <label for="exampleInputSemester">Semester: </label>
+                        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                        <select class="btn btn-info dropdown-toggle btn-sm" name="semester" id="semester" data-toggle="dropdown">
+                          <option value="">-- Pilih Semester --</option>
+                          @foreach($semester as $smt)
+                          <option value="{{$smt->idsemester}}">{{$smt->semester}}</option>
+                          @endforeach
+                        </select>
+                        <br>
                         <label for="exampleInputTahunAkademik">Tahun Akademik: </label>
                         <select class="btn btn-info dropdown-toggle btn-sm" name="tahunakademik" id="tahunakademik" data-toggle="dropdown">
                           <option value="">-- Pilih Tahun Akademik --</option>
@@ -297,16 +308,7 @@
                           <option value="{{$thn->idtahunakademik}}">{{$thn->tahun}}</option>
                           @endforeach
                         </select>
-                        <br>
-                        <label for="exampleInputSemester">Semester: </label>
-                        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
-                        <select class="btn btn-info dropdown-toggle btn-sm" name="semester" id="Semester" data-toggle="dropdown">
-                          <option value="">-- Pilih Semester --</option>
-                          @foreach($semester as $smt)
-                          <option value="{{$smt->idsemester}}">{{$smt->semester}}</option>
-                          @endforeach
-                        </select>
-
+                        
                         <button type="submit" class="btn btn-light">Tampilkan</button>
                       </div>
                     </form>
@@ -337,14 +339,38 @@
                         @endforeach
                       </tbody>
                     </table>
-                      <br/>
-                    Halaman : {{$data_kartustudi->currentPage()}} <br/>
-                    Jumlah Data : {{$data_kartustudi->total()}} <br/>
-                    Data Per Halaman : {{$data_kartustudi->perPage()}} <br/>
+                    <br/>
+                  </div>
+
+                  <div class="tab-pane fade" id="custom-tabs-two-transkrip" role="tabpanel" aria-labelledby="custom-tabs-two-transkrip-tab">
+                    <table id="tabel_transkrip" class="table table-bordered table-striped" >
+                      <thead>
+                        <tr> 
+                          <th>No.</th>
+                          <th>Kode Mata Kuliah</th>
+                          <th>Nama Mata Kuliah</th>
+                          <th>SKS</th>
+                          <th>NA</th>
+                          <th>NISBI</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach($data_transkrip as $no => $dt)
+                        <tr>
+                         <td>{{$no+1}}</td>
+                         <td>{{$dt->kodematakuliah}}</td>
+                         <td>{{$dt->namamatakuliah}}</td>
+                         <td>{{$dt->sks}}</td>
+                         <td>{{$dt->na}}</td>
+                         <td>{{$dt->nisbi}}</td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>  
                   </div>
 
                   <div class="tab-pane fade" id="custom-tabs-two-konsultasi" role="tabpanel" aria-labelledby="custom-tabs-two-konsultasi-tab">
-                    <table id="tabel_konsultasi" class="table table-bordered table-striped">
+                    <table id="tabel_konsultasi" class="table table-bordered table-striped" >
                       <thead>
                         <tr> 
                           <th>No.</th>
@@ -379,7 +405,7 @@
                       </tbody>
                     </table>  
                   </div>
-                  
+
                   <div class="tab-pane fade" id="custom-tabs-two-hukuman" role="tabpanel" aria-labelledby="custom-tabs-two-hukuman-tab">
                     <table id="tabel_hukuman" class="table table-bordered table-striped">
                       <thead>
@@ -624,11 +650,21 @@
 
 <script>
   $(function () {
-    $('#tabel_hukuman').DataTable();
+    $('#tabel_hukuman').DataTable({
+      "dom": '<"pull-right"f><"pull-left"l>tip'
+    });
   });
 
   $(function () {
-    $('#tabel_konsultasi').DataTable();
+    $('#tabel_konsultasi').DataTable({
+      "dom": '<"pull-right"f><"pull-left"l>tip'
+    });
+  });
+
+   $(function () {
+    $('#tabel_transkrip').DataTable({
+      "dom": '<"pull-right"f><"pull-left"l>tip'
+    });
   });
 </script>
 @endpush

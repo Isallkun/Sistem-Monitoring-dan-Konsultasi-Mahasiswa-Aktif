@@ -100,7 +100,9 @@ Route::group(['prefix' => '/' ], function()
 		Route::get('data/mahasiswa/ubahflag/{id}', 'DataMahasiswaController@ubahflag');
 
 		//Menampilkan Detail Mahasiswa
-		Route::get('data/mahasiswa/detail/{id}', 'DataMahasiswaController@detailmahasiswa');
+		Route::get('data/mahasiswa/detail/{id}', 'DataMahasiswaController@detailmahasiswa')->name('detail');
+		//Mencari data Kartu Studi Mahasiswa
+		Route::get('data/mahasiswa/prosescari/', 'DataMahasiswaController@carikartustudi');
 
 
 		//2. PROFILE DOSEN

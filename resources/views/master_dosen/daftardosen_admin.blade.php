@@ -17,7 +17,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('admin')}}">Home</a></li>
-              <li class="breadcrumb-item active">Daftar Dosen</li>
+              <li class="breadcrumb-item active">Daftar Data Dosen</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -62,7 +62,7 @@
           </div>
 
           <div class="card-body">
-            <table id="tabel_dosen" class="table table-bordered table-striped">
+            <table id="tabel_dosen" class="table table-bordered table-striped" >
               <thead>
                 <tr> 
                   <th>No.</th>
@@ -110,7 +110,10 @@
 @push('scripts')
 <script>
   $(function () {
-    $('#tabel_dosen').DataTable();
+    $('#tabel_dosen').DataTable({
+        "dom": '<"pull-right"f><"pull-left"l>tip'
+    });
   });
+
 </script>
 @endpush
