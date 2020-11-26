@@ -256,7 +256,7 @@
 
     var barChartCanvas = $('#barChart1').get(0).getContext('2d')
     var barChartData = {
-      labels  : ["0-2","3-4"],
+      labels  : ["0 - 2","3 - 4"],
       datasets: [
         {
           label               : 'Total Mahasiswa (IPS) ',
