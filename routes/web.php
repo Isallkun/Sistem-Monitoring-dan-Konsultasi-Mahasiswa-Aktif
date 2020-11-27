@@ -91,14 +91,13 @@ Route::group(['prefix' => '/' ], function()
 	{
 		//localhost:8000/admin/(halaman home dosen)
 		Route::get('/', 'HomeController@index_dosen');
-		//Tampilkan MataKuliah
+		//Menampilkan hasil pencarian mata kuliah
 		Route::get('tampilkanmatakuliah', 'HomeController@tampilkan_matakuliah');
 
-		//1. Data Mahasiswa
-		//localhost:8000/dosen/mahasiswa
+		//1. DATA MAHASISWA
+		//localhost:8000/dosen/data/mahasiswa
 		Route::get('data/mahasiswa', 'DataMahasiswaController@daftarmahasiswa');
-		
-	
+
 		//Ubah Flag
 		Route::get('data/mahasiswa/ubahflag/{id}', 'DataMahasiswaController@ubahflag');
 
@@ -107,12 +106,24 @@ Route::group(['prefix' => '/' ], function()
 		//Mencari data Kartu Studi Mahasiswa
 		Route::get('data/mahasiswa/prosescari/', 'DataMahasiswaController@carikartustudi');
 
+		//2. DATA KONSULTASI
+		//localhost:8000/dosen/data/konsultasi
+		Route::get('data/konsultasi','DataKonsultasiController@daftarkonsultasi');
 
-		//2. PROFILE DOSEN
+		//Tambah data konsultasi
+		Route::get('data/tambah', 'DataKonsultasiController@tambahkonsultasi');
+		Route::post('data/prosestambah', 'DataKonsultasiController@tambahkonsultasi_proses');
+
+		Route::get('data/rangkumankondisi/{id}', 'DataKonsultasiController@kondisi');
+		
+
+		//3. PROFILE DOSEN
 		//Menampilkan halaman profile dosen
 		Route::get('profil/profildosen', 'profildosenController@profil_dosen');
 		//Ubah Halaman Profile Dosen
 		Route::post('profil/profildosen/ubahproses', 'profildosenController@ubahprofildosen_proses');
+
+
 
 		
 	});

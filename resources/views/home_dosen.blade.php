@@ -72,7 +72,7 @@
               <div class="icon">
                 <i class="ion ion-archive"></i>
               </div>
-              <a href="{{url('admin/master/matakuliah')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('dosen/data/konsultasi')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -104,6 +104,20 @@
               <div class="card-body">
                 <div class="chart">
                   <canvas id="barChart1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+                <div>
+                  <p style="font-size: 11px;">
+                    Keterangan:
+                    <br>
+                    <a href="#" class="btn btn-primary btn-sm"></a> 
+                    Total mahasiswa berdasarkan nilai Indeks Prestasi Semester (IPS).
+                    <br>
+                    <a href="#" class="btn btn-secondary btn-sm"></a> 
+                    Total mahasiswa berdasarkan nilai Indeks Prestasi Kumulatif (IPK).
+                    <br>
+                    <a href="#" class="btn btn-info btn-sm"></a> 
+                    Total mahasiswa berdasarkan nilai IPKm
+                  </p>
                 </div>
               </div>
               <!-- /.card-body -->
@@ -137,17 +151,30 @@
                   <canvas id="barChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                 </div>
 
-                 <p style="font-size: 12px">Menampilkan Data Mata Kuliah:
-                  @foreach($data_nisbi as $dn)
-                    @if($dn->namamatakuliah == " ")
-                      
-                    @else
-                      {{$dn->namamatakuliah}}
-                    @endif
-                  @endforeach
-                 </p>
+                <p style="font-size: 12px">Menampilkan Data Mata Kuliah:
+                  @if(!empty($data_nisbi[0]->namamatakuliah))
+                    {{$data_nisbi[0]->namamatakuliah}}
+                  @elseif($data_nisbi[0]->matakuliah =="")
+                    tidak
+                  @endif
+                  
+                </p>
               </div>
 
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </section>
+
+          <section class="col-lg-12 connectedSortable">
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Total Mahasiswa Berdasarkan Kondisi</h3>
+              </div>
+              <div class="card-body">
+                <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
@@ -199,6 +226,180 @@
 @push('scripts')
 <!-- Untuk Menambahkan script baru -->
 <script>
+  // Grafik IP
+  $(function () {
+    var totalmahasiswa_ips = new Array();
+    @foreach($results_ips as $ips)
+      totalmahasiswa_ips.push({{$ips->total}});    
+    @endforeach
+
+    var totalmahasiswa_ipk = new Array();
+    @foreach($results_ipk as $ipk)
+      totalmahasiswa_ipk.push({{$ipk->total}});    
+    @endforeach
+
+    var totalmahasiswa_ipkm = new Array();
+    @foreach($results_ipkm as $ipkm)
+      totalmahasiswa_ipkm.push({{$ipkm->total}});    
+    @endforeach
+
+    var barChartCanvas = $('#barChart1').get(0).getContext('2d')
+    var barChartData = {
+      labels  : ["0 - 2","3 - 4"],
+      datasets: [
+        {
+          label               : 'Total Mahasiswa (IPS) ',
+          backgroundColor     : 'rgba(60,141,188,0.9)',
+          borderColor         : 'rgba(60,141,188,0.8)',
+          pointRadius          : true,
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : totalmahasiswa_ips
+        },
+        {
+          label               : 'Total Mahasiswa (IPK) ',
+          backgroundColor     : 'rgba(210, 214, 222, 1)',
+          borderColor         : 'rgba(210, 214, 222, 1)',
+          pointRadius         : false,
+          pointColor          : 'rgba(210, 214, 222, 1)',
+          pointStrokeColor    : '#c1c7d1',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(220,220,220,1)',
+          data                : totalmahasiswa_ipk
+        },
+        {
+          label               : 'Total Mahasiswa (IPKm) ',
+          backgroundColor     : 'rgb(64, 224, 208)',
+          borderColor         : 'rgb(64, 224, 208)',
+          pointRadius         : false,
+          pointColor          : 'rgb(64, 224, 208)',
+          pointStrokeColor    : '#c1c7d1',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgb(220,220,220)',
+          data                : totalmahasiswa_ipkm
+        }, 
+      ],
+    }
+
+    var barChartOptions = {
+      maintainAspectRatio : false,
+      responsive : true,
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          gridLines : {
+            display : true,
+          }
+        }],
+        yAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }]
+      }
+    }
+
+    // This will get the first returned node in the jQuery collection.
+    var barChart       = new Chart(barChartCanvas, { 
+      type: 'bar',
+      data: barChartData, 
+      options: barChartOptions
+    })
+  })
+
+
+  //Grafik NISBI
+  $(function () {
+    var nisbi = new Array();
+    var total = new Array();
+    @foreach($data_nisbi as $n)
+      nisbi.push('{{$n->nisbi}}');    
+      total.push({{$n->total}});    
+    @endforeach
+
+    var barChartCanvas = $('#barChart2').get(0).getContext('2d')
+    var barChartData = {
+      labels  : nisbi ,
+      datasets: [
+        {
+          label               : 'Total Mahasiswa ',
+          backgroundColor     : 'rgba(60,141,188,0.9)',
+          borderColor         : 'rgba(60,141,188,0.8)',
+          pointRadius          : true,
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : total
+        },
+      ],
+    }
+
+    var barChartOptions = {
+      maintainAspectRatio : false,
+      responsive : true,
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          gridLines : {
+            display : true,
+          }
+        }],
+        yAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }]
+      }
+    }
+    // This will get the first returned node in the jQuery collection.
+    var barChart       = new Chart(barChartCanvas, { 
+      type: 'bar',
+      data: barChartData, 
+      options: barChartOptions
+    })
+  })
+
+
+  //Grafik Kondisi Mahasiswa
+  var total = new Array();
+  var kondisi = new Array();
+  
+  @foreach($kondisi_mahasiswa as $k)
+    kondisi.push('{{$k->flag}}');    
+    total.push({{$k->total}});    
+  @endforeach
+  
+  var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+  var donutData        = {
+                            labels: ['Normal','Waspada','Kurang'],
+                            datasets: [
+                              {
+                                data: total,
+                                backgroundColor : ['#5cb85c','#f0ad4e','#d9534f'],
+                              }
+                            ]
+                          }
+  var donutOptions     = {
+    maintainAspectRatio : false,
+    responsive : true,
+  }
+  //Create pie or douhnut chart
+  // You can switch between pie and douhnut using the method below.
+  var donutChart = new Chart(donutChartCanvas, {
+    type: 'doughnut',
+    data: donutData,
+    options: donutOptions      
+  })
+
+
+  // Grafik Konsultasi
   $(function () {
     //Total seluruh konsultasi per bulan
     var nama_bulan= new Array();
@@ -272,154 +473,6 @@
       type: 'line',
       data: areaChartData, 
       options: areaChartOptions
-    })
-  })
-
-
-  
-
-   $(function () {
-    
-    var totalmahasiswa_ips = new Array();
-    @foreach($results_ips as $ips)
-      totalmahasiswa_ips.push({{$ips->total}});    
-    @endforeach
-
-    var totalmahasiswa_ipk = new Array();
-    @foreach($results_ipk as $ipk)
-      totalmahasiswa_ipk.push({{$ipk->total}});    
-    @endforeach
-
-    var totalmahasiswa_ipkm = new Array();
-    @foreach($results_ipkm as $ipkm)
-      totalmahasiswa_ipkm.push({{$ipkm->total}});    
-    @endforeach
-
-
-    var barChartCanvas = $('#barChart1').get(0).getContext('2d')
-    var barChartData = {
-      labels  : ["0 - 2","3 - 4"],
-      datasets: [
-        {
-          label               : 'Total Mahasiswa (IPS) ',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
-          pointRadius          : true,
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : totalmahasiswa_ips
-        },
-        {
-          label               : 'Total Mahasiswa (IPK) ',
-          backgroundColor     : 'rgba(210, 214, 222, 1)',
-          borderColor         : 'rgba(210, 214, 222, 1)',
-          pointRadius         : false,
-          pointColor          : 'rgba(210, 214, 222, 1)',
-          pointStrokeColor    : '#c1c7d1',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(220,220,220,1)',
-          data                : totalmahasiswa_ipk
-        },
-        {
-          label               : 'Total Mahasiswa (IPKm) ',
-          backgroundColor     : 'rgb(64, 224, 208)',
-          borderColor         : 'rgb(64, 224, 208)',
-          pointRadius         : false,
-          pointColor          : 'rgb(64, 224, 208)',
-          pointStrokeColor    : '#c1c7d1',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgb(220,220,220)',
-          data                : totalmahasiswa_ipkm
-        },
-      
-      
-       
-      ],
-    }
-
-    var barChartOptions = {
-      maintainAspectRatio : false,
-      responsive : true,
-      legend: {
-        display: false
-      },
-      scales: {
-        xAxes: [{
-          gridLines : {
-            display : true,
-          }
-        }],
-        yAxes: [{
-          gridLines : {
-            display : false,
-          }
-        }]
-      }
-    }
-
-    // This will get the first returned node in the jQuery collection.
-    var barChart       = new Chart(barChartCanvas, { 
-      type: 'bar',
-      data: barChartData, 
-      options: barChartOptions
-    })
-  })
-
-$(function () {
-    
-    var nisbi = new Array();
-    var total = new Array();
-
-    @foreach($data_nisbi as $n)
-      nisbi.push('{{$n->nisbi}}');    
-      total.push({{$n->total}});    
-    @endforeach
-
-    var barChartCanvas = $('#barChart2').get(0).getContext('2d')
-    var barChartData = {
-      labels  : nisbi ,
-      datasets: [
-        {
-          label               : 'Total Mahasiswa ',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
-          pointRadius          : true,
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : total
-        },
-      ],
-    }
-
-    var barChartOptions = {
-      maintainAspectRatio : false,
-      responsive : true,
-      legend: {
-        display: false
-      },
-      scales: {
-        xAxes: [{
-          gridLines : {
-            display : true,
-          }
-        }],
-        yAxes: [{
-          gridLines : {
-            display : false,
-          }
-        }]
-      }
-    }
-
-    // This will get the first returned node in the jQuery collection.
-    var barChart       = new Chart(barChartCanvas, { 
-      type: 'bar',
-      data: barChartData, 
-      options: barChartOptions
     })
   })
 

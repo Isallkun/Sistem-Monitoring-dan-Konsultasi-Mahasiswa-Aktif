@@ -97,6 +97,7 @@
         <!-- Main row -->
         <div class="row">
           <!-- Left col -->
+
           <section class="col-lg-12 connectedSortable">
             <!-- Custom tabs (Charts with tabs)-->
             <div class="card card-primary">
@@ -106,7 +107,7 @@
               <div class="card-body">
                 
                 <div class="chart">
-                  <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  <canvas id="areaChart1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                   <br>
                   <p style="font-size: 11px;">
                     Keterangan:
@@ -117,6 +118,24 @@
                     <a href="#" class="btn btn-secondary btn-sm"></a> 
                     Total konsultasi saat ini (3 bulan).
                   </p>
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </section>
+
+          <section class="col-lg-12 connectedSortable">
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Konsultasi Dosen Wali Dalam Setahun </h3>
+              </div>
+              <div class="card-body">
+                
+                <div class="chart">
+                  <canvas id="areaChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  <br>
                 </div>
               </div>
               <!-- /.card-body -->
@@ -138,8 +157,7 @@
 @push('scripts')
 <!-- Untuk Menambahkan script baru -->
 <script>
-  $(function () {
-    
+  $(function () {  
     //Total seluruh konsultasi per bulan
     var nama_bulan= new Array();
     var total= new Array();
@@ -159,7 +177,7 @@
     @endforeach
     
 
-    var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+    var areaChartCanvas = $('#areaChart1').get(0).getContext('2d')
 
     var areaChartData = {
       labels  : nama_bulan,
@@ -186,9 +204,63 @@
           pointHighlightStroke: 'rgba(220,220,220,1)',
           data                : total_sekarang
         },
-       
-        
-        
+      ]
+    }
+
+    var areaChartOptions = {
+      maintainAspectRatio : false,
+      responsive : true,
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }],
+        yAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }]
+      }
+    }
+
+    // This will get the first returned node in the jQuery collection.
+    var areaChart       = new Chart(areaChartCanvas, { 
+      type: 'line',
+      data: areaChartData, 
+      options: areaChartOptions
+    })    
+  })
+
+  $(function () {
+    var nama_bulan = new Array();
+    var total = new Array();
+
+    @foreach($aktifitaskonsultasi as $a)
+      nama_bulan.push('{{$a->bulan}}');
+      total.push({{$ts->total}});
+    @endforeach
+    
+
+    var areaChartCanvas = $('#areaChart2').get(0).getContext('2d')
+
+    var areaChartData = {
+      labels  : nama_bulan,
+      datasets: [
+        {
+          label               : 'Konsultasi Per Bulan',
+          backgroundColor     : 'rgba(60,141,188,0.9)',
+          borderColor         : 'rgba(60,141,188,0.8)',
+          pointRadius          : true,
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : total
+        },    
       ]
     }
 
