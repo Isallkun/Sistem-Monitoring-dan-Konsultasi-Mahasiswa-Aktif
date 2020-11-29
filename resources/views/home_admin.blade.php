@@ -129,7 +129,7 @@
             <!-- Custom tabs (Charts with tabs)-->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Konsultasi Dosen Wali Dalam Setahun </h3>
+                <h3 class="card-title">Monitoring Konsultasi Dosen Wali Dalam Setahun </h3>
               </div>
               <div class="card-body">
                 

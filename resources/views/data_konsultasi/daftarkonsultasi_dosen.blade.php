@@ -46,7 +46,7 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <a href="{{ url('dosen/data/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
+        <a href="{{ url('dosen/data/konsultasi/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
         <br><br>
 
         @if(!empty($notification))
@@ -96,10 +96,14 @@
                   </td>
                   <td>{{$dk->namamahasiswa}} ({{$dk->nrpmahasiswa}})</td>
                   <td>
-                    <a href="{{url('dosen/data/mahasiswa/detail/'.$dk->idkonsultasi)}}" class="fas fa-eye" data-toggle="modal" data-target="#detailKonsultasi_{{$dk->idkonsultasi}}"></a>
+                    <a href="#" class="fas fa-eye" data-toggle="modal" data-target="#detailKonsultasi_{{$dk->idkonsultasi}}"></a>
                   </td>
                   <td>
-                    <a href="{{url('#')}}" class="btn btn-warning">Ubah</a>
+                    @if($dk->konfirmasi == "0")
+                    <a href="{{url('dosen/data/konsultasi/ubah/'.$dk->idkonsultasi)}}" class="btn btn-warning">Ubah</a>
+                    @else
+                    none
+                    @endif
                   </td>
                 </tr>
                 @endforeach

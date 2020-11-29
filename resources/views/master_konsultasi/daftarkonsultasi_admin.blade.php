@@ -78,7 +78,7 @@
                   <td>{{$k->nrpmahasiswa}} - {{$k->namamahasiswa}}</td>
                   <td>{{$k->semester}} {{$k->tahun}}</td>
                   <td>
-                    <a href="{{url('admin/master/konsultasi/detail_konsultasi/'.$k->idkonsultasi)}}" class="fas fa-eye" data-toggle="modal" data-target="#detailKonsultasi_{{$k->idkonsultasi}}"></a>
+                    <a href="#" class="fas fa-eye" data-toggle="modal" data-target="#detailKonsultasi_{{$k->idkonsultasi}}"></a>
                   </td>
                   <td>
                     <a href="{{url('admin/master/konsultasi/ubah/'.$k->idkonsultasi)}}" class="btn btn-warning">Ubah</a>

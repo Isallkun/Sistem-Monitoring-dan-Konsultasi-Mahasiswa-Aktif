@@ -398,7 +398,7 @@
                             @endif
                           </td>
                           <td>
-                            <a href="{{url('dosen/data/mahasiswa/detail/'.$dk->idkonsultasi)}}" class="fas fa-eye" data-toggle="modal" data-target="#detailKonsultasi_{{$dk->idkonsultasi}}"></a>
+                            <a href="#" class="fas fa-eye" data-toggle="modal" data-target="#detailKonsultasi_{{$dk->idkonsultasi}}"></a>
                           </td>
                         </tr>
                         @endforeach

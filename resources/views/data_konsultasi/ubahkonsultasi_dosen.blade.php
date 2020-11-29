@@ -20,13 +20,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Tambah Data Konsultasi</h1>
+            <h1>Ubah Data Konsultasi</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
               <li class="breadcrumb-item"><a href="{{url('dosen/data/konsultasi')}}">Daftar Konsultasi</a></li>
-              <li class="breadcrumb-item active">Tambah Data Konsultasi</li>
+              <li class="breadcrumb-item active">Ubah Data Konsultasi</li>
             </ol>
           </div>
         </div>
@@ -45,8 +45,8 @@
                 <h3 class="card-title">Form Input Data Konsultasi</h3>
               </div>
               <!-- /.card-header -->
-              <!-- form start -->
-              <form action="{{url('dosen/data/konsultasi/prosestambah')}}" role="form" method="post">
+              <!-- form start --> 
+              <form action="{{url('dosen/data/konsultasi/ubahproses')}}" role="form" method="post">
                 {{ csrf_field() }}
 
                 @if (count($errors) > 0)
@@ -66,61 +66,69 @@
                     </ul>
                   </div>
                 @endif
-               
+                
+                @foreach($datakonsultasi as $d)
                 <div class="card-body">
-                  <div class="form-group">
-                    <label for="exampleInputMahasiswa">Mahasiswa</label>
-                    <br>
-                    <select class="btn btn-primary dropdown-toggle" name="mahasiswa" data-toggle="dropdown" id="exampleInputMahasiswa">
-                      <option value="">-- Pilih Mahasiswa --</option>
-                       @foreach($mahasiswa as $m)
-                        <option value="{{$m->nrpmahasiswa}}">{{$m->nrpmahasiswa}} - {{$m->namamahasiswa}}</option>
-                       @endforeach
-                    </select>
-                  </div>
+                	<input type="hidden" name="idtopik" value="{{$d->idtopikkonsultasi}}">
+                  	<input type="hidden" name="idkonsultasi" value="{{$d->idkonsultasi}}">
+                  
 
-                  <div class="form-group">
-                    <label for="exampleInputSemester">Semester</label>
-                    <br>
-                    <select class="btn btn-primary dropdown-toggle" name="semester" data-toggle="dropdown" id="exampleInputSemester">
-                      <option value="">-- Pilih Semester --</option>
-                       @foreach($semester as $s)
-                        <option value="{{$s->idsemester}}">{{$s->semester}}</option>
-                       @endforeach
-                    </select>
-                  </div>
+              		<div class="form-group">
+              			<label for="exampleInputMahasiswa">Identitas Mahasiswa</label>
+              			<br>
+                		{{$d->namamahasiswa}} ({{$d->nrpmahasiswa}})
+              		</div>
 
-                  <div class="form-group">
-                    <label for="exampleInputTahunAkademik">Tahun Akademik</label>
-                    <br>
-                    <select class="btn btn-primary dropdown-toggle" name="tahun_akademik" data-toggle="dropdown" id="exampleInputTahunAkademik">
-                      <option value="">-- Pilih Tahun Akademik --</option>
-                       @foreach($tahun_akademik as $th)
-                        <option value="{{$th->idtahunakademik}}">{{$th->tahun}}</option>
-                       @endforeach
-                    </select>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="exampleInputTopik">Topik Konsultasi</label>
-                    <input type="text" name="topik_konsultasi" class="form-control" id="exampleInputTopik" placeholder="Enter Topik">
-                  </div>
+              		<div class="form-group">
+		                <label for="exampleInputTopik">Topik Konsultasi</label>
+		                <input type="text" name="topik_konsultasi" class="form-control" id="exampleInputTopik" placeholder="Enter Topik" value="{{$d->namatopik}}">
+             		</div>
                  
-                  <div class="form-group">
-                    <label for="exampleInputPermasalahan">Permasalahan</label>
-                     <textarea class="form-control" name="permasalahan" id="exampleInputPermasalahan" rows="3" placeholder="Enter Permasalahan"></textarea>
-                  </div>
+                  	<div class="form-group">
+                    	<label for="exampleInputPermasalahan">Permasalahan</label>
+                     	<textarea class="form-control" name="permasalahan" id="exampleInputPermasalahan" rows="3" placeholder="Enter Permasalahan">{{$d->permasalahan}}</textarea>
+                  	</div>
 
-                  <div class="form-group">
-                    <label for="exampleInputSolusi">Solusi</label>
-                    <input type="text" name="solusi" class="form-control" id="exampleInputSolusi" placeholder="Enter Solusi">
-                  </div>
+                  	<div class="form-group">
+                   		<label for="exampleInputSolusi">Solusi</label>
+                    	<input type="text" name="solusi" class="form-control" id="exampleInputSolusi" value="{{$d->solusi}}">
+                  	</div>
 
-                  <div class="form-group">
-                    <label for="exampleInputKonsultasiSelanjutnya">Konsultasi Selanjutnya</label>
-                    <input type="date" name="konsultasi_selanjutnya" class="form-control" id="exampleInputKonsultasiSelanjutnya" >
-                  </div>
+                  	<div class="form-group">
+                    	<label for="exampleInputKonsultasiSelanjutnya">Konsultasi Selanjutnya</label>
+                    	<input type="date" name="konsultasi_selanjutnya" class="form-control" id="exampleInputKonsultasiSelanjutnya" value="{{$d->konsultasiselanjutnya}}" >
+                  	</div>
+
+                  	<div class="form-group">
+                    	<label for="exampleInputSemester">Semester</label>
+                    	<br>
+                    	<select class="btn btn-primary dropdown-toggle" name="semester" data-toggle="dropdown" id="exampleInputSemester">
+                      	@foreach($semester as $s)
+                        	@if($s->idsemester == $d->idsemester)
+                          	<option value="{{$s->idsemester}}" selected>{{$s->semester}}</option>
+                        	@else 
+                          	<option value="{{$s->idsemester}}">{{$s->semester}}</option>
+                        	@endif
+                      	@endforeach
+                    	</select>
+                  	</div>
+
+                  	<div class="form-group">
+                    	<label for="exampleInputTahunAkademik">Tahun Akademik</label>
+                    	<br>
+                    	<select class="btn btn-primary dropdown-toggle" name="tahun_akademik" data-toggle="dropdown" id="exampleInputTahunAkademik">
+                      	@foreach($tahun_akademik as $th)
+                        	@if($th->idtahunakademik == $d->idtahunakademik)
+                          	<option value="{{$th->idtahunakademik}}" selected>{{$th->tahun}}</option>
+                        	@else 
+                          	<option value="{{$th->idtahunakademik}}">{{$th->tahun}}</option>
+                        	@endif
+                      	@endforeach
+                    	</select>
+                  	</div>
                 </div>
+                @endforeach
+                
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>

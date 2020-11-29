@@ -91,7 +91,7 @@
                   <td>{{$m->status}}</td>
                   <td>{{$m->users_username}}</td>
                   <td>
-                    <a href="{{url('admin/master/mahasiswa/detail_mahasiswa/'.$m->nrpmahasiswa)}}" class="fas fa-eye" data-toggle="modal" data-target="#detailMahasiswa_{{$m->nrpmahasiswa}}"></a>
+                    <a href="#" class="fas fa-eye" data-toggle="modal" data-target="#detailMahasiswa_{{$m->nrpmahasiswa}}"></a>
                   </td>
                   
                   <td>

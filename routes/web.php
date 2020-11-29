@@ -111,11 +111,18 @@ Route::group(['prefix' => '/' ], function()
 		Route::get('data/konsultasi','DataKonsultasiController@daftarkonsultasi');
 
 		//Tambah data konsultasi
-		Route::get('data/tambah', 'DataKonsultasiController@tambahkonsultasi');
-		Route::post('data/prosestambah', 'DataKonsultasiController@tambahkonsultasi_proses');
+		Route::get('data/konsultasi/tambah', 'DataKonsultasiController@tambahkonsultasi');
+		Route::post('data/konsultasi/prosestambah', 'DataKonsultasiController@tambahkonsultasi_proses');
 
-		Route::get('data/rangkumankondisi/{id}', 'DataKonsultasiController@kondisi');
+		//Menampilkan rangkuman kondisi
+		Route::get('data/konsultasi/rangkumankondisi/{id}', 'DataKonsultasiController@kondisi');
+		//Tambah data rating
+		Route::post('data/rating/prosestambah/{id}', 'DataKonsultasiController@tambahrating_proses');
+
 		
+		//Ubah data konsultasi
+		Route::get('data/konsultasi/ubah/{id}', 'DataKonsultasiController@ubahkonsultasi');
+		Route::post('data/konsultasi/ubahproses', 'DataKonsultasiController@ubahkonsultasi_proses');
 
 		//3. PROFILE DOSEN
 		//Menampilkan halaman profile dosen
