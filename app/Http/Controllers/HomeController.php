@@ -123,61 +123,61 @@ class HomeController extends Controller
             // Grafik IP mahasiswa berdasarkan range
             // IPS Mahasiswa
             $ips1_mahasiswa = DB::table('kartu_studi')
-            ->select(DB::raw('COUNT(*) as total, round((ips),0) as ips'))
+            ->select(DB::raw('COUNT(*) as total, round((ips),0) as ips, nrpmahasiswa'))
             ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
             ->where('dosen_npkdosen',$dosen[0]->npkdosen)
-            ->whereBetween('kartu_studi.ips',[0,2]);
+            ->whereBetween('kartu_studi.ips',[1,2]);
             $ips2_mahasiswa = DB::table('kartu_studi')
-            ->select(DB::raw('COUNT(*) as total, round((ips),0) as ips'))
+            ->select(DB::raw('COUNT(*) as total, round((ips),0) as ips, nrpmahasiswa'))
             ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
             ->where('dosen_npkdosen',$dosen[0]->npkdosen)
             ->whereBetween('kartu_studi.ips',[3,4]);
-            $results_ips = $ips2_mahasiswa->union($ips1_mahasiswa)->orderBy("ips")->get();
+            $results_ips = $ips2_mahasiswa->union($ips1_mahasiswa)->orderBy("ips","ASC")->get();
             
             //IPK Mahasiswa
             $ipk1_mahasiswa = DB::table('kartu_studi')
-            ->select(DB::raw('COUNT(*) as total, round((ipk),0) as ipk'))
+            ->select(DB::raw('COUNT(*) as total, round((ipk),0) as ipk, nrpmahasiswa'))
             ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
             ->where('dosen_npkdosen',$dosen[0]->npkdosen)
-            ->whereBetween('kartu_studi.ipk',[0,2]);
+            ->whereBetween('kartu_studi.ipk',[1,2]);
             $ipk2_mahasiswa = DB::table('kartu_studi')
-            ->select(DB::raw('COUNT(*) as total, round((ipk),0) as ipk'))
+            ->select(DB::raw('COUNT(*) as total, round((ipk),0) as ipk, nrpmahasiswa'))
             ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
             ->where('dosen_npkdosen',$dosen[0]->npkdosen)
             ->whereBetween('kartu_studi.ipk',[3,4]);
-            $results_ipk = $ipk2_mahasiswa->union($ipk1_mahasiswa)->orderBy("ipk")->get();
-          
+            $results_ipk = $ipk2_mahasiswa->union($ipk1_mahasiswa)->orderBy("ipk","ASC")->get();
+
             //IPKM Mahasiswa
             $ipkm1_mahasiswa = DB::table('kartu_studi')
-            ->select(DB::raw('COUNT(*) as total, round((ipkm),0) as ipkm'))
+            ->select(DB::raw('COUNT(*) as total, round((ipkm),0) as ipkm, nrpmahasiswa'))
             ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
             ->where('dosen_npkdosen',$dosen[0]->npkdosen)
-            ->whereBetween('kartu_studi.ipkm',[0,2]);
+            ->whereBetween('kartu_studi.ipkm',[1,2]);
             $ipkm2_mahasiswa = DB::table('kartu_studi')
-            ->select(DB::raw('COUNT(*) as total, round((ipkm),0) as ipkm'))
+            ->select(DB::raw('COUNT(*) as total, round((ipkm),0) as ipkm, nrpmahasiswa'))
             ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
             ->where('dosen_npkdosen',$dosen[0]->npkdosen)
             ->whereBetween('kartu_studi.ipkm',[3,4]);
-            $results_ipkm = $ipkm2_mahasiswa->union($ipkm1_mahasiswa)->orderBy("ipkm")->get();
+            $results_ipkm = $ipkm2_mahasiswa->union($ipkm1_mahasiswa)->orderBy("ipkm","ASC")->get();
           
             //Grafik NISBI Mata Kuliah
             $matakuliah = DB::table('matakuliah')
             ->select('kodematakuliah','namamatakuliah')
             ->get();
             $data_nisbi = DB::table('kartu_studi')
-            ->select(DB::raw('count(*) as total, " " as namamatakuliah'), 'nisbi')
+            ->select(DB::raw('count(nisbi) as total, " " as namamatakuliah, "Total Mata kuliah" as label'),"idkartustudi","nisbi",'nrpmahasiswa')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
             ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
@@ -257,54 +257,54 @@ class HomeController extends Controller
 
 
         $ips1_mahasiswa = DB::table('kartu_studi')
-        ->select(DB::raw('COUNT(*) as total, round((ips),0) as ips'))
+        ->select(DB::raw('COUNT(*) as total, round((ips),0) as ips, nrpmahasiswa'))
         ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
         ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
         ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
         ->where('dosen_npkdosen',$dosen[0]->npkdosen)
-        ->whereBetween('kartu_studi.ips',[0,2]);
+        ->whereBetween('kartu_studi.ips',[1,2]);
         $ips2_mahasiswa = DB::table('kartu_studi')
-        ->select(DB::raw('COUNT(*) as total, round((ips),0) as ips'))
+        ->select(DB::raw('COUNT(*) as total, round((ips),0) as ips, nrpmahasiswa'))
         ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
         ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
         ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
         ->where('dosen_npkdosen',$dosen[0]->npkdosen)
         ->whereBetween('kartu_studi.ips',[3,4]);
-        $results_ips = $ips2_mahasiswa->union($ips1_mahasiswa)->orderBy("ips")->get();
+        $results_ips = $ips2_mahasiswa->union($ips1_mahasiswa)->orderBy("ips","ASC")->get();
         
         //IPK Mahasiswa
         $ipk1_mahasiswa = DB::table('kartu_studi')
-        ->select(DB::raw('COUNT(*) as total, round((ipk),0) as ipk'))
+        ->select(DB::raw('COUNT(*) as total, round((ipk),0) as ipk, nrpmahasiswa'))
         ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
         ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
         ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
         ->where('dosen_npkdosen',$dosen[0]->npkdosen)
-        ->whereBetween('kartu_studi.ipk',[0,2]);
+        ->whereBetween('kartu_studi.ipk',[1,2]);
         $ipk2_mahasiswa = DB::table('kartu_studi')
-        ->select(DB::raw('COUNT(*) as total, round((ipk),0) as ipk'))
+        ->select(DB::raw('COUNT(*) as total, round((ipk),0) as ipk, nrpmahasiswa'))
         ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
         ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
         ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
         ->where('dosen_npkdosen',$dosen[0]->npkdosen)
         ->whereBetween('kartu_studi.ipk',[3,4]);
-        $results_ipk = $ipk2_mahasiswa->union($ipk1_mahasiswa)->orderBy("ipk")->get();
+        $results_ipk = $ipk2_mahasiswa->union($ipk1_mahasiswa)->orderBy("ipk","ASC")->get();
       
         //IPKM Mahasiswa
         $ipkm1_mahasiswa = DB::table('kartu_studi')
-        ->select(DB::raw('COUNT(*) as total, round((ipkm),0) as ipkm'))
+        ->select(DB::raw('COUNT(*) as total, round((ipkm),0) as ipkm, nrpmahasiswa'))
         ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
         ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
         ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
         ->where('dosen_npkdosen',$dosen[0]->npkdosen)
-        ->whereBetween('kartu_studi.ipkm',[0,2]);
+        ->whereBetween('kartu_studi.ipkm',[1,2]);
         $ipkm2_mahasiswa = DB::table('kartu_studi')
-        ->select(DB::raw('COUNT(*) as total, round((ipkm),0) as ipkm'))
+        ->select(DB::raw('COUNT(*) as total, round((ipkm),0) as ipkm, nrpmahasiswa'))
         ->join('mahasiswa','mahasiswa.nrpmahasiswa', '=', 'kartu_studi.mahasiswa_nrpmahasiswa')
         ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
         ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','kartu_studi.thnakademik_idthnakademik')
         ->where('dosen_npkdosen',$dosen[0]->npkdosen)
         ->whereBetween('kartu_studi.ipkm',[3,4]);
-        $results_ipkm = $ipkm2_mahasiswa->union($ipkm1_mahasiswa)->orderBy("ipkm")->get();
+        $results_ipkm = $ipkm2_mahasiswa->union($ipkm1_mahasiswa)->orderBy("ipkm","ASC")->get();
       
         //Grafik Pencarian NISBI Matakuliah
         $matakuliah = DB::table('matakuliah')
@@ -313,7 +313,7 @@ class HomeController extends Controller
            
         $kode_matakuliah=$request->get('matakuliah');
         $data_nisbi = DB::table('matakuliah')
-        ->select(DB::raw('count(*) as total'), 'nisbi', 'matakuliah.kodematakuliah','matakuliah.namamatakuliah','dosen.*')
+        ->select(DB::raw('count(*) as total,"Total Mahasiswa" as label'), 'nisbi', 'matakuliah.kodematakuliah','matakuliah.namamatakuliah','dosen.*')
         ->join('detail_kartu_studi','detail_kartu_studi.matakuliah_kodematakuliah','=','matakuliah.kodematakuliah')
         ->join('kartu_studi','kartu_studi.idkartustudi','=','detail_kartu_studi.kartustudi_idkartustudi')
         ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')

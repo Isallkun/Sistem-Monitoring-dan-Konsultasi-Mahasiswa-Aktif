@@ -154,8 +154,6 @@
                 <p style="font-size: 12px">Menampilkan Data Mata Kuliah:
                   @if(!empty($data_nisbi[0]->namamatakuliah))
                     {{$data_nisbi[0]->namamatakuliah}}
-                  @elseif($data_nisbi[0]->matakuliah =="")
-                    tidak
                   @endif
                   
                 </p>
@@ -245,7 +243,7 @@
 
     var barChartCanvas = $('#barChart1').get(0).getContext('2d')
     var barChartData = {
-      labels  : ["0 - 2","3 - 4"],
+      labels  : ["1 - 2","3 - 4"],
       datasets: [
         {
           label               : 'Total Mahasiswa (IPS) ',
@@ -316,17 +314,21 @@
   $(function () {
     var nisbi = new Array();
     var total = new Array();
+    var label ="";
     @foreach($data_nisbi as $n)
       nisbi.push('{{$n->nisbi}}');    
-      total.push({{$n->total}});    
+      total.push({{$n->total}});
+      label="{{$n->label}}";    
     @endforeach
+
+
 
     var barChartCanvas = $('#barChart2').get(0).getContext('2d')
     var barChartData = {
       labels  : nisbi ,
       datasets: [
         {
-          label               : 'Total Mahasiswa ',
+          label               : label ,
           backgroundColor     : 'rgba(60,141,188,0.9)',
           borderColor         : 'rgba(60,141,188,0.8)',
           pointRadius          : true,

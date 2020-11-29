@@ -65,7 +65,6 @@
             <table id="tabel_dosen" class="table table-bordered table-striped" >
               <thead>
                 <tr> 
-                  <th>No.</th>
                   <th>NPK</th>
                   <th>Nama</th>
                   <th>Jenis Kelamin</th>
@@ -80,7 +79,6 @@
               <tbody>
                 @foreach($dosen as $no => $d)
                 <tr>
-                  <td>{{$no+1}}</td>
                   <td>{{$d->npkdosen}}</td>
                   <td>{{$d->namadosen}}</td>
                   <td>{{$d->jeniskelamin}}</td>
