@@ -83,25 +83,37 @@
                   <td>{{$d->tanggalinput}}</td>
                   <td>{{$d->namamahasiswa}} <br>({{$d->nrpmahasiswa}})</td>
                   <td>
-                    @if(!empty($d->berkas))
-                      Selesai
+                    @if($d->status == "0")
+                      <a href="#" class="btn btn-danger btn-sm">Tidak Aktif</a>
+                    @elseif($d->status == "1")
+                      <a href="#" class="btn btn-success btn-sm">Aktif</a>
                     @else
-                      Belum Selesai
+                      <a href="#" class="btn btn-dark btn-sm">Masa Berlaku Habis</a>
                     @endif
                   </td>
                  <td>
-                  @if(!empty($d->berkas))
+                  @if($d->status == "1")
                     @if($d->penilaian == "kurang")
-                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-danger btn-sm">Kurang</a>
+                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-danger btn-sm">Kurang</a>
                     @elseif($d->penilaian == "cukup")
-                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-warning btn-sm">Cukup</a>
+                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-warning btn-sm">Cukup</a>
                     @elseif($d->penilaian == "baik")
-                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-success btn-sm">Baik</a>
+                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-success btn-sm">Baik</a>
                     @else
-                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-light btn-sm">Menunggu penilaian</a>
+                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-info btn-sm">Menunggu penilaian</a>
                     @endif
-                  @else($d->status == "1")
-                    <a href="#" class="btn btn-dark btn-sm disabled">Belum ada nilai</a>
+                  @elseif($d->status == "0")
+                    <a href="#" class="btn btn-outline-dark btn-sm disabled">Belum ada nilai</a>
+                  @else
+                     @if($d->penilaian == "kurang")
+                      <a href="#" class="btn btn-danger btn-sm">Kurang</a>
+                    @elseif($d->penilaian == "cukup")
+                      <a href="#" class="btn btn-warning btn-sm">Cukup</a>
+                    @elseif($d->penilaian == "baik")
+                      <a href="#" class="btn btn-success btn-sm">Baik</a>
+                    @else
+                      <a href="#" class="btn btn-info btn-sm">Tidak ada nilai</a>
+                    @endif
                   @endif
                  </td>
                   <td>

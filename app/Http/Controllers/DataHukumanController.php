@@ -33,13 +33,25 @@ class DataHukumanController extends Controller
         	->get();
 
         	$data_hukuman = DB::table('hukuman')
-        	->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.*')
+        	->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
         	->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
         	->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
         	->where('npkdosen', $dosen[0]->npkdosen)
             ->orderby('tanggalinput','DESC')
         	->groupBy('idhukuman')
         	->get();
+
+            foreach ($data_hukuman as $d)
+            {
+                if(Carbon::now() >= $d->masaberlaku)
+                {
+                    $hukuman = DB::table('hukuman') 
+                    ->where('idhukuman',$d->idhukuman)
+                    ->update([
+                        'status' => 2
+                    ]);   
+                }
+            }
 
         	return view('data_hukuman.daftarhukuman_dosen', compact('data_hukuman'));
         }
@@ -54,7 +66,7 @@ class DataHukumanController extends Controller
     	if(Session::get('dosen') != null)
     	{
             $data_hukuman = DB::table('hukuman')
-            ->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.*')
+            ->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->where('idhukuman', $id)
