@@ -106,7 +106,7 @@
           </li>
 
           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+            <a href="{{url('dosen/data/hukuman')}}" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Data Hukuman

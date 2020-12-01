@@ -53,7 +53,7 @@ class DataKonsultasiController extends Controller
             ->orderBy('konsultasiselanjutnya','ASC')
             ->get();
 
-        	return view('data_konsultasi.daftarkonsultasi_dosen', compact('data_konsultasi'))->with('notification', $konsultasi_berikutnya);
+        	return view('data_konsultasi.daftarkonsultasi_dosen', compact('data_konsultasi','konsultasi_berikutnya'));
         }
         else
         {

@@ -42,17 +42,17 @@
       </div>
     @endif
     
-    
+      
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <a href="{{ url('dosen/data/konsultasi/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
         <br><br>
 
-        @if(!empty($notification))
+        @if(!empty($konsultasi_berikutnya))
           <div class="alert alert-primary">
             <p style="font-weight: bold">Informasi Jadwal Konsultasi: </p>
-            @foreach($notification as $no => $n)
+            @foreach($konsultasi_berikutnya as $no => $n)
             ({{$no+1}}). Tanggal {{$n->konsultasiselanjutnya}}, mahasiswa {{$n->namamahasiswa}} ({{$n->mahasiswa_nrpmahasiswa}}) akan melakukan konsultasi dosen wali.
             <br>
             @endforeach

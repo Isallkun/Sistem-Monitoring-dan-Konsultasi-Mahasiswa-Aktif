@@ -158,11 +158,13 @@
                       @endif
                       Rating:
                       @if($m->poin != "0")
-                        @for($i=0; $i <= $m->poin; $i++)
+                        @for($i=0; $i < $m->poin; $i++)
                           <span class="fa fa-star checked"></span>
                         @endfor
                       @else
-                        sorry, no rating 
+                        @for($i=0; $i < 5; $i++)
+                          <span class="fa fa-star"></span>
+                        @endfor 
                       @endif 
                     </a>
                    </td>
