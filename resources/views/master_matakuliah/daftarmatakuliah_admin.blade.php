@@ -43,6 +43,14 @@
       </div>
     @endif
 
+    @if (\Session::has('Error'))
+      <div class="alert alert-danger alert-block">
+        <ul>
+            <li>{!! \Session::get('Error') !!}</li>
+        </ul>
+      </div>
+    @endif
+
     
     
     <!-- Main content -->

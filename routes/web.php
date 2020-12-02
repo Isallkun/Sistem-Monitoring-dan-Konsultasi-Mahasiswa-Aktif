@@ -135,6 +135,16 @@ Route::group(['prefix' => '/' ], function()
 		//Tampilkan Berkas hukuman
 		Route::get('data/hukuman/detailhukuman/{id}', 'DataHukumanController@detailhukuman');
 
+		//Tambah data hukuman
+		Route::get('data/hukuman/tambah', 'DataHukumanController@tambahhukuman');
+		Route::post('data/hukuman/prosestambah', 'DataHukumanController@tambahhukuman_proses');
+
+		//Ubah data hukuman
+		Route::get('data/hukuman/ubah/{id}', 'DataHukumanController@ubahhukuman');
+		Route::post('data/hukuman/ubahproses', 'DataHukumanController@ubahhukuman_proses');
+
+		//Hapus data hukuman
+		Route::get('data/hukuman/hapus/{id}', 'DataHukumanController@hapushukuman');
 
 
 		//4. PROFILE DOSEN

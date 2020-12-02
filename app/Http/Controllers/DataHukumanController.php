@@ -9,6 +9,7 @@ use Illuminate\Database\QueryException;
 use DB;
 use Session;
 use Carbon\Carbon;
+use File;
 
 use App\User;
 use App\Mahasiswa;
@@ -159,5 +160,151 @@ class DataHukumanController extends Controller
     	{
     		return redirect("/");
     	}
+    }
+
+    public function tambahhukuman()
+    {
+        if(Session::get('dosen') != null)
+        {
+            $dosen = DB::table('users')
+            ->join('dosen','dosen.users_username','=','users.username')
+            ->where('users.username',Session::get('dosen'))
+            ->get();
+
+            $mahasiswa = DB::table('mahasiswa')
+                    ->select('*')
+                    ->join("dosen","dosen.npkdosen","=","mahasiswa.dosen_npkdosen")
+                    ->where("dosen.npkdosen",$dosen[0]->npkdosen)
+                    ->get();
+
+            return view('data_hukuman.tambahhukuman_dosen', compact('mahasiswa'));
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
+
+    public function tambahhukuman_proses(Request $request)
+    {
+        try
+        {
+            $dosen = DB::table('users')
+            ->join('dosen','dosen.users_username','=','users.username')
+            ->where('users.username',Session::get('dosen'))
+            ->get();
+
+            $tanggal_sekarang=Carbon::now()->format('Y/m/d');
+            $mahasiswa= $request->get('mahasiswa');
+            $keterangan = $request->get('keterangan');
+
+
+            $this->validate($request,[
+                'mahasiswa' =>'required',
+                'keterangan'=>'required'               
+            ]);
+
+
+            $tambahdata_hukuman = Hukuman::insert([
+                'tanggalinput' =>$tanggal_sekarang,
+                'keterangan' =>$keterangan,
+                'status'=>0,
+                'dosen_npkdosen'=>$dosen[0]->npkdosen,
+                'mahasiswa_nrpmahasiswa'=>$mahasiswa
+            ]);
+
+             return redirect('dosen/data/hukuman')->with(['Success' => 'Berhasil Menambahkan Data Hukuman Mahasiswa ('. $mahasiswa.')']);
+        }
+
+        catch (QueryException $e)
+        {
+            $message= explode("in C:",$e);
+
+            return redirect('dosen/data/hukuman/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database <br> Pesan Kesalahan: '.$message[0]]);
+        }
+    }
+
+    public function ubahhukuman($id)
+    {
+        if(Session::get('dosen') != null)
+        {
+            $hukuman = DB::table("hukuman")
+            ->select('mahasiswa.nrpmahasiswa','mahasiswa.namamahasiswa', 'hukuman.*')
+            ->join('mahasiswa', 'mahasiswa.nrpmahasiswa', '=', 'hukuman.mahasiswa_nrpmahasiswa')
+            ->where('hukuman.idhukuman',$id)
+            ->get();
+
+            return view('data_hukuman.ubahhukuman_dosen',compact('hukuman'));
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
+
+    public function ubahhukuman_proses(Request $request)
+    {
+        try
+        {
+            $this->validate($request,[
+                'keterangan'=>'required'               
+            ]);
+
+             $hukuman = DB::table('hukuman')
+            ->where('idhukuman',$request->get('idhukuman'))
+            ->update([
+                'keterangan' => $request->get('keterangan')
+            ]);
+
+            return redirect('dosen/data/hukuman')->with(['Success' => 'Berhasil Mengubah Data Hukuman (ID) '.$request->get('idhukuman')]);
+        }
+        catch(QueryException $e)
+        {
+            $message= explode("in C:",$e);
+            
+            return redirect("dosen/data/hukuman/ubah/{$request->get('idhukuman')}")->with(['Error' => 'Gagal Mengubah Data Hukuman (ID) '.$request->get('idhukuman')."<br> Pesan Kesalahan: ".$message[0]]);
+        }
+    }
+
+    public function hapushukuman(Request $request,$id)
+    {
+        try
+        {
+            $total_hukuman = DB::table('hukuman')
+            ->join('berkas_hukuman','berkas_hukuman.hukuman_idhukuman','=','hukuman.idhukuman')
+            ->where('idhukuman',$id)
+            ->count();
+
+            $berkas_hukuman = DB::table('hukuman')
+            ->select('berkas_hukuman.berkas')
+            ->join('berkas_hukuman','berkas_hukuman.hukuman_idhukuman','=','hukuman.idhukuman')
+            ->where('idhukuman',$id)
+            ->get();
+
+            if($total_hukuman != 0)
+            {
+                $hapus_berkas = DB::table('berkas_hukuman')
+                ->where('hukuman_idhukuman',$id)
+                ->delete();
+
+                foreach ($berkas_hukuman as $b) 
+                {
+                    File::delete('data_hukuman/'.$b->berkas);
+                }
+            }
+           
+            $hapus_hukuman = DB::table('hukuman')
+            ->where('idhukuman',$id)
+            ->delete();
+            
+            return redirect('dosen/data/hukuman')->with(['Success' => 'Berhasil Menghapus Data Hukuman (ID) '.$id]);
+
+        }
+        catch (QueryException $e)
+        {
+            $message= explode("in C:",$e);
+            
+            return redirect("dosen/data/hukuman/")->with(['Error' => 'Gagal Menghapus Data Hukuman (ID) '.$id."<br> Pesan Kesalahan: ".$message[0]]);
+        }
     }
 }

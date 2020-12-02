@@ -41,12 +41,20 @@
         </ul>
       </div>
     @endif
+
+    @if (\Session::has('Error'))
+      <div class="alert alert-danger alert-block">
+        <ul>
+            <li>{!! \Session::get('Error') !!}</li>
+        </ul>
+      </div>
+    @endif
     
     
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <a href="#" class="btn btn-primary" role="button">Tambah Data</a>
+        <a href="{{ url('dosen/data/hukuman/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
         <br><br>
 
          @if(!empty($notifikasi_hukuman))
@@ -120,7 +128,13 @@
                     <a href="{{url('dosen/data/hukuman/detailhukuman/'.$d->idhukuman)}}" class="fas fa-eye"></a>
                   </td>
                   <td>
-                    <a href="#" class="btn btn-warning">Ubah</a>
+                    @if($d->status == "0")
+                    <a href="{{url('dosen/data/hukuman/ubah/'.$d->idhukuman)}}" class="btn btn-warning">Ubah</a>
+                    @endif
+
+                    <form method="get" action="{{url('dosen/data/hukuman/hapus/'.$d->idhukuman)}}">
+                      <button type="submmit" class="btn btn-danger">Hapus</button>
+                    </form>
                   </td>
                 </tr>
                 @endforeach

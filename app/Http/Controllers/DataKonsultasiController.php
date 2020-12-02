@@ -153,7 +153,7 @@ class DataKonsultasiController extends Controller
         {
             $message= explode("in C:",$e);
 
-            return redirect('dosen/data/mahasiswa/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database <br> Pesan Kesalahan: '.$message[0]]);
+            return redirect('dosen/data/konsultasi/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database <br> Pesan Kesalahan: '.$message[0]]);
         }
     }
 
@@ -227,10 +227,6 @@ class DataKonsultasiController extends Controller
             {
                 return redirect("dosen/data/konsultasi/rangkumankondisi/$id")->with(['Error' => 'Mohon maaf, sistem gagal menambahkan rating mahasiswa']);
             }
-            
-
-            
-            
         }
         else
         {
@@ -270,7 +266,7 @@ class DataKonsultasiController extends Controller
 
     public function ubahkonsultasi_proses(Request $request)
     {
-          try
+        try
         {
             // Form Validasi Input User
             $this->validate($request,[
