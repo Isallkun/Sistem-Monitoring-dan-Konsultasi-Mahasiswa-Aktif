@@ -43,17 +43,36 @@ class DataHukumanController extends Controller
 
             foreach ($data_hukuman as $d)
             {
-                if(Carbon::now() >= $d->masaberlaku)
+                if($d->masaberlaku <= Carbon::now())
                 {
                     $hukuman = DB::table('hukuman') 
                     ->where('idhukuman',$d->idhukuman)
                     ->update([
                         'status' => 2
                     ]);   
+                    
+                }
+                if($d->masaberlaku == null)
+                {
+                    $hukuman = DB::table('hukuman') 
+                    ->where('idhukuman',$d->idhukuman)
+                    ->update([
+                        'status' => 0
+                    ]);  
                 }
             }
 
-        	return view('data_hukuman.daftarhukuman_dosen', compact('data_hukuman'));
+            $notifikasi_hukuman = DB::table('hukuman')
+            ->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
+            ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
+            ->where('npkdosen', $dosen[0]->npkdosen)
+            ->orderby('tanggalinput','DESC')
+            ->groupBy('idhukuman')
+            ->whereNotNull('masaberlaku')
+            ->get();
+
+        	return view('data_hukuman.daftarhukuman_dosen', compact('data_hukuman','notifikasi_hukuman'));
         }
         else
         {

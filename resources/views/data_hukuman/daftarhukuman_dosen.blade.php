@@ -49,12 +49,12 @@
         <a href="#" class="btn btn-primary" role="button">Tambah Data</a>
         <br><br>
 
-         @if(!empty($data_hukuman))
+         @if(!empty($notifikasi_hukuman))
           <div class="alert alert-info">
             <p style="font-weight: bold">Informasi Masa Berlaku Hukuman: </p>
-            @foreach($data_hukuman as $no => $d)
+            @foreach($notifikasi_hukuman as $no => $d)
               @if($d->total <= "30" AND $d->total > "0")
-                ({{$no+1}}). {{$d->namamahasiswa}} ({{$d->nrpmahasiswa}}) memiliki masa berlaku hukuman kurang dari {{$d->total}} Hari.
+                {{$no+1}}. {{$d->namamahasiswa}} ({{$d->nrpmahasiswa}}) memiliki masa berlaku hukuman kurang dari {{$d->total}} Hari.
               @endif
             <br>
             @endforeach
@@ -139,5 +139,11 @@
       "dom": '<"pull-right"f><"pull-left"l>tip'
     });
   });
+
+   $(document).ready(function(){
+        setTimeout(function() {
+            location.reload();
+        },900000);
+    })
 </script>
 @endpush
