@@ -62,7 +62,7 @@ class LoginController extends Controller
                 if($hasil[0]->role_idrole == "1")
                 {
                     Session::put('admin',$hasil[0]->username);
-                    Session::put('profil','administrator.jpg');
+                    Session::put('profil_admin','administrator.jpg');
 
                     return redirect('admin/');
                 }
@@ -74,16 +74,21 @@ class LoginController extends Controller
                                     -> get();
 
                     Session::put('dosen',$hasil[0]->username);
-                    Session::put('profil',$hasil_profil[0]->profil);
-
+                    Session::put('profil_dosen',$hasil_profil[0]->profil);
 
                     return redirect('dosen/');    
                 }   
-                // else if($hasil[0]->role_idrole == "3")
-                // {
-                //     Session::put('mahasiswa',$hasil[0]->username);
-                //     return view('...', compact('username'));    
-                // }  
+                else if($hasil[0]->role_idrole == "3")
+                {
+                    $hasil_profil = DB::table('mahasiswa')
+                    -> where('users_username', $hasil[0]->username)
+                    -> get();
+
+                    Session::put('mahasiswa',$hasil[0]->username);
+                    Session::put('profil_mahasiswa',$hasil_profil[0]->profil);
+                    
+                    return redirect ('mahasiswa/');    
+                }  
                 else
                 {
                     return redirect()->back()->with('Info', 'ID Role tidak dapat ditemukan adalam Database');
@@ -105,19 +110,19 @@ class LoginController extends Controller
         if(Session::get('admin') !=null)
         {
             Session::forget('admin');
-            Session::forget('profil');
+            Session::forget('profil_admin');
         }
         
-        if(Session::get('dosen') !=null)
+        elseif(Session::get('dosen') !=null)
         {
             Session::forget('dosen');
-            Session::forget('profil');
+            Session::forget('profil_dosen');
         }
         
-        if(Session::get('mahasiswa') !=null)
+        elseif(Session::get('mahasiswa') !=null)
         {
             Session::forget('mahasiswa');
-            Session::forget('profil');
+            Session::forget('profil_mahasiswa');
         }
 
         return redirect("/");

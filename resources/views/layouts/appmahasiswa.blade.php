@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Administrator | SI Monitoring Ubaya</title>
+  <title>Mahasiswa | SI Monitoring Ubaya</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Font Awesome -->
@@ -26,8 +26,6 @@
   <link rel="stylesheet" href="{{url('asset/plugins/summernote/summernote-bs4.css')}}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -53,14 +51,14 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{url('data_pengguna/'. Session::get('profil_admin') )}}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{url('data_pengguna/'. Session::get('profil_mahasiswa') )}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href='#'>{{Session::get('admin')}}</a>
+          <a href='#'>{{Session::get('mahasiswa')}}</a>
           <br>
           
           <a href="#" style="font-size: 14px">
-          @if(Session::get('admin') != "")
+          @if(Session::get('mahasiswa') != "")
           <i class="fa fa-circle text-success"></i>
           &nbsp Online
           @else
@@ -77,7 +75,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="{{url('admin')}}" class="nav-link">
+            <a href="{{url('dosen')}}" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -85,39 +83,11 @@
             </a>
           </li>
 
-          <li class="nav-header">Master Data</li>
-          <li class="nav-item has-treeview">
-            <a href="{{ url('admin/master/dosen') }}" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                Data Dosen Wali
-                <i class="fas fa-angle-right right"></i>
-              </p>
-            </a>
-          </li>
+
+          <li class="nav-header">Menu</li>
 
           <li class="nav-item has-treeview">
-            <a href="{{ url('admin/master/mahasiswa') }}" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                Data Mahasiswa
-                <i class="fas fa-angle-right right"></i>
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item has-treeview">
-            <a href="{{ url('admin/master/matakuliah') }}" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                Data Matakuliah
-                <i class="fas fa-angle-right right"></i>
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item has-treeview">
-            <a href="{{ url('admin/master/konsultasi') }}" class="nav-link">
+            <a href="{{url('dosen/data/konsultasi')}}" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Data Konsultasi 
@@ -126,7 +96,26 @@
             </a>
           </li>
 
+          <li class="nav-item has-treeview">
+            <a href="{{url('dosen/data/hukuman')}}" class="nav-link">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Data Hukuman
+                <i class="fas fa-angle-right right"></i>
+              </p>
+            </a>
+          </li>
+
           <li class="nav-header">Settings Pengguna</li>
+          <li class="nav-item">
+            <a href="{{url('dosen/profil/profildosen')}}" class="nav-link">
+              <i class="nav-icon fas fa-user-circle"></i>
+              <p>
+                Profil pengguna
+              </p>
+            </a>
+          </li>  
+
           <li class="nav-item">
             <a href="{{ route('keluar') }}" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>

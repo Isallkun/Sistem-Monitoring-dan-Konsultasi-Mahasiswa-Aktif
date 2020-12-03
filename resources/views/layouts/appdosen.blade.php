@@ -51,7 +51,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{url('data_pengguna/'. Session::get('profil') )}}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{url('data_pengguna/'. Session::get('profil_dosen') )}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href='#'>{{Session::get('dosen')}}</a>

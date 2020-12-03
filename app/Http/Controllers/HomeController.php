@@ -356,5 +356,38 @@ class HomeController extends Controller
 
         return view('home_dosen', compact('mahasiswa','hukuman','konsultasi','konsultasi_berikutnya','results_ips','results_ipk','results_ipkm','matakuliah','data_nisbi','kondisi_mahasiswa','total_konsultasi','total_konsultasi_sekarang'));
     }
+
+    public function index_mahasiswa()
+    {
+        if(Session::get('mahasiswa') != null)
+        {
+            $mahasiswa = DB::table('mahasiswa')
+            ->join('users','users.username','=', 'mahasiswa.users_username')
+            ->where('users.username', Session::get('mahasiswa'))
+            ->get();
+
+            $konsultasi_mahasiswa = DB::table('konsultasi_dosenwali')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
+            ->count();
+
+            $hukuman_mahasiswa = DB::table('hukuman')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
+            ->count();
+
+            $konsultasi_berikutnya = DB::table('konsultasi_dosenwali')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
+            ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
+            ->count();
+
+            return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','hukuman_mahasiswa','konsultasi_berikutnya'));
+        }
+        else
+        {
+            return redirect('/');  
+        }
+    }
 }
   

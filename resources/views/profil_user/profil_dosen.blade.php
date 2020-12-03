@@ -58,7 +58,7 @@
               <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
                   <div class="text-center">
-                    <img class="profile-user-img img-fluid img-circle" src="{{url('data_pengguna/'. Session::get('profil') )}}" alt="User profile picture">
+                    <img class="profile-user-img img-fluid img-circle" src="{{url('data_pengguna/'. Session::get('profil_dosen') )}}" alt="User profile picture">
 
                   </div>
                    <h3 class="profile-username text-center">{{$u->namadosen}} - {{$u->npkdosen}}</h3>
