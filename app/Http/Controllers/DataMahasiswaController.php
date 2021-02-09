@@ -159,7 +159,7 @@ class DataMahasiswaController extends Controller
             ->whereIn('kartu_studi.idkartustudi', $whereinCondition)
             ->get();
             $sisasks = $total_sks[0]->sisasks;
-
+ 
             //1b. informasi dalam bentuk grafik 
             $grafik_akademik= DB::table('kartu_studi')
             ->select('idkartustudi','ipk','ips','semester','tahun','totalsks')
@@ -170,6 +170,9 @@ class DataMahasiswaController extends Controller
             ->orderBy('idkartustudi','ASC')
             ->get();
 
+            //Hitung sks mahasiswa per semester
+            
+            
             //2. Detail Profil Mahasiswa
             $data_mahasiswa = DB::table('kartu_studi')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
@@ -206,21 +209,33 @@ class DataMahasiswaController extends Controller
             ->get();
 
             //4. Transkrip
+            $semester_tidakaktif = DB::table('semester')
+            ->select('idsemester','semester')
+            ->where('status',0)
+            ->get();
+            $whereinSemester=[];
+            foreach ($semester_tidakaktif as $key => $value) 
+            {
+                $whereinSemester[] = $value->idsemester;
+            }
+
             $tahunakademik_tidakaktif = DB::table('tahun_akademik')
             ->select('idtahunakademik','tahun')
-            ->where('status', '0')
+            ->where('status',0)
             ->get();
             $whereinTahun=[];
             foreach ($tahunakademik_tidakaktif as $key => $value) 
             {
                 $whereinTahun[] = $value->idtahunakademik;
             }
+
             $data_transkrip = DB::table('kartu_studi')
             ->join('mahasiswa','nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
             ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
-            ->whereIn('kartu_studi.thnakademik_idthnakademik', $whereinTahun)
             ->where('kartu_studi.mahasiswa_nrpmahasiswa',$id)
+            ->whereIn('kartu_studi.semester_idsemester', $whereinSemester)
+            ->orwhereIn('kartu_studi.thnakademik_idthnakademik', $whereinTahun)
             ->get();
 
 
@@ -229,7 +244,7 @@ class DataMahasiswaController extends Controller
             ->join('dosen','dosen.npkdosen','=','konsultasi_dosenwali.dosen_npkdosen')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
             ->join('topik_konsultasi','topik_konsultasi.idtopikkonsultasi','=','konsultasi_dosenwali.topik_idtopikkonsultasi')
-              ->join('semester','semester.idsemester','=','konsultasi_dosenwali.semester_idsemester')
+            ->join('semester','semester.idsemester','=','konsultasi_dosenwali.semester_idsemester')
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','konsultasi_dosenwali.thnakademik_idthnakademik')
             ->where('mahasiswa.nrpmahasiswa',$id)
             ->orderBy('konsultasi_dosenwali.idkonsultasi','DESC')
@@ -255,8 +270,8 @@ class DataMahasiswaController extends Controller
     public function carikartustudi (Request $request)
     {
         $nrpmahasiswa = $request->get('nrpmahasiswa');
-        $semester = $request->get('semester');
-        $tahun_akademik = $request->get('tahunakademik');
+        $semesters = $request->get('semester');
+        $tahun_akademiks = $request->get('tahunakademik');
        
         
         $this->validate($request,[
@@ -268,8 +283,8 @@ class DataMahasiswaController extends Controller
         ->join('mahasiswa','nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
         ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
         ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
-        ->where('kartu_studi.semester_idsemester',$semester)
-        ->where('kartu_studi.thnakademik_idthnakademik',$tahun_akademik)
+        ->where('kartu_studi.semester_idsemester',$semesters)
+        ->where('kartu_studi.thnakademik_idthnakademik',$tahun_akademiks)
         ->where('kartu_studi.mahasiswa_nrpmahasiswa',$nrpmahasiswa)
         ->get();
             
@@ -338,10 +353,18 @@ class DataMahasiswaController extends Controller
         $tahunakademik = DB::table('tahun_akademik')
         ->get();
 
+        $data_kartustudi = DB::table('kartu_studi')
+        ->join('mahasiswa','nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
+        ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
+        ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
+        ->where('kartu_studi.semester_idsemester',$semesters)
+        ->where('kartu_studi.thnakademik_idthnakademik',$tahun_akademiks )
+        ->where('kartu_studi.mahasiswa_nrpmahasiswa',$nrpmahasiswa)
+        ->get();
+ 
         //4. Transkrip
         $tahunakademik_tidakaktif = DB::table('tahun_akademik')
         ->select('idtahunakademik','tahun')
-        ->where('status', '0')
         ->get();
         $whereinTahun=[];
         foreach ($tahunakademik_tidakaktif as $key => $value) 
@@ -353,7 +376,7 @@ class DataMahasiswaController extends Controller
         ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
         ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
         ->whereIn('kartu_studi.thnakademik_idthnakademik', $whereinTahun)
-        ->where('kartu_studi.mahasiswa_nrpmahasiswa',$id)
+        ->where('kartu_studi.mahasiswa_nrpmahasiswa',$nrpmahasiswa)
         ->get();
         
         //5. Detail Konsultasi Mahasiswa

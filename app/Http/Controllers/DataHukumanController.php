@@ -307,4 +307,103 @@ class DataHukumanController extends Controller
             return redirect("dosen/data/hukuman/")->with(['Error' => 'Gagal Menghapus Data Hukuman (ID) '.$id."<br> Pesan Kesalahan: ".$message[0]]);
         }
     }
+
+    public function daftarhukuman_mahasiswa()
+    {
+        if(Session::get('mahasiswa') != null)
+        {
+            $mahasiswa = DB::table('users')
+            ->join('mahasiswa','mahasiswa.users_username','=','users.username')
+            ->where('users.username',Session::get('mahasiswa'))
+            ->get();
+
+            $data_hukuman = DB::table('hukuman')
+            ->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa', 'dosen.namadosen')
+            ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
+            ->where('nrpmahasiswa', $mahasiswa[0]->nrpmahasiswa)
+            ->orderby('tanggalinput','DESC')
+            ->groupBy('idhukuman')
+            ->get();
+
+            foreach ($data_hukuman as $d)
+            {
+                if($d->masaberlaku <= Carbon::now())
+                {
+                    $hukuman = DB::table('hukuman') 
+                    ->where('idhukuman',$d->idhukuman)
+                    ->update([
+                        'status' => 2
+                    ]);   
+                    
+                }
+                if($d->masaberlaku == null)
+                {
+                    $hukuman = DB::table('hukuman') 
+                    ->where('idhukuman',$d->idhukuman)
+                    ->update([
+                        'status' => 0
+                    ]);  
+                }
+            }
+
+            $notifikasi_hukuman = DB::table('hukuman')
+            ->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
+            ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
+            ->where('npkdosen', $mahasiswa[0]->nrpmahasiswa)
+            ->orderby('tanggalinput','DESC')
+            ->groupBy('idhukuman')
+            ->whereNotNull('masaberlaku')
+            ->get();
+
+
+            return view('data_hukuman.daftarhukuman_mahasiswa', compact('data_hukuman','notifikasi_hukuman'));
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
+
+    public function unggahberkas_proses(Request $request, $id)
+    {
+        if(Session::get('mahasiswa') != null)
+        {
+            try
+            {
+                $this->validate($request,[
+                'berkas.*' =>'required|file|max:2000'
+                ]);
+
+                $nrpmahasiswa = $request->get('nrpmahasiswa');
+                $total = count($_FILES['berkas']['name']);
+
+                if($total <="2")
+                {
+                    for($i=0; $i< $total; $i++)
+                    {
+                        $filename =time()."_".$nrpmahasiswa."_".$_FILES['berkas']['name'][$i];
+                        
+                        //QUERY DB
+                        move_uploaded_file($_FILES['berkas']['tmp_name'][$i],'data_hukuman/'.$filename);
+                        
+                        return redirect("mahasiswa/data/hukumanmahasiswa")->with(['Success' => 'Berhasil mengunggah berkas hukuman']);
+                    }
+                }
+                else
+                {
+                    return redirect("mahasiswa/data/hukumanmahasiswa")->with(['Error' => 'Berkas yang diunggah tidak boleh lebih dari 2 (dua) berkas.']);
+                }
+            }
+            catch (QueryException $e)
+            {
+                return redirect("mahasiswa/data/hukumanmahasiswa")->with(['Error' => 'Mohon maaf, sistem gagal mengunggah berkas hukuman']);
+            }
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
 }
