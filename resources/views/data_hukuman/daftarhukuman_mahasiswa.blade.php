@@ -82,6 +82,7 @@
                   <th width="1%">Keterangan</th>
                   <th width="1%">Status</th>
                   <th width="1%">Penilaian</th>
+                  <th width="1%">Detail</th>
                   <th width="1%">Unggah Berkas</th>
                 </tr>
               </thead>
@@ -125,10 +126,16 @@
                       @endif
                     @endif
                   </td>
+
+                  <td>
+                    <a href="#" class="fas fa-eye" data-toggle="modal" data-target="#detail_{{$d->idhukuman}}"></a>
+                  </td>
                   
                   <td>
                     @if($d->status == "0")
                       <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#upload_{{$d->nrpmahasiswa}}">Upload</a>
+                    @else
+                      <a href="#" class="btn btn-secondary">Selesai</a>
                     @endif
                   </td>
                 </tr>
@@ -137,6 +144,42 @@
             </table>  
           </div>
         </div>
+        @foreach($data_hukuman as $d)
+        <div id="detail_{{$d->idhukuman}}" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- konten modal-->
+            <div class="modal-content">
+              <!-- heading modal -->
+              <div class="modal-header">
+                <h4 class="modal-title">Detail Hukuman</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <!-- body modal -->
+              <div class="modal-body">
+                <p style="font-weight: bold;">
+                  ID: {{$d->idhukuman}} <br>
+                  {{$d->keterangan}}
+                </p>
+                <table class="table table-bordered table-hover">
+                  <tr>
+                   <th>Tanggal Konfirmasi</th>
+                   <td>{{$d->tanggalkonfirmasi}}</td>
+                  </tr>
+                  <tr>
+                   <th>Masa Berlaku</th>
+                   <td>{{$d->masaberlaku}}</td>
+                  </tr>
+                  
+                </table>
+              </div>
+              <!-- footer modal -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        @endforeach
 
         @foreach($data_hukuman as $d)
         <div id="upload_{{$d->nrpmahasiswa}}" class="modal fade" role="dialog">

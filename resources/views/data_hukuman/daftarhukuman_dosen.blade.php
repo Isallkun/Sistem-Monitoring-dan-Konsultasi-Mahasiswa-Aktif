@@ -99,7 +99,7 @@
                       <a href="#" class="btn btn-dark btn-sm">Masa Berlaku Habis</a>
                     @endif
                   </td>
-                 <td>
+                  <td>
                   @if($d->status == "1")
                     @if($d->penilaian == "kurang")
                       <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-danger btn-sm">Kurang</a>
@@ -123,10 +123,12 @@
                       <a href="#" class="btn btn-info btn-sm">Tidak ada nilai</a>
                     @endif
                   @endif
-                 </td>
+                  </td>
+                  
                   <td>
                     <a href="{{url('dosen/data/hukuman/detailhukuman/'.$d->idhukuman)}}" class="fas fa-eye"></a>
                   </td>
+                  
                   <td>
                     @if($d->status == "0")
                     <a href="{{url('dosen/data/hukuman/ubah/'.$d->idhukuman)}}" class="btn btn-warning">Ubah</a>

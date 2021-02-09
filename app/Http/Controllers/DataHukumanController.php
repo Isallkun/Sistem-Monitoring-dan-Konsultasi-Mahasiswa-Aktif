@@ -381,15 +381,32 @@ class DataHukumanController extends Controller
 
                 if($total <="2")
                 {
-                    for($i=0; $i< $total; $i++)
+                    foreach ($_FILES['berkas']['name'] as $key => $value) 
+                    {
+                        $name_file = time()."_".$nrpmahasiswa."_".$value;
+
+                        $tambahdata_berkashukuman= Berkas_hukuman::insert([
+                           'berkas'=>$name_file, 
+                           'hukuman_idhukuman'=>$id
+                        ]);
+                    }
+
+                    for($i=0; $i < $total; $i++)
                     {
                         $filename =time()."_".$nrpmahasiswa."_".$_FILES['berkas']['name'][$i];
-                        
-                        //QUERY DB
                         move_uploaded_file($_FILES['berkas']['tmp_name'][$i],'data_hukuman/'.$filename);
-                        
-                        return redirect("mahasiswa/data/hukumanmahasiswa")->with(['Success' => 'Berhasil mengunggah berkas hukuman']);
                     }
+
+                    //Lakukan update data hukuman
+                    $pengguna = DB::table('hukuman')
+                        ->where('idhukuman',$id)
+                        ->update([
+                            'status' => 1,
+                            'tanggalkonfirmasi' => Carbon::now(),
+                            'masaberlaku' =>Carbon::now()->addMonths(6)
+                    ]);
+
+                    return redirect("mahasiswa/data/hukumanmahasiswa")->with(['Success' => 'Berhasil mengunggah berkas hukuman']);
                 }
                 else
                 {
