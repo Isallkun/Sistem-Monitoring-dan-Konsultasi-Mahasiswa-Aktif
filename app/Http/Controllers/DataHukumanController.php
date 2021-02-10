@@ -308,6 +308,7 @@ class DataHukumanController extends Controller
         }
     }
 
+
     public function daftarhukuman_mahasiswa()
     {
         if(Session::get('mahasiswa') != null)

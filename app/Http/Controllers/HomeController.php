@@ -382,7 +382,14 @@ class HomeController extends Controller
             ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
             ->count();
 
-            return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','hukuman_mahasiswa','konsultasi_berikutnya'));
+            
+            $menunggu_konfirmasi = DB::table('konsultasi_dosenwali')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
+            ->where('konsultasi_dosenwali.konfirmasi', 0)
+            ->count();
+
+            return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','hukuman_mahasiswa','konsultasi_berikutnya', 'menunggu_konfirmasi'));
         }
         else
         {

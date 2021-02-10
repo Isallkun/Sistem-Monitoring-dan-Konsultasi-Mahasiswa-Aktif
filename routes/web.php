@@ -161,10 +161,14 @@ Route::group(['prefix' => '/' ], function()
 		Route::get('/', 'HomeController@index_mahasiswa');
 
 		//1. DATA HUKUMAN 
-		//localhost:8000/dosen/data/hukuman
+		//localhost:8000/mahasiswa/data/hukuman
 		Route::get('data/hukumanmahasiswa','DataHukumanController@daftarhukuman_mahasiswa');
 		//Unggah berkas hukuman 
 		Route::post('data/hukumanmahasiswa/prosesunggah/{id}', 'DataHukumanController@unggahberkas_proses');
+
+		Route::get('data/konsultasimahasiswa','DataKonsultasiController@daftarkonsultasi_mahasiswa');
+		//Konfirmasi konsultasi
+		Route::get('data/konsultasimahasiswa/proseskonfirmasi/{id}', 'DataKonsultasiController@konfirmasikonsultasi_proses');
 
 	});
 

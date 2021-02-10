@@ -49,6 +49,7 @@ class DataKonsultasiController extends Controller
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
             ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->where('konsultasi_dosenwali.konfirmasi',1)
             ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
             ->orderBy('konsultasiselanjutnya','ASC')
             ->get();
@@ -301,6 +302,81 @@ class DataKonsultasiController extends Controller
             $message= explode("in C:",$e);
             
             return redirect("dosen/data/konsultasi/ubah/{$request->get('idkonsultasi')}")->with(['Error' => 'Gagal Mengubah Data Konsultasi (ID) '.$request->get('idkonsultasi')."<br> Pesan Kesalahan: ".$message[0]]);
+        }
+    }
+
+
+    public function daftarkonsultasi_mahasiswa()
+    {
+        if(Session::get('mahasiswa') != null)
+        {
+            $mahasiswa = DB::table('users')
+            ->join('mahasiswa','mahasiswa.users_username','=','users.username')
+            ->where('users.username',Session::get('mahasiswa'))
+            ->get();
+
+            $data_konsultasi = DB::table('konsultasi_dosenwali')
+            ->join('dosen','dosen.npkdosen','=','konsultasi_dosenwali.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->join('topik_konsultasi','topik_konsultasi.idtopikkonsultasi','=','konsultasi_dosenwali.topik_idtopikkonsultasi')
+            ->join('semester','semester.idsemester','=','konsultasi_dosenwali.semester_idsemester')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','konsultasi_dosenwali.thnakademik_idthnakademik')
+            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
+            ->where('konsultasi_dosenwali.konfirmasi',0)
+            ->orderBy('konsultasi_dosenwali.idkonsultasi','DESC')
+            ->get();
+
+            $semua_konsultasi = DB::table('konsultasi_dosenwali')
+            ->join('dosen','dosen.npkdosen','=','konsultasi_dosenwali.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->join('topik_konsultasi','topik_konsultasi.idtopikkonsultasi','=','konsultasi_dosenwali.topik_idtopikkonsultasi')
+            ->join('semester','semester.idsemester','=','konsultasi_dosenwali.semester_idsemester')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','konsultasi_dosenwali.thnakademik_idthnakademik')
+            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
+            ->orderBy('konsultasi_dosenwali.idkonsultasi','ASC')
+            ->get();
+
+            $konsultasi_berikutnya = DB::table('konsultasi_dosenwali')
+            ->select('konsultasiselanjutnya','namamahasiswa','mahasiswa_nrpmahasiswa')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
+            ->where('konsultasi_dosenwali.mahasiswa_nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa )
+            ->where('konsultasi_dosenwali.konfirmasi',1)
+            ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
+            ->orderBy('konsultasiselanjutnya','ASC')
+            ->get();
+
+            return view('data_konsultasi.daftarkonsultasi_mahasiswa',compact('data_konsultasi','semua_konsultasi','konsultasi_berikutnya'));
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
+
+    public function konfirmasikonsultasi_proses($id)
+    {
+        if(Session::get('mahasiswa') != null)
+        {
+            $status_konfirmasi = DB::table('konsultasi_dosenwali')
+            ->select('konfirmasi')
+            ->where('idkonsultasi', $id)
+            ->get();
+
+            if($status_konfirmasi[0]->konfirmasi == 0)
+            {
+                $hasil_konfirmasi = DB::table('konsultasi_dosenwali') 
+                ->where('idkonsultasi',$id)
+                ->update([
+                    'konfirmasi' => '1'
+                ]);   
+            }
+
+            return redirect('mahasiswa/data/konsultasimahasiswa');
+        }
+        else
+        {
+            return redirect("/");
         }
     }
 }

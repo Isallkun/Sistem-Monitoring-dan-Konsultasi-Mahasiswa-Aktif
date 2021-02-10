@@ -42,7 +42,7 @@
               <div class="icon">
                 <i class="ion ion-archive"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer"><br></a>
             </div>
           </div>
           <!-- ./col -->
@@ -65,14 +65,14 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>0</h3>
+                <h3>{{$menunggu_konfirmasi}}</h3>
 
-                <p>Kondisi Mahasiswa</p>
+                <p>Menunggu Konfirmasi</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person"></i>
               </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{url('mahasiswa/data/konsultasimahasiswa')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -88,7 +88,7 @@
               <div class="icon">
                 <i class="ion ion-ios-alarm"></i>
               </div>
-              <a href="{{url('dosen/data/konsultasi')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('mahasiswa/data/konsultasimahasiswa')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
