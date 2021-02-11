@@ -10,6 +10,7 @@ use DB;
 use Session;
 use Carbon\Carbon;
 use File;
+use ZipArchive;
 
 use App\User;
 use App\Mahasiswa;
@@ -418,6 +419,61 @@ class DataHukumanController extends Controller
             {
                 return redirect("mahasiswa/data/hukumanmahasiswa")->with(['Error' => 'Mohon maaf, sistem gagal mengunggah berkas hukuman']);
             }
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
+
+    public function unduhberkas_proses(Request $request, $id)
+    {
+        if(Session::get('mahasiswa') != null)
+        {
+            $nrpmahasiswa = $request->get('nrpmahasiswa');
+
+            $berkas_hukuman = DB::table('hukuman')
+            ->select('berkas_hukuman.berkas')
+            ->join('berkas_hukuman','berkas_hukuman.hukuman_idhukuman','=','hukuman.idhukuman')
+            ->where('idhukuman',$id)
+            ->where('mahasiswa_nrpmahasiswa',$nrpmahasiswa)
+            ->get();
+
+
+            //Load ZIP Library  
+            $zip = new ZipArchive;
+            $zipname = time()."_".$nrpmahasiswa.".zip";
+
+            //Membuat File ZIP
+            if ($zip->open(public_path($zipname), ZipArchive::CREATE) === TRUE)
+            {
+                $files = File::files(public_path('data_hukuman'));
+       
+                foreach ($berkas_hukuman as $key => $value) 
+                {
+                    $zip->addFile("data_hukuman/".$value->berkas);
+                }
+                 
+                $zip->close();
+            } 
+           
+
+
+            //Mengunduh File ZIP yang telah dibentuk
+            if(file_exists($zipname))
+            {
+                header('Content-Type: application/zip');
+                header('Content-disposition: attachment; filename="'.$zipname.'"');
+                header('Content-Length: ' . filesize($zipname));
+                readfile($zipname);
+                unlink($zipname);
+            } 
+            else
+            {
+                $informasi = "Proses mengkompresi file gagal";
+            } 
+             
+             // return redirect("mahasiswa/data/hukumanmahasiswa");   
         }
         else
         {
