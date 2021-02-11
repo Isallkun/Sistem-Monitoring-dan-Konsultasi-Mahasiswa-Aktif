@@ -133,7 +133,6 @@
                     @if($d->status == "0")
                       <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#upload_{{$d->nrpmahasiswa}}">Upload</a>
                     @else
-
                       <form action="{{url('mahasiswa/data/hukumanmahasiswa/prosesunduh/'.$d->idhukuman)}}" role="form" method="post">
                         {{ csrf_field() }}
                         <input type="hidden" name="nrpmahasiswa" value="{{$d->nrpmahasiswa}}">

@@ -96,6 +96,13 @@
                           -
                         @endif
                       @endforeach
+
+                      <form action="{{url('dosen/data/hukuman/prosesunduh/'.$d->idhukuman)}}" role="form" method="post">
+                      {{ csrf_field() }}
+                        <input type="hidden" name="nrpmahasiswa" value="{{$d->nrpmahasiswa}}">
+                        <button type="submit" class="btn btn-info">Unduh berkas (.zip)</button>
+                      </form>
+
                     </td>
                     <br>
                   </tr>

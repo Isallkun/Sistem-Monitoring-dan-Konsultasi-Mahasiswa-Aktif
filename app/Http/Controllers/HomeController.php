@@ -389,7 +389,19 @@ class HomeController extends Controller
             ->where('konsultasi_dosenwali.konfirmasi', 0)
             ->count();
 
-            return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','hukuman_mahasiswa','konsultasi_berikutnya', 'menunggu_konfirmasi'));
+            $data_konsultasi_mhs = DB::table('konsultasi_dosenwali')
+            ->join('topik_konsultasi','topik_konsultasi.idtopikkonsultasi','=','konsultasi_dosenwali.topik_idtopikkonsultasi')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->join('dosen','dosen.npkdosen','=','konsultasi_dosenwali.dosen_npkdosen')
+            ->join('semester','semester.idsemester','=','konsultasi_dosenwali.semester_idsemester')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','konsultasi_dosenwali.thnakademik_idthnakademik')
+            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
+            ->where('konsultasi_dosenwali.konfirmasi', 1)
+            ->orderBy('idkonsultasi','ASC')
+            ->get();
+
+
+            return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','hukuman_mahasiswa','konsultasi_berikutnya', 'menunggu_konfirmasi','data_konsultasi_mhs'));
         }
         else
         {

@@ -95,8 +95,46 @@
         </div>
 
         <div class="row">
-         <!-- ISI HALAMAN -->
+        <!-- ISI HALAMAN -->
 
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Data Konsultasi Dosen Wali</h3>
+          </div>  
+          <div class="card-body">
+            <table id="tabel_konsultasi" class="table table-bordered table-striped">
+              <thead>
+                <form action="#" role="form" method="post">
+                {{ csrf_field() }}
+                  <button type="submit" class="btn btn-primary pull-right">Cetak Konsultasi (.pdf)</button>
+                </form>
+                
+                <br><br>
+                <tr> 
+                  <th width="1%">No.</th>
+                  <th width="1%">Tanggal Konsultasi</th>
+                  <th width="1%">Tahun Akademik</th>
+                  <th width="1%">Topik</th>
+                  <th width="1%">Permasalahan</th>
+                  <th width="1%">Solusi</th>
+                  <th width="1%">Dosen Wali</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($data_konsultasi_mhs as $no =>$d)
+                <tr>
+                  <td>{{$no+1}}</td>
+                  <td>{{$d->tanggalkonsultasi}}</td>
+                  <td>{{$d->semester}} {{$d->tahun}}</td>
+                  <td>{{$d->namatopik}}</td>
+                  <td>{{$d->permasalahan}}</td>
+                  <td>{{$d->solusi}}</td>
+                  <td>{{$d->namadosen}} {{$d->npkdosen}}</td>
+                </tr>
+                @endforeach
+              </tbody>
+            </table>  
+          </div>
 
         </div>
         <!-- /.row (main row) -->

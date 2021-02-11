@@ -134,6 +134,9 @@ Route::group(['prefix' => '/' ], function()
 
 		//Tampilkan Berkas hukuman
 		Route::get('data/hukuman/detailhukuman/{id}', 'DataHukumanController@detailhukuman');
+		//Unduh Berkas
+		Route::post('data/hukuman/prosesunduh/{id}', 'DataHukumanController@unduhberkas_proses');
+
 
 		//Tambah data hukuman
 		Route::get('data/hukuman/tambah', 'DataHukumanController@tambahhukuman');
@@ -167,6 +170,7 @@ Route::group(['prefix' => '/' ], function()
 		Route::post('data/hukumanmahasiswa/prosesunggah/{id}', 'DataHukumanController@unggahberkas_proses');
 		//Unduh berkas
 		Route::post('data/hukumanmahasiswa/prosesunduh/{id}', 'DataHukumanController@unduhberkas_proses');
+
 
 		Route::get('data/konsultasimahasiswa','DataKonsultasiController@daftarkonsultasi_mahasiswa');
 		//Konfirmasi konsultasi

@@ -428,7 +428,7 @@ class DataHukumanController extends Controller
 
     public function unduhberkas_proses(Request $request, $id)
     {
-        if(Session::get('mahasiswa') != null)
+        if(Session::get('mahasiswa') != null || Session::get('dosen') != null)
         {
             $nrpmahasiswa = $request->get('nrpmahasiswa');
 
@@ -457,8 +457,6 @@ class DataHukumanController extends Controller
                 $zip->close();
             } 
            
-
-
             //Mengunduh File ZIP yang telah dibentuk
             if(file_exists($zipname))
             {
@@ -472,9 +470,8 @@ class DataHukumanController extends Controller
             {
                 $informasi = "Proses mengkompresi file gagal";
             } 
-             
-             // return redirect("mahasiswa/data/hukumanmahasiswa");   
         }
+        
         else
         {
             return redirect("/");
