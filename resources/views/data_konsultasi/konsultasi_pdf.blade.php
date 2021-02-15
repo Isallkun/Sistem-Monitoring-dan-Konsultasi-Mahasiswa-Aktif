@@ -10,8 +10,25 @@
 			font-size: 9pt;
 		}
 	</style>
+
+	<table>
+		<tr>
+			<td align="center">
+				<img src="logo_univeristas_surabaya.jpg" style="width: 120px;height: 120px;">
+			</td>
+			<td align="center">
+				<h5>LAPORAN HASIL BIMBINGAN DOSEN WALI</h5> 
+				<p style="font-family: times new roman;font-weight: bold;font-size: 15px">Jurusan Teknik Informatika  Universitas Surabaya</p>
+			</td>
+			<td align="center">
+				<img src="logo_univeristas_surabaya.jpg" style="width: 120px;height: 120px;">
+			</td>
+			
+		</tr>
+	</table>
+	
 	<center>
-		<h5>LAPORAN HASIL KONSULTASI DOSEN WALI</h5>
+		
 		<br>
 	</center>
 	<p style="font-family: times new roman; font-size: 13px; font-weight: bold;">
