@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Session;
 use Carbon\Carbon;
 use DB;
+use PDF;
 
 class HomeController extends Controller
 {
@@ -399,8 +400,7 @@ class HomeController extends Controller
             ->where('konsultasi_dosenwali.konfirmasi', 1)
             ->orderBy('idkonsultasi','ASC')
             ->get();
-
-
+            
             return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','hukuman_mahasiswa','konsultasi_berikutnya', 'menunggu_konfirmasi','data_konsultasi_mhs'));
         }
         else
@@ -408,5 +408,27 @@ class HomeController extends Controller
             return redirect('/');  
         }
     }
+
+    public function cetak_konsultasi ($id)
+    {
+        $mahasiswa = DB::table('mahasiswa')
+        ->where('nrpmahasiswa', $id)
+        ->get();
+
+        $data_konsultasi_mhs = DB::table('konsultasi_dosenwali')
+        ->join('topik_konsultasi','topik_konsultasi.idtopikkonsultasi','=','konsultasi_dosenwali.topik_idtopikkonsultasi')
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+        ->join('dosen','dosen.npkdosen','=','konsultasi_dosenwali.dosen_npkdosen')
+        ->join('semester','semester.idsemester','=','konsultasi_dosenwali.semester_idsemester')
+        ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','konsultasi_dosenwali.thnakademik_idthnakademik')
+        ->where('mahasiswa.nrpmahasiswa',$id)
+        ->where('konsultasi_dosenwali.konfirmasi', 1)
+        ->orderBy('idkonsultasi','ASC')
+        ->get();
+
+        $pdf = PDF::loadview('data_konsultasi/konsultasi_pdf',['konsultasi'=>$data_konsultasi_mhs,'mhs'=>$mahasiswa]);
+        return $pdf->download('laporan-konsultasi-dosenwali-'.$id);
+    }
+
 }
   

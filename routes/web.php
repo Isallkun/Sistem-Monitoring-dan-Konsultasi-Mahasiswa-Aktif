@@ -162,6 +162,8 @@ Route::group(['prefix' => '/' ], function()
 	{
 		//localhost:8000/mahasiswa/(halaman home mahasiswa)
 		Route::get('/', 'HomeController@index_mahasiswa');
+		//Cetak hasil konsutasi (.pdf)
+		Route::get('data/cetakkonsultasi/{id}', 'HomeController@cetak_konsultasi');
 
 		//1. DATA HUKUMAN 
 		//localhost:8000/mahasiswa/data/hukuman
@@ -171,11 +173,13 @@ Route::group(['prefix' => '/' ], function()
 		//Unduh berkas
 		Route::post('data/hukumanmahasiswa/prosesunduh/{id}', 'DataHukumanController@unduhberkas_proses');
 
-
+		//2. DATA KONSULTASI
+		//menampilkan daftar konsultasi mahasiswa 
 		Route::get('data/konsultasimahasiswa','DataKonsultasiController@daftarkonsultasi_mahasiswa');
 		//Konfirmasi konsultasi
 		Route::get('data/konsultasimahasiswa/proseskonfirmasi/{id}', 'DataKonsultasiController@konfirmasikonsultasi_proses');
 
+		
 	});
 
 });

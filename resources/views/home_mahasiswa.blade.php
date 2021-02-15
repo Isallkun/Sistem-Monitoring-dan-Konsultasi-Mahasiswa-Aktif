@@ -42,7 +42,7 @@
               <div class="icon">
                 <i class="ion ion-archive"></i>
               </div>
-              <a href="#" class="small-box-footer"><br></a>
+              <a href="{{url('mahasiswa/data/konsultasimahasiswa')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -97,18 +97,19 @@
         <div class="row">
         <!-- ISI HALAMAN -->
 
-        <div class="card">
+        <div class="card" >
           <div class="card-header">
             <h3 class="card-title">Data Konsultasi Dosen Wali</h3>
           </div>  
           <div class="card-body">
             <table id="tabel_konsultasi" class="table table-bordered table-striped">
               <thead>
-                <form action="#" role="form" method="post">
+                @foreach($mahasiswa as $m)
+                <form action="{{url('mahasiswa/data/cetakkonsultasi/'.$m->nrpmahasiswa)}}" role="form" method="get">
                 {{ csrf_field() }}
                   <button type="submit" class="btn btn-primary pull-right">Cetak Konsultasi (.pdf)</button>
                 </form>
-                
+                @endforeach
                 <br><br>
                 <tr> 
                   <th width="1%">No.</th>
