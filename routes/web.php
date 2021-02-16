@@ -149,7 +149,6 @@ Route::group(['prefix' => '/' ], function()
 		//Hapus data hukuman
 		Route::get('data/hukuman/hapus/{id}', 'DataHukumanController@hapushukuman');
 
-
 		//4. PROFILE DOSEN
 		//Menampilkan halaman profile dosen
 		Route::get('profil/profildosen', 'profildosenController@profil_dosen');
@@ -179,7 +178,11 @@ Route::group(['prefix' => '/' ], function()
 		//Konfirmasi konsultasi
 		Route::get('data/konsultasimahasiswa/proseskonfirmasi/{id}', 'DataKonsultasiController@konfirmasikonsultasi_proses');
 
-		
+		//4. PROFIL MAHASISWA
+		//Menampilkan halaman profil mahasiswa
+		Route::get('profil/profilmahasiswa', 'profilmahasiswaController@profil_mahasiswa');
+		//Ubah halaman profil mahasiswa
+		Route::post('profil/profilmahasiswa/ubahproses', 'profilmahasiswaController@ubahprofilmahasiswa_proses');	
 	});
 
 });

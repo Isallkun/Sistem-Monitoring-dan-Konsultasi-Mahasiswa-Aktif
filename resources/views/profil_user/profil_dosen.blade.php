@@ -70,7 +70,8 @@
                   <ul class="list-group list-group-unbordered mb-3">
                     <li class="list-group-item">
                       <b>Nama Lengkap</b> 
-                      <input type="text" name="nama_dosen" class="form-control" id="exampleInputNama" placeholder="Enter Nama Dosen" value="{{$u->namadosen}}">
+                        <input type="text" name="name" class="form-control" id="exampleInputName" placeholder="Enter Nama Lengkap" value="{{$u->namadosen}}">
+                     
                     </li>
 
                     <li class="list-group-item">
@@ -83,7 +84,7 @@
                       <b>Nomor Telepon</b> <a class="float-right">{{$u->telepon}} </a>
                     </li>
                     <li class="list-group-item">
-                      <b>Jurusan</b> <a class="float-right">{{$u->namajurusan}} </a>
+                      <b>Jurusan</b> <a class="float-right">{{$u->namafakultas}} - {{$u->namajurusan}} </a>
                     </li>
                     <li class="list-group-item">
                       <b>Status</b> <a class="float-right">{{$u->status}}</a>
@@ -96,7 +97,16 @@
                     </li>
 
                      <li class="list-group-item">
-                      <b>Password</b> <a class="float-right" required="*">{{$decrypted}}</a>
+                      <b>Password</b> 
+                      <input type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Enter Password" value="{{$decrypted}}">
+
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" onclick="myFunction()"> 
+                        <label class="form-check-label" for="flexCheckChecked">
+                          Show Password
+                        </label>
+                      </div>
+                      
                     </li>
 
                     <li class="list-group-item">
@@ -191,8 +201,15 @@
       data: areaChartData, 
       options: areaChartOptions
     })
-
-    
   })
+
+  function myFunction() {
+  var x = document.getElementById("exampleInputPassword");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+} 
 </script>
 @endpush

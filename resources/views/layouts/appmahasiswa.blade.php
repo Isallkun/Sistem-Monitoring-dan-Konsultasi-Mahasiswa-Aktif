@@ -108,7 +108,7 @@
 
           <li class="nav-header">Settings Pengguna</li>
           <li class="nav-item">
-            <a href="{{url('dosen/profil/profildosen')}}" class="nav-link">
+            <a href="{{url('mahasiswa/profil/profilmahasiswa')}}" class="nav-link">
               <i class="nav-icon fas fa-user-circle"></i>
               <p>
                 Profil pengguna

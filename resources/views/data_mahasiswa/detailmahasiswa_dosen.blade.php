@@ -214,14 +214,16 @@
 
                         <ul class="list-group list-group-unbordered mb-3">
                           <li class="list-group-item">
-                            
                             <a class="float-left">
                               @if($m->level == "Bronze")
                               <img src="{{url('rank_pictures/Bronze.png')}}" class="rounded mx-auto d-block" alt="rank image">
+                              <center>Bronze</center>
                               @elseif($m->level == "Silver")
                               <img src="{{url('rank_pictures/Silver.png')}}" class="rounded mx-auto d-block" alt="rank image">
+                              <center>Silver</center>
                               @else
                               <img src="{{url('rank_pictures/Gold.png')}}" class="rounded mx-auto d-block" alt="rank image">
+                              <center>Gold</center>
                               @endif 
                             </a>
                             <a class="float-left">
@@ -239,7 +241,7 @@
                             </a>
                           </li>
 
-                         
+                          
                           <li class="list-group-item"></li>
                           
                           <li class="list-group-item">
@@ -258,7 +260,7 @@
                             <b>Alamat</b> <a class="float-right">{{$m->alamat}} </a>
                           </li>
                           <li class="list-group-item">
-                            <b>Jurusan</b> <a class="float-right">{{$m->namajurusan}} </a>
+                            <b>Jurusan</b> <a class="float-right">{{$m->namafakultas}} - {{$m->namajurusan}} </a>
                           </li>
                           <li class="list-group-item">
                             <b>Status</b> <a class="float-right">{{$m->status}}</a>
