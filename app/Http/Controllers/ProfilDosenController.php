@@ -54,31 +54,62 @@ class ProfilDosenController extends Controller
     {
     	try
     	{
-    		$this->validate($request,[
-                'name' =>'required',
-                'password' =>'required|max:10'
-            ]);
+    		$message=[];
+           
 
-            $password = $request->get('password');
-            $encrypted = Crypt::encryptString($password);
-            
-            $dosen = DB::table('dosen') 
+            $namalengkap = $request->get('namalengkap');
+            $password_lama = $request->get('password_lama');
+            $password_baru = $request->get('password_baru');
+            $password_re_baru = $request->get('password_re-baru');
+
+
+            if($namalengkap)
+            {
+                $dosen = DB::table('dosen') 
                 ->join('users','users.username','=','dosen.users_username')
                 ->where('npkdosen',$request->get('npk_dosen'))
                 ->update([    
-                    'namadosen'=>$request->get('name'),              
-                    'password' =>$encrypted
-            ]);    
+                    'namadosen'=>$namalengkap
+                ]);    
 
+                $message=["Success","Berhasil Mengubah Profil Pengguna"];
+            }
+            else
+            {
+                if($password_lama == $request->get('password'))
+                {
+                    if($password_baru == $password_re_baru)
+                    {
+                        $encrypted = Crypt::encryptString($password_baru);
 
-	        return redirect('dosen/profil/profildosen')->with(['Success' => 'Berhasil Mengubah Data Profil Anda']);
+                        $dosen = DB::table('dosen') 
+                        ->join('users','users.username','=','dosen.users_username')
+                        ->where('npkdosen',$request->get('npk_dosen'))
+                        ->update([    
+                            'password'=>$encrypted
+                        ]); 
+
+                        $message=["Success","Berhasil Mengubah Password Pengguna"];
+                    }
+                    else
+                    {
+                        $message=["Error","Harap Periksa Ulang Password Baru dan Konfirmasi Password yang di Inputkan"];
+                    }
+                }
+                else
+                {
+                    $message=["Error","Password Lama Yang Anda Masukan Salah"];
+                }
+            }
+
+	        return redirect('dosen/profil/profildosen')->with([$message[0] => $message[1]]);
     	}
     	
         catch(QueryException $e)
         {
             $message= explode("in C:",$e);
 
-            return redirect("dosen/profil/profildosen")->with(['Error' => 'Gagal Mengubah Data Profil Anda <br> Pesan Kesalahan: '.$message[0]]);
+            return redirect("dosen/profil/profildosen")->with(['Error' => 'Gagal Mengubah Data Pengguna <br> Pesan Kesalahan: '.$message[0]]);
         }
 
     }

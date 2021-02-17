@@ -31,109 +31,176 @@
         <div class="row">
           <div class="col-md-12">
 
-            <form action="{{url('dosen/profil/profildosen/ubahproses')}}" role="form" method="post" enctype="multipart/form-data">
-              {{ csrf_field() }}
-
-              @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                  <ul>
-                    @foreach ($errors->all() as $error)
-                      <li>{{ $error }}</li>
-                    @endforeach
-                  </ul>
-                </div>
-              @endif
-
-              @if (\Session::has('Success'))
-                <div class="alert alert-success alert-block">
-                  <ul>
-                      <li>{!! \Session::get('Success') !!}</li>
-                  </ul>
-                </div>
-              @endif
-
-              @foreach($user_dosen as $u)
-              <input type="hidden" name="npk_dosen" value="{{$u->npkdosen}}">
-              
-              <div class="card card-primary card-outline">
-                <div class="card-body box-profile">
-                  <div class="text-center">
-                    <img class="profile-user-img img-fluid img-circle" src="{{url('data_pengguna/'. Session::get('profil_dosen') )}}" alt="User profile picture">
-
-                  </div>
-                   <h3 class="profile-username text-center">{{$u->namadosen}} - {{$u->npkdosen}}</h3>
-
-                    <p class="text-muted text-center">
-                    Department of Informatics Engineering <br>University of Surabaya
-                    </p>
-
-                  <ul class="list-group list-group-unbordered mb-3">
-                    <li class="list-group-item">
-                      <b>Nama Lengkap</b> 
-                        <input type="text" name="name" class="form-control" id="exampleInputName" placeholder="Enter Nama Lengkap" value="{{$u->namadosen}}">
-                     
-                    </li>
-
-                    <li class="list-group-item">
-                      <b>Jenis Kelamin</b> <a class="float-right">{{$u->jeniskelamin}} </a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Email</b> <a class="float-right">{{$u->email}} </a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Nomor Telepon</b> <a class="float-right">{{$u->telepon}} </a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Jurusan</b> <a class="float-right">{{$u->namafakultas}} - {{$u->namajurusan}} </a>
-                    </li>
-                    <li class="list-group-item">
-                      <b>Status</b> <a class="float-right">{{$u->status}}</a>
-                    </li>
-
-                    <li class="list-group-item"></li>
-                    
-                    <li class="list-group-item">
-                      <b>Username</b> <a class="float-right">{{$u->username}}</a>
-                    </li>
-
-                     <li class="list-group-item">
-                      <b>Password</b> 
-                      <input type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Enter Password" value="{{$decrypted}}">
-
-                      <div class="form-check">
-                        <input type="checkbox" class="form-check-input" onclick="myFunction()"> 
-                        <label class="form-check-label" for="flexCheckChecked">
-                          Show Password
-                        </label>
-                      </div>
-                      
-                    </li>
-
-                    <li class="list-group-item">
-                      <button type="submit" class="btn btn-primary float-right">Simpan</button>
-                    </li>
-
-                    <li class="list-group-item">
-                      <b>Grafik Pelayanan Konsultasi Per-bulan</b>
-                    </li>
-                  </ul>
-
-                  <div class="chart">
-                    <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                    
-                  </div>
-                </div>
-                <!-- /.card-header -->
-                <!-- /.card-body -->
+            @if (count($errors) > 0)
+              <div class="alert alert-danger">
+                <ul>
+                  @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                  @endforeach
+                </ul>
               </div>
-            @endforeach
-            </form>
+            @endif
+
+            @if (\Session::has('Success'))
+              <div class="alert alert-success alert-block">
+                <ul>
+                    <li>{!! \Session::get('Success') !!}</li>
+                </ul>
+              </div>
+            @endif
+
+            @if (\Session::has('Error'))
+              <div class="alert alert-danger alert-block">
+                <ul>
+                    <li>{!! \Session::get('Error') !!}</li>
+                </ul>
+              </div>
+            @endif
+
+            @foreach($user_dosen as $u) 
+            <div class="card card-primary card-outline">
+              <div class="card-body box-profile">
+                <div class="text-center">
+                  <img class="profile-user-img img-fluid img-circle" src="{{url('data_pengguna/'. Session::get('profil_dosen') )}}" alt="User profile picture">
+
+                </div>
+                 <h3 class="profile-username text-center">{{$u->namadosen}} - {{$u->npkdosen}}</h3>
+
+                  <p class="text-muted text-center">
+                  Department of Informatics Engineering <br>University of Surabaya
+                  </p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                  
+                  <li class="list-group-item">
+                    <b>Nama Lengkap</b> 
+                    <a class="float-right">{{$u->namadosen}} </a>
+                    <br>
+                    <a href="#" class="float-right" style="text-decoration: underline;" data-toggle="modal" data-target="#ubahData_{{$u->npkdosen}}">ubah</a>
+                  </li>
+
+                  <li class="list-group-item">
+                    <b>Jenis Kelamin</b> <a class="float-right">{{$u->jeniskelamin}} </a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Email</b> <a class="float-right">{{$u->email}} </a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Nomor Telepon</b> <a class="float-right">{{$u->telepon}} </a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Jurusan</b> <a class="float-right">{{$u->namafakultas}} - {{$u->namajurusan}} </a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Status</b> <a class="float-right">{{$u->status}}</a>
+                  </li>
+
+                  <li class="list-group-item"></li>
+                  
+                  <li class="list-group-item">
+                    <b>Username</b> <a class="float-right">{{$u->username}}</a>
+                  </li>
+
+                  <li class="list-group-item">
+                    <b>Password</b> 
+                    <a href="#" class="float-right" style="text-decoration: underline;" data-toggle="modal" data-target="#ubahPassword_{{$u->npkdosen}}">ubah</a>  
+                  </li>      
+
+                  <li class="list-group-item">
+                    <b>Grafik Pelayanan Konsultasi Per-bulan</b>
+                  </li>
+                </ul>
+
+                <div class="chart">
+                  <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <!-- /.card-body -->
+            </div>
+          @endforeach
           </div>
-
-
         </div>
-      
         
+        @foreach($user_dosen as $d)
+        <div id="ubahData_{{$d->npkdosen}}" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- konten modal-->
+            <div class="modal-content">
+              <!-- heading modal -->
+              <div class="modal-header">
+                <h4 class="modal-title">Ubah Data Profil Pengguna</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <!-- body modal -->
+              <div class="modal-body">
+                
+                <form action="{{url('dosen/profil/profildosen/ubahproses')}}" role="form" method="post" enctype="multipart/form-data">
+                {{ csrf_field() }}  
+                  <input type="hidden" name="npk_dosen" value="{{$d->npkdosen}}">
+
+                  <div class="form-group">
+                    <label for="exampleInputNamaLengkap">Nama Lengkap</label>
+                    <input type="text" class="form-control" id="exampleInputNamaLengkap" name="namalengkap" placeholder="Enter Nama Lengkap" value="{{$d->namadosen}}" required>
+                  </div>
+
+                 <button type="submit" class="btn btn-success float-right">Simpan</button>
+                </form>
+              
+              </div>
+              <!-- footer modal -->
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+        @endforeach
+        
+         @foreach($user_dosen as $d)
+        <div id="ubahPassword_{{$d->npkdosen}}" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- konten modal-->
+            <div class="modal-content">
+              <!-- heading modal -->
+              <div class="modal-header">
+                <h4 class="modal-title">Ubah Password Pengguna</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <!-- body modal -->
+              <div class="modal-body">
+                
+                <form action="{{url('dosen/profil/profildosen/ubahproses')}}" role="form" method="post" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                  <input type="hidden" name="npk_dosen" value="{{$d->npkdosen}}">
+                  <input type="hidden" name="password" value="{{$decrypted}}">
+
+                  <div class="form-group">
+                    <label for="exampleInputPasswordLama">Password Lama</label>
+                    <input type="password" class="form-control" id="exampleInputPasswordLama" name="password_lama" placeholder="Enter Password Lama" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputPasswordBaru">Password Baru</label>
+                    <input type="password" class="form-control" id="exampleInputPasswordBaru" name="password_baru" placeholder="Enter Password Baru" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputRePasswordBaru">Re-Password Baru</label>
+                    <input type="password" class="form-control" id="exampleInputRePasswordBaru" name="password_re-baru" placeholder="Enter  Re-Password Baru" required>
+                  </div>
+
+                 <button type="submit" class="btn btn-success float-right">Simpan</button>
+                </form>
+              
+              </div>
+              <!-- footer modal -->
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+        @endforeach
        
 
         <!-- /.row (main row) -->
@@ -202,14 +269,5 @@
       options: areaChartOptions
     })
   })
-
-  function myFunction() {
-  var x = document.getElementById("exampleInputPassword");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-} 
 </script>
 @endpush
