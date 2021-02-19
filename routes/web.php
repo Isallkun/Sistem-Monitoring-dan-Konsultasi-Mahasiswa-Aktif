@@ -83,6 +83,22 @@ Route::group(['prefix' => '/' ], function()
 
 		//Hapus data matakuliah
 		Route::get('master/konsultasi/hapus/{id}', 'MasterKonsultasiController@hapuskonsultasi');
+
+
+		//5. MASTER NOTIFIKASI
+		//localhost:8000/admin/notifikasi
+		Route::get('master/notifikasi', 'MasterNotifikasiController@daftarnotifikasi');
+
+		//Tambah data notifikasi
+		Route::get('master/notifikasi/tambah', 'MasterNotifikasiController@tambahnotifikasi');
+		Route::post('master/notifikasi/prosestambah', 'MasterNotifikasiController@tambahnotifikasi_proses');
+
+		//Ubah data notifikasi
+		Route::get('master/notifikasi/ubah/{id}', 'MasterNotifikasiController@ubahnotifikasi');
+		Route::post('master/notifikasi/ubahproses', 'MasterNotifikasiController@ubahnotifikasi_proses');
+
+		//Hapus data notifikasi
+		Route::get('master/notifikasi/hapus/{id}', 'MasterNotifikasiController@hapusnotifikasi');
 		
 	});
 

@@ -126,6 +126,17 @@
             </a>
           </li>
 
+          <li class="nav-header">Notifikasi Email</li>
+          <li class="nav-item has-treeview">
+            <a href="{{ url('admin/master/notifikasi') }}" class="nav-link">
+              <i class="nav-icon fas fa-calendar"></i>
+              <p>
+                Konsultasi 
+                <i class="fas fa-angle-right right"></i>
+              </p>
+            </a>
+          </li>
+
           <li class="nav-header">Settings Pengguna</li>
           <li class="nav-item">
             <a href="{{ route('keluar') }}" class="nav-link">

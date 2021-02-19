@@ -9,3 +9,4 @@ class Hukuman extends Model
     protected $table = "hukuman";
     protected $fillable = ['idhukuman','tanggalinput','keterangan','status','penilaian','tanggalkonfirmasi','masaberlaku','dosen_npkdosen','mahasiswa_nrpmahasiswa']; 
 }
+ 
