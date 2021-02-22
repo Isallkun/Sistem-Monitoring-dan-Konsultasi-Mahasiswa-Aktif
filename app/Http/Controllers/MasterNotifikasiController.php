@@ -210,6 +210,7 @@ class MasterNotifikasiController extends Controller
     }
 
     // Bagian untuk pengiriman notifikasi konsultasi (otomatis)
+    // note: letakan di index notifikasi
     public function contact_send()
     {
     	$data_konsultasi = DB::table('jadwal_konsultasi')
@@ -252,6 +253,8 @@ class MasterNotifikasiController extends Controller
                 $when = now()->addDays($d->selisih-3);
 
                 Mail::to($email_pengguna)->later($when,new KonsultasiDosenWaliMail($data_konsultasi));
+
+                // Jangan lupa nyalakan: php artisan queue:listen
                 return "Berhasil";
             }
             else

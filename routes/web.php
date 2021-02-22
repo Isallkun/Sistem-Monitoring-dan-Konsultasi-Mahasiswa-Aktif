@@ -87,7 +87,7 @@ Route::group(['prefix' => '/' ], function()
 
 		//5. MASTER NOTIFIKASI
 		//localhost:8000/admin/notifikasi
-		Route::get('master/notifikasi', 'MasterNotifikasiController@contact_send');
+		Route::get('master/notifikasi', 'MasterNotifikasiController@daftarnotifikasi');
 
 		//Tambah data notifikasi
 		Route::get('master/notifikasi/tambah', 'MasterNotifikasiController@tambahnotifikasi');
