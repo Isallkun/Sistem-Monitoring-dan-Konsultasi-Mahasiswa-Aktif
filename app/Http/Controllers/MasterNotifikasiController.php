@@ -77,8 +77,10 @@ class MasterNotifikasiController extends Controller
 		                'keterangan'=>$keterangan
             		]);
 
+
                     $data_konsultasi = DB::table('jadwal_konsultasi')
                     ->select('jadwal_konsultasi.*')
+                    ->orderBy('idjadwalkonsultasi', 'DESC')
                     ->limit(1)
                     ->get();
 
@@ -101,7 +103,6 @@ class MasterNotifikasiController extends Controller
                     {
                         $email_pengguna[]=$pd->email_dosen;
                     }
-
                     Mail::to($email_pengguna)->send(new KonsultasiDosenWaliMail($data_konsultasi));
 
 
@@ -243,6 +244,7 @@ class MasterNotifikasiController extends Controller
                     $email_pengguna[]=$pd->email_dosen;
                 }
 
+                
                 Mail::to($email_pengguna)->send(new KonsultasiDosenWaliMail($data_konsultasi));
                 return "Berhasil";
             }
@@ -250,12 +252,6 @@ class MasterNotifikasiController extends Controller
             {
                 return "Gagal";
             }
-        }
-
-
-		
-       
-        
-        
+        }	
     }
 }
