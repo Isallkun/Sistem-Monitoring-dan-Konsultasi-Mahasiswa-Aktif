@@ -71,39 +71,38 @@ class MasterNotifikasiController extends Controller
     				$tambah_jadwal= Jadwal_konsultasi::insert([
 		                'judul'=> $judul,
 		                'tanggalinput'=> now(),
-		                'status'=>1,
+		                'status'=>0,
 		                'tanggalmulai'=>$tanggalmulai,
 		                'tanggalberakhir'=>$tanggalberakhir,
 		                'keterangan'=>$keterangan
             		]);
 
 
-                    $data_konsultasi = DB::table('jadwal_konsultasi')
-                    ->select('jadwal_konsultasi.*')
-                    ->orderBy('idjadwalkonsultasi', 'DESC')
-                    ->limit(1)
-                    ->get();
+                    // $data_konsultasi = DB::table('jadwal_konsultasi')
+                    // ->select('jadwal_konsultasi.*')
+                    // ->orderBy('idjadwalkonsultasi', 'DESC')
+                    // ->limit(1)
+                    // ->get();
 
-                    $email_pengguna =array();
+                    // $email_pengguna =array();
 
-                    $pengguna_mahasiswa = DB::table('mahasiswa')
-                    ->select('mahasiswa.email as email_mahasiswa')
-                    ->where('mahasiswa.status','aktif')
-                    ->get();
-                    foreach($pengguna_mahasiswa as $pm)
-                    {
-                        $email_pengguna[]=$pm->email_mahasiswa;
-                    }
-
-                    $pengguna_dosen = DB::table('dosen')
-                    ->select('dosen.email as email_dosen')
-                    ->where('dosen.status','aktif')
-                    ->get();
-                    foreach($pengguna_dosen as $pd)
-                    {
-                        $email_pengguna[]=$pd->email_dosen;
-                    }
-                    Mail::to($email_pengguna)->send(new KonsultasiDosenWaliMail($data_konsultasi));
+                    // $pengguna_mahasiswa = DB::table('mahasiswa')
+                    // ->select('mahasiswa.email as email_mahasiswa')
+                    // ->where('mahasiswa.status','aktif')
+                    // ->get();
+                    // foreach($pengguna_mahasiswa as $pm)
+                    // {
+                    //     $email_pengguna[]=$pm->email_mahasiswa;
+                    // }
+                    // $pengguna_dosen = DB::table('dosen')
+                    // ->select('dosen.email as email_dosen')
+                    // ->where('dosen.status','aktif')
+                    // ->get();
+                    // foreach($pengguna_dosen as $pd)
+                    // {
+                    //     $email_pengguna[]=$pd->email_dosen;
+                    // }
+                    // Mail::to($email_pengguna)->send(new KonsultasiDosenWaliMail($data_konsultasi));
 
 
     				return redirect('admin/master/notifikasi')->with(['Success' => 'Berhasil Menambahkan Data']);
@@ -224,8 +223,14 @@ class MasterNotifikasiController extends Controller
         {
             if($d->selisih <= 5)
             {
-                $email_pengguna =array();
+                $jadwalkonsultasi = DB::table('jadwal_konsultasi')
+                ->where('idjadwalkonsultasi', $d->idjadwalkonsultasi)
+                ->update([
+                    'status'=>1
+                ]);
 
+
+                $email_pengguna =array();
                 $pengguna_mahasiswa = DB::table('mahasiswa')
                 ->select('mahasiswa.email as email_mahasiswa')
                 ->where('mahasiswa.status','aktif')
@@ -244,8 +249,9 @@ class MasterNotifikasiController extends Controller
                     $email_pengguna[]=$pd->email_dosen;
                 }
 
-                
-                Mail::to($email_pengguna)->send(new KonsultasiDosenWaliMail($data_konsultasi));
+                $when = now()->addDays($d->selisih-3);
+
+                Mail::to($email_pengguna)->later($when,new KonsultasiDosenWaliMail($data_konsultasi));
                 return "Berhasil";
             }
             else
