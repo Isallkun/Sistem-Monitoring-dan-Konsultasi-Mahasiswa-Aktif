@@ -71,11 +71,39 @@ class MasterNotifikasiController extends Controller
     				$tambah_jadwal= Jadwal_konsultasi::insert([
 		                'judul'=> $judul,
 		                'tanggalinput'=> now(),
-		                'status'=>0,
+		                'status'=>1,
 		                'tanggalmulai'=>$tanggalmulai,
 		                'tanggalberakhir'=>$tanggalberakhir,
 		                'keterangan'=>$keterangan
             		]);
+
+                    $data_konsultasi = DB::table('jadwal_konsultasi')
+                    ->select('jadwal_konsultasi.*')
+                    ->limit(1)
+                    ->get();
+
+                    $email_pengguna =array();
+
+                    $pengguna_mahasiswa = DB::table('mahasiswa')
+                    ->select('mahasiswa.email as email_mahasiswa')
+                    ->where('mahasiswa.status','aktif')
+                    ->get();
+                    foreach($pengguna_mahasiswa as $pm)
+                    {
+                        $email_pengguna[]=$pm->email_mahasiswa;
+                    }
+
+                    $pengguna_dosen = DB::table('dosen')
+                    ->select('dosen.email as email_dosen')
+                    ->where('dosen.status','aktif')
+                    ->get();
+                    foreach($pengguna_dosen as $pd)
+                    {
+                        $email_pengguna[]=$pd->email_dosen;
+                    }
+
+                    Mail::to($email_pengguna)->send(new KonsultasiDosenWaliMail($data_konsultasi));
+
 
     				return redirect('admin/master/notifikasi')->with(['Success' => 'Berhasil Menambahkan Data']);
     			}
@@ -181,33 +209,53 @@ class MasterNotifikasiController extends Controller
         }
     }
 
+    // Bagian untuk pengiriman notifikasi konsultasi (otomatis)
+    public function contact_send()
+    {
+    	$data_konsultasi = DB::table('jadwal_konsultasi')
+	    ->select(DB::raw("DATEDIFF(tanggalmulai,now()) as selisih"),'jadwal_konsultasi.*')
+	    ->where ('status',0)
+	    ->where(DB::raw("DATEDIFF(tanggalmulai,now())"),'<=',5)
+	    ->limit(1)
+	    ->get();
 
-
-
-    public function contact_sent()
-	{
-		if(Session::get('admin')!=null)
-        {  
-
-			$data_email =array();
-
-			$dosen = DB::table('dosen')
-	        ->select('dosen.*','jurusan.namajurusan')
-	        ->join('jurusan', 'jurusan.idjurusan', '=', 'dosen.jurusan_idjurusan')
-	        ->where('status','aktif')
-	        ->get();
-	        
-	        foreach($dosen as $d)
-	        {
-	        	$data_email[]=$d->email;
-	        }
-
-	        Mail::to($data_email)->send(new KonsultasiDosenWaliMail());
-	        return "Email telah dikirim";	
-	    } 
-	    else
+        foreach ($data_konsultasi as $d) 
         {
-            
-        }   
-	}
+            if($d->selisih <= 5)
+            {
+                $email_pengguna =array();
+
+                $pengguna_mahasiswa = DB::table('mahasiswa')
+                ->select('mahasiswa.email as email_mahasiswa')
+                ->where('mahasiswa.status','aktif')
+                ->get();
+                foreach($pengguna_mahasiswa as $pm)
+                {
+                    $email_pengguna[]=$pm->email_mahasiswa;
+                }
+
+                $pengguna_dosen = DB::table('dosen')
+                ->select('dosen.email as email_dosen')
+                ->where('dosen.status','aktif')
+                ->get();
+                foreach($pengguna_dosen as $pd)
+                {
+                    $email_pengguna[]=$pd->email_dosen;
+                }
+
+                Mail::to($email_pengguna)->send(new KonsultasiDosenWaliMail($data_konsultasi));
+                return "Berhasil";
+            }
+            else
+            {
+                return "Gagal";
+            }
+        }
+
+
+		
+       
+        
+        
+    }
 }

@@ -17,17 +17,18 @@ use App\Jadwal_konsultasi;
 class KonsultasiDosenWaliMail extends Mailable
 {
     use Queueable, SerializesModels;
+    public $data_konsultasi;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data_konsultasi)
     {
-    
+        $this->data_konsultasi =$data_konsultasi;
     }
-
+ 
     /**
      * Build the message.
      *
@@ -35,12 +36,7 @@ class KonsultasiDosenWaliMail extends Mailable
      */
     public function build()
     {
-        return $this->from('konsultasi.dosenwali@gmail.com')
-                    ->view('master_notifikasi.notifikasi_mailformat')
-                    ->with([
-                        'title' => 'nanti akan diisi judul dari DB ...',
-                        'date' => 'nanti akan diisi tanggal dari DB ...',
-                        'subject' => 'isi'
-                    ]);
+        return $this->from($address = 'noreply@domain.com', $name = 'konsultasi.dosenwali@gmail.com')
+        ->view('master_notifikasi.notifikasi_mailformat');
     }
 }
