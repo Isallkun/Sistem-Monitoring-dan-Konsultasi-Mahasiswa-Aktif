@@ -10,6 +10,7 @@ use Session;
 use Carbon\Carbon;
 
 use App\Mail\KonsultasiDosenWaliMail;
+use App\Mail\RemindKonsultasiMail;
 use App\Dosen;
 use App\Mahasiswa;
 use App\Jadwal_konsultasi;
@@ -29,8 +30,7 @@ class MasterNotifikasiController extends Controller
         	->select('*')
         	->get();
 
-            $this->contact_send();
-
+            $this->ubahstatus();
         	return view('master_notifikasi.daftarnotifikasi_admin', compact('jadwalkonsultasi'));
         }
         else
@@ -73,7 +73,7 @@ class MasterNotifikasiController extends Controller
     				$tambah_jadwal= Jadwal_konsultasi::insert([
 		                'judul'=> $judul,
 		                'tanggalinput'=> now(),
-		                'status'=>0,
+		                'statuskirim'=>0,
 		                'tanggalmulai'=>$tanggalmulai,
 		                'tanggalberakhir'=>$tanggalberakhir,
 		                'keterangan'=>$keterangan
@@ -158,11 +158,11 @@ class MasterNotifikasiController extends Controller
     // Catatan  :php artisan queue:listen 
     //          :php artisan queue:work                         
   
-    public function contact_send()
+    public function ubahstatus()
     {
     	$data_konsultasi = DB::table('jadwal_konsultasi')
 	    ->select(DB::raw("DATEDIFF(tanggalmulai,now()) as selisih"),'jadwal_konsultasi.*')
-	    ->where ('status',0)
+	    ->where ('statuskirim',0)
 	    ->where(DB::raw("DATEDIFF(tanggalmulai,now())"),'<=',3)
 	    ->orderBy('idjadwalkonsultasi', 'ASC')
         ->limit(1)
@@ -173,9 +173,34 @@ class MasterNotifikasiController extends Controller
             $jadwalkonsultasi = DB::table('jadwal_konsultasi')
             ->where('idjadwalkonsultasi', $d->idjadwalkonsultasi)
             ->update([
-                'status'=>1
+                'statuskirim'=>1
             ]);
-
-        }	
+        }
     }
+
+    public function remind_mahasiswa()
+    {
+        if(Session::get('admin')!=null)
+        {
+            //Data Email Mahasiswa
+            $data_mahasiswa = DB::table('mahasiswa')
+            ->select('mahasiswa.email')
+            ->get();
+
+            $email_mahasiswa = array();
+            foreach ($data_mahasiswa as $d) 
+            {
+                $email_mahasiswa[]=$d->email;
+            }
+
+            Mail::to($email_mahasiswa)->send(new RemindKonsultasiMail());
+        }
+        else
+        {
+            return redirect("/");
+        }
+
+    }
+
+
 }

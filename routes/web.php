@@ -95,6 +95,8 @@ Route::group(['prefix' => '/' ], function()
 
 		//Hapus data notifikasi
 		Route::get('master/notifikasi/hapus/{id}', 'MasterNotifikasiController@hapusnotifikasi');
+
+		Route::get('master/notifikasi/remind', 'MasterNotifikasiController@remind_mahasiswa');
 		
 	});
 
