@@ -93,10 +93,6 @@ Route::group(['prefix' => '/' ], function()
 		Route::get('master/notifikasi/tambah', 'MasterNotifikasiController@tambahnotifikasi');
 		Route::post('master/notifikasi/prosestambah', 'MasterNotifikasiController@tambahnotifikasi_proses');
 
-		//Ubah data notifikasi
-		Route::get('master/notifikasi/ubah/{id}', 'MasterNotifikasiController@ubahnotifikasi');
-		Route::post('master/notifikasi/ubahproses', 'MasterNotifikasiController@ubahnotifikasi_proses');
-
 		//Hapus data notifikasi
 		Route::get('master/notifikasi/hapus/{id}', 'MasterNotifikasiController@hapusnotifikasi');
 		

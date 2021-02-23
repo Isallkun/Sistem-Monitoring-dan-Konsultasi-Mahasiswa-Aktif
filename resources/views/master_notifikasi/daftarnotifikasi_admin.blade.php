@@ -55,7 +55,8 @@
       <div class="container-fluid">
         <a href="{{ url('admin/master/notifikasi/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
         <br><br>
-
+        <a style="float: right;" href="{{ url('admin/master/notifikasi/tambah') }}" class="btn btn-warning" role="button"> <i class="fas fa-envelope"></i> Remind Mahasiswa</a>
+        <br><br>
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Data Notifikasi Konsultasi</h3>
@@ -82,9 +83,10 @@
                   <td>{{$jdwl->tanggalinput}}</td>
                   <td>
                     @if($jdwl->status == 0)
-                      <a href="#" class="btn btn-secondary btn-sm"> Belum Terkirim</a>
+                      <a href="#" class="btn btn-danger btn-sm">Menunggu Pengiriman</a>
                     @else
-                      <a href="#" class="btn btn-success btn-sm"> Terkirim</a>
+                      <a href="#" class="btn btn-success btn-sm">Terkirim</a>
+                    
                     @endif
                   </td>
                   <td>{{$jdwl->tanggalmulai}}</td>
@@ -99,13 +101,13 @@
                   
                   <td>
                     @if($jdwl->status == 0)
-                    <a href="{{url('admin/master/notifikasi/ubah/'.$jdwl->idjadwalkonsultasi)}}" class="btn btn-warning">Ubah</a>
-                    @endif
-
-                    <form method="get" action="{{url('admin/master/notifikasi/hapus/'.$jdwl->idjadwalkonsultasi)}}">
+                      <form method="get" action="{{url('admin/master/notifikasi/hapus/'.$jdwl->idjadwalkonsultasi)}}">
                       <input type="hidden" name="idjadwalkonsultasi" value="">
                       <button type="submmit" class="btn btn-danger">Hapus</button>
-                    </form>                   
+                    </form> 
+                    @else
+                     none   
+                    @endif        
                   </td>
                   
                 </tr>
@@ -126,5 +128,9 @@
       "dom": '<"pull-right"f><"pull-left"l>tip'
     });
   });
+
+  setTimeout(function() {
+   location.reload();
+   }, 5000); 
 </script>
 @endpush
