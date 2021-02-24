@@ -150,7 +150,7 @@ class MasterNotifikasiController extends Controller
         {
             $message= explode("in C:",$e);
 
-            return redirect("admin/master/notifikasi")->with(['Error' => 'Gagal Menghapus Data '.$id."<br> Pesan Kesalahan: ".$message[0]]);
+            return redirect("admin/master/notifikasi")->with(['Error' => 'Gagal Menghapus Data (ID) '.$id."<br> Pesan Kesalahan: ".$message[0]]);
         }
     }
 

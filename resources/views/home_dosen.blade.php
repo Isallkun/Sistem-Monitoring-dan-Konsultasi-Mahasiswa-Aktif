@@ -65,9 +65,9 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>{{$konsultasi}}</h3>
+                <h3>{{$konsultasi_berikutnya}}</h3>
 
-                <p>Total Konsultasi</p>
+                <p>Jadwal Konsultasi</p>
               </div>
               <div class="icon">
                 <i class="ion ion-archive"></i>
@@ -81,14 +81,14 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>{{$konsultasi_berikutnya}}</h3>
+                <h3>{{$nonkonsultasi_berikutnya}}</h3>
 
-                <p>Konsultasi Berikutnya </p>
+                <p>Jadwal Non-Konsultasi</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-alarm"></i>
               </div>
-              <a href="{{url('dosen/data/konsultasi')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('dosen/data/nonkonsultasi')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

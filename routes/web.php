@@ -163,11 +163,21 @@ Route::group(['prefix' => '/' ], function()
 		//Hapus data hukuman
 		Route::get('data/hukuman/hapus/{id}', 'DataHukumanController@hapushukuman');
 
+
 		//4. PROFILE DOSEN
 		//Menampilkan halaman profile dosen
 		Route::get('profil/profildosen', 'profildosenController@profil_dosen');
 		//Ubah Halaman Profile Dosen
-		Route::post('profil/profildosen/ubahproses', 'profildosenController@ubahprofildosen_proses');		
+		Route::post('profil/profildosen/ubahproses', 'profildosenController@ubahprofildosen_proses');	
+
+
+		//5. DATA NON KONSULTASI
+		//localhost:8000/dosen/data/konsultasi
+		Route::get('data/nonkonsultasi','DataNonKonsultasiController@daftarnonkonsultasi');
+
+		//Hapus data hukuman
+		Route::get('data/nonkonsultasi/hapus/{id}', 'DataNonKonsultasiController@hapusnonkonsultasi');
+	
 	});
 
 	//localhost:8000/mahasiswa/

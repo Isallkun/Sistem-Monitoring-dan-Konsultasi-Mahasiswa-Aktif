@@ -1,5 +1,5 @@
 <!--Wajib untuk inisialisasi file views/layouts/appadmin-->
-@extends('layouts.appadmin')
+@extends('layouts.appdosen')
 
 @push('styles')
   <!-- Untuk menambahkan style baru -->
@@ -12,12 +12,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Tambah Data Notifikasi Konsultasi</h1>
+            <h1 class="m-0 text-dark">Daftar Data Non-Konsultasi</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('admin')}}">Home</a></li>
-              <li class="breadcrumb-item active">Daftar Notifikasi Konsultasi</li>
+              <li class="breadcrumb-item active">Daftar Data Non-Konsultasi</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -53,63 +53,61 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <a href="{{ url('admin/master/notifikasi/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
+        <a href="#" class="btn btn-primary" role="button">Tambah Data</a>
         <br><br>
+
+         @if(!empty($non_konsultasi_berikutnya))
+          <div class="alert alert-primary">
+            <p style="font-weight: bold">Informasi Jadwal Non-Konsultasi: </p>
+            @foreach($non_konsultasi_berikutnya as $no => $n)
+            ({{$no+1}}). Tanggal {{$n->tanggalpertemuan}},   {{$n->namamahasiswa}} ({{$n->nrpmahasiswa}}) akan melakukan bertemu dengan anda.
+            <br>
+            @endforeach
+          </div>
+        @endif
+
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Data Notifikasi Konsultasi</h3>
+            <h3 class="card-title">Data Non-Konsultasi</h3>
           </div>  
           <div class="card-body">
-            <a style="float: right;" href="{{ url('admin/master/notifikasi/remind')}}" class="btn btn-primary btn-sm fas fa-envelope" role="button"> Notif Mahasiswa</a>
-
-            <br><br>      
-            <table id="tabel_notifikasi_konsultasi" class="table table-bordered table-striped">
+            <table id="tabel_nonkonsultasi" class="table table-bordered table-striped">
               <thead>
                 <tr> 
                   <th width="1%">No.</th>
-                  <th width="1%">Judul</th>
                   <th width="1%">Tanggal Input</th>
-                  <th width="1%">Status Kirim</th>
-                  <th width="1%">Tanggal Mulai</th>
-                  <th width="1%">Tanggal Berakhir</th>
-                  <th width="1%">Keterangan</th>
+                  <th width="1%">Tanggal Pertemuan</th>
+                  <th width="1%">Status</th>
+                  <th width="1%">Pesan</th>
+                  <th width="1%">Mahasiswa</th>
                   <th width="1%">Action</th>
                 </tr>
               </thead>
               <tbody>
-                @foreach($jadwalkonsultasi as $no => $jdwl)
+                @foreach($data_non_konsultasi as $no => $dn)
                 <tr>
                   <td>{{$no+1}}</td>
-                  <td>{{$jdwl->judul}}</td>
-                  <td>{{$jdwl->tanggalinput}}</td>
+                  <td>{{$dn->tanggalinput}}</td>
+                  <td>{{$dn->tanggalpertemuan}}</td>
                   <td>
-                    @if($jdwl->statuskirim == 0)
-                      <a href="#" class="btn btn-warning btn-sm">Menunggu...</a>
+                    @if($dn->status == "0")
+                    <i class="btn btn-danger btn-sm"> Dalam proses...</i>
                     @else
-                      <a href="#" class="btn btn-success btn-sm">Terkirim</a>  
+                    <i class="btn btn-success btn-sm"> Selesai</i>
                     @endif
                   </td>
+                  <td>{{$dn->pesan}}</td>
+                  <td>{{$dn->namamahasiswa}} {{$dn->nrpmahasiswa}}</td>
+                  <td>
+                    @if($dn->status == "0")
+                    <a href="#" class="btn btn-warning">Ubah</a>
+                    @endif
 
-               
-                  <td>{{$jdwl->tanggalmulai}}</td>
-                  <td>{{$jdwl->tanggalberakhir}}</td>
-                  <td>
-                    @if($jdwl->keterangan=="")
-                      -
-                    @else
-                      {{$jdwl->keterangan}}
-                    @endif
-                  </td>
-                  
-                  <td>
-                    @if($jdwl->statuskirim == 0)
-                      <form method="get" action="{{url('admin/master/notifikasi/hapus/'.$jdwl->idjadwalkonsultasi)}}">
-                      <input type="hidden" name="idjadwalkonsultasi" value="">
+                    <form method="get" action="{{url('dosen/data/nonkonsultasi/hapus/'.$dn->idnonkonsultasi)}}">
                       <button type="submmit" class="btn btn-danger">Hapus</button>
-                    </form> 
-                    @endif  
+                    </form>
+
                   </td>
-                  
                 </tr>
                 @endforeach
               </tbody>
@@ -117,6 +115,7 @@
           </div>
         </div>
         
+       
       </div>
     </section>
 @endsection
@@ -124,13 +123,9 @@
 @push('scripts')
 <script>
   $(function () {
-    $('#tabel_notifikasi_konsultasi').DataTable({
+    $('#tabel_nonkonsultasi').DataTable({
       "dom": '<"pull-right"f><"pull-left"l>tip'
     });
   });
-
-  setTimeout(function() {
-   location.reload();
-   }, 5000); 
 </script>
 @endpush
