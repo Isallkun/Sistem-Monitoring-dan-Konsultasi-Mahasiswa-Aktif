@@ -111,7 +111,7 @@ class MasterMahasiswaController extends Controller
                 'nrp_mahasiswa' =>'required|numeric|min:9',
                 'nama_mahasiswa' =>'required',
                 'jenis_kelamin'=> 'required',
-                'tanggal_lahir'=>'required',
+                'tanggal_lahir'=>'required|before:today',
                 'tempat_lahir'=>'required',
                 'email'=>'required|email',
                 'telepon' => 'required|numeric|min:12',
@@ -215,7 +215,7 @@ class MasterMahasiswaController extends Controller
             // Form Validasi Input User
             $this->validate($request,[
                 'nama_mahasiswa' =>'required',
-                'tanggal_lahir'=>'required',
+                'tanggal_lahir'=>'required|before:today',
                 'tempat_lahir'=>'required',
                 'email'=>'required|email',
                 'telepon' => 'required|numeric|min:12',

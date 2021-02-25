@@ -62,8 +62,8 @@ class MasterNotifikasiController extends Controller
 
     		$this->validate($request,[
             	'judul' =>'required',
-            	'tanggal_mulai' =>'required',
-            	'tanggal_berakhir' =>'required',
+            	'tanggal_mulai' =>'required|after:today',
+            	'tanggal_berakhir' =>'required|after:today',
         	]);
 
     		if($tanggalmulai >= now() && $tanggalberakhir >= now())

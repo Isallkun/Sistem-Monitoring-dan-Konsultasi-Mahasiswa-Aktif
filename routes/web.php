@@ -172,10 +172,18 @@ Route::group(['prefix' => '/' ], function()
 
 
 		//5. DATA NON KONSULTASI
-		//localhost:8000/dosen/data/konsultasi
+		//localhost:8000/dosen/data/non konsultasi
 		Route::get('data/nonkonsultasi','DataNonKonsultasiController@daftarnonkonsultasi');
 
-		//Hapus data hukuman
+		//Tambah data non konsultasi
+		Route::get('data/nonkonsultasi/tambah', 'DataNonKonsultasiController@tambahnonkonsultasi');
+		Route::post('data/nonkonsultasi/prosestambah', 'DataNonKonsultasiController@tambahnonkonsultasi_proses');
+
+		//Ubah data non-konsultasi
+		Route::get('data/nonkonsultasi/ubah/{id}', 'DataNonKonsultasiController@ubahnonkonsultasi');
+		Route::post('data/nonkonsultasi/ubahproses', 'DataNonKonsultasiController@ubahnonkonsultasi_proses');
+
+		//Hapus data non konsultasi
 		Route::get('data/nonkonsultasi/hapus/{id}', 'DataNonKonsultasiController@hapusnonkonsultasi');
 	
 	});

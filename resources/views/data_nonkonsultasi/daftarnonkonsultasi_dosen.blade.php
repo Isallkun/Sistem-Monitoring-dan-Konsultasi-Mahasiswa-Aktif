@@ -53,7 +53,7 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <a href="#" class="btn btn-primary" role="button">Tambah Data</a>
+        <a href="{{url('dosen/data/nonkonsultasi/tambah')}}" class="btn btn-primary" role="button">Tambah Data</a>
         <br><br>
 
          @if(!empty($non_konsultasi_berikutnya))
@@ -100,7 +100,7 @@
                   <td>{{$dn->namamahasiswa}} {{$dn->nrpmahasiswa}}</td>
                   <td>
                     @if($dn->status == "0")
-                    <a href="#" class="btn btn-warning">Ubah</a>
+                    <a href="{{url('dosen/data/nonkonsultasi/ubah/'.$dn->idnonkonsultasi)}}" class="btn btn-warning">Ubah</a>
                     @endif
 
                     <form method="get" action="{{url('dosen/data/nonkonsultasi/hapus/'.$dn->idnonkonsultasi)}}">

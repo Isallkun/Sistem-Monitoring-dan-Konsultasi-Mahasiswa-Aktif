@@ -58,6 +58,111 @@ class DataNonKonsultasiController extends Controller
         }
     }
 
+    public function tambahnonkonsultasi()
+    {
+    	if(Session::get('dosen') != null)
+        {
+            $dosen = DB::table('users')
+            ->join('dosen','dosen.users_username','=','users.username')
+            ->where('users.username',Session::get('dosen'))
+            ->get();
+
+            $mahasiswa = DB::table('mahasiswa')
+            ->select('*')
+            ->join("dosen","dosen.npkdosen","=","mahasiswa.dosen_npkdosen")
+            ->where("dosen.npkdosen",$dosen[0]->npkdosen)
+            ->get();
+
+            return view('data_nonkonsultasi.tambahnonkonsultasi_dosen', compact('mahasiswa','dosen'));
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
+
+    public function tambahnonkonsultasi_proses(Request $request)
+    {
+    	try
+    	{
+    		$dosen = DB::table('users')
+            ->join('dosen','dosen.users_username','=','users.username')
+            ->where('users.username',Session::get('dosen'))
+            ->get();
+
+            $tanggalpertemuan= $request->get('tanggal_pertemuan');
+            $pesan = $request->get('pesan');
+            $mahasiswa = $request->get('mahasiswa');
+
+            $this->validate($request,[
+                'mahasiswa' =>'required',
+                'tanggal_pertemuan'=>'required|after:today',
+                'pesan'=>'required|max:100',
+            ]);
+
+			$tambah_nonkonsultasi= Non_konsultasi::insert([
+			    'tanggalinput'=> now(),
+			    'tanggalpertemuan'=> $tanggalpertemuan,
+			    'status'=>0,
+			    'pesan'=>$pesan,
+			    'mahasiswa_nrpmahasiswa'=>$mahasiswa,
+			    'dosen_npkdosen'=>$dosen[0]->npkdosen
+			]);
+
+    		return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Berhasil Menambahkan Data Non-Konsultasi Mahasiswa ('. $mahasiswa.')']);
+    	}
+    	catch (QueryException $e)
+    	{
+    		$message= explode("in C:",$e);
+
+            return redirect('dosen/data/nonkonsultasi/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database <br> Pesan Kesalahan: '.$message[0]]);
+    	}
+    }
+
+    public function ubahnonkonsultasi($id)
+    {
+        if(Session::get('dosen') != null)
+        {
+            $nonkonsultasi = DB::table("non_konsultasi")
+            ->select('mahasiswa.nrpmahasiswa','mahasiswa.namamahasiswa', 'non_konsultasi.*')
+            ->join('mahasiswa', 'mahasiswa.nrpmahasiswa', '=', 'non_konsultasi.mahasiswa_nrpmahasiswa')
+            ->where('idnonkonsultasi',$id)
+            ->get();
+
+            return view('data_nonkonsultasi.ubahnonkonsultasi_dosen',compact('nonkonsultasi'));
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
+
+    public function ubahnonkonsultasi_proses (Request $request)
+    {
+    	try
+        {
+            $this->validate($request,[
+                'tanggal_pertemuan'=>'required|after:today',
+                'pesan'=>'required|max:100',
+            ]);
+
+             $nonkonsultasi = DB::table('non_konsultasi')
+            ->where('idnonkonsultasi',$request->get('idnonkonsultasi'))
+            ->update([
+            	'tanggalpertemuan' => $request->get('tanggal_pertemuan'),
+                'pesan' => $request->get('pesan')
+            ]);
+
+            return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Berhasil Mengubah Data Non-Konsultasi (ID) '.$request->get('idnonkonsultasi')]);
+        }
+        catch(QueryException $e)
+        {
+            $message= explode("in C:",$e);
+            
+            return redirect("dosen/data/nonkonsultasi/ubah/{$request->get('idnonkonsultasi')}")->with(['Error' => 'Gagal Mengubah Data Non-Konsultasi (ID) '.$request->get('idnonkonsultasi')."<br> Pesan Kesalahan: ".$message[0]]);
+        }
+    }
+
     public function hapusnonkonsultasi ($id)
     {
         try
