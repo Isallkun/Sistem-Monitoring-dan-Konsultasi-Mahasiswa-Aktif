@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Mail;
+
 
 use DB;
 use Session;
 use Carbon\Carbon;
 
+use App\Mail\NonKonsultasiMail;
 use App\User;
 use App\Mahasiswa;
 use App\Dosen;
@@ -109,6 +112,29 @@ class DataNonKonsultasiController extends Controller
 			    'dosen_npkdosen'=>$dosen[0]->npkdosen
 			]);
 
+
+			$data_pengguna= DB::table('mahasiswa')
+			->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','mahasiswa.email','dosen.npkdosen','dosen.namadosen')
+			->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
+			->where('mahasiswa.nrpmahasiswa','=',$mahasiswa)
+			->get();
+
+			$data=array();
+			foreach ($data_pengguna as $d)
+			{
+				$data=[
+					'judul'=> 'Pengumuman Non-Konsultasi Mahasiswa',
+					'nama_mahasiswa'=> $d->namamahasiswa,
+					'nrp_mahasiswa'=>$d->nrpmahasiswa,
+					'email_mahasiswa'=>$d->email,
+					'nama_dosen'=>$d->namadosen,
+					'npk_dosen' =>$d->npkdosen,
+					'tanggal'=>$tanggalpertemuan,
+					'pesan'=>$pesan	
+				];
+			}
+			Mail::to($data['email_mahasiswa'])->send(new NonKonsultasiMail($data));
+
     		return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Berhasil Menambahkan Data Non-Konsultasi Mahasiswa ('. $mahasiswa.')']);
     	}
     	catch (QueryException $e)
@@ -152,6 +178,29 @@ class DataNonKonsultasiController extends Controller
             	'tanggalpertemuan' => $request->get('tanggal_pertemuan'),
                 'pesan' => $request->get('pesan')
             ]);
+
+            $data_pengguna= DB::table('non_konsultasi')
+			->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','mahasiswa.email','dosen.npkdosen','dosen.namadosen')
+			->join('dosen','dosen.npkdosen','=','non_konsultasi.dosen_npkdosen')
+			->join('mahasiswa','mahasiswa.nrpmahasiswa','=','non_konsultasi.mahasiswa_nrpmahasiswa')
+			->where('non_konsultasi.idnonkonsultasi','=',$request->get('idnonkonsultasi'))
+			->get();
+			
+			$data=array();
+			foreach ($data_pengguna as $d)
+			{
+				$data=[
+					'judul'=> 'Re-Pengumuman Non-Konsultasi Mahasiswa',
+					'nama_mahasiswa'=> $d->namamahasiswa,
+					'nrp_mahasiswa'=>$d->nrpmahasiswa,
+					'email_mahasiswa'=>$d->email,
+					'nama_dosen'=>$d->namadosen,
+					'npk_dosen' =>$d->npkdosen,
+					'tanggal'=>$request->get('tanggal_pertemuan'),
+					'pesan'=> $request->get('pesan')
+				];
+			}
+			Mail::to($data['email_mahasiswa'])->send(new NonKonsultasiMail($data));
 
             return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Berhasil Mengubah Data Non-Konsultasi (ID) '.$request->get('idnonkonsultasi')]);
         }

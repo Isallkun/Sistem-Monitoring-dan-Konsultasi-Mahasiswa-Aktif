@@ -1,4 +1,4 @@
-<h3>Notifikasi Konsultasi Dosen Wali</h3>
+<h3>Reminder Konsultasi Dosen Wali</h3>
 
 	<p style="font-family: times-new-roman;font-size: 13px">Kepada Seluruh Mahasiswa Teknik Informatika (IF/SI/MM/IT-DD) Universitas Surabaya. <br>
 	Di beritahukan untuk selalu rutin melakukan konsultasi / bimbingan dosen wali secara disiplin dan tepat waktu, dan terima kasih bagi mahasiswa yang telah melakukan konsultasi / bimbingan dosen wali secara rutin kami apresiasi setinggi-tingginya.
@@ -7,7 +7,7 @@
 	Atas perhatiannya kami sampaikan terima kasih.
 	<br><br>
 	
-	<p style="font-weight:bold; font-size: 12px">NB: Konsultasi dosen wali hanya dapat dilakukan pada saat hari kerja, konsultasi dosen wali selain hari tergantung dari kebijakan yang diberikan oleh dosen wali masing-msaing. </p>
+	<p style="font-weight:bold; font-size: 12px">NB: Konsultasi dosen wali hanya dapat dilakukan pada saat hari kerja, konsultasi dosen wali selain hari tergantung dari kebijakan yang diberikan oleh dosen wali masing-masing. </p>
 
 	</p>
 

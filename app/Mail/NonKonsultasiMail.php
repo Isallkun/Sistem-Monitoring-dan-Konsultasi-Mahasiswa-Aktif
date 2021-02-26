@@ -7,18 +7,26 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class RemindKonsultasiMail extends Mailable
+use DB;
+use Session;
+
+use App\Dosen;
+use App\Mahasiswa;
+use App\Non_konsultasi;
+
+class NonKonsultasiMail extends Mailable
 {
     use Queueable, SerializesModels;
+    public $data;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -29,7 +37,10 @@ class RemindKonsultasiMail extends Mailable
     public function build()
     {
         return $this->from($address = 'noreply@domain.com', $name = 'konsultasi.dosenwali@gmail.com')
-                    ->subject('Reminder Konsultasi Dosen Wali')
-                    ->view('master_notifikasi.remindkonsultasi_mailformat');
+            ->subject('Informasi Non-Konsultasi Mahasiswa')
+            ->view('data_nonkonsultasi.nonkonsultasi_mailformat');
+
+
     }
 }
+ 

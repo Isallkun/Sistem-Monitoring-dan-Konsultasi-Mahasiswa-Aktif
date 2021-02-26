@@ -37,6 +37,7 @@ class KonsultasiDosenWaliMail extends Mailable
     public function build()
     {
         return $this->from($address = 'noreply@domain.com', $name = 'konsultasi.dosenwali@gmail.com')
+        ->subject('Pengumuman Jadwal Konsultasi Dosen Wali')
         ->view('master_notifikasi.konsultasidosenwali_mailformat');
     }
 }
