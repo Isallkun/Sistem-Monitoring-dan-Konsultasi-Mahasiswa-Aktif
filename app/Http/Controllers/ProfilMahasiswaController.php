@@ -34,7 +34,6 @@ class ProfilMahasiswaController extends Controller
             ->get();
 
             $decrypted = Crypt::decryptString($user_mahasiswa[0]->password);
-
             
             return view('profil_user.profil_mahasiswa',compact('user_mahasiswa', 'decrypted'));
     	}

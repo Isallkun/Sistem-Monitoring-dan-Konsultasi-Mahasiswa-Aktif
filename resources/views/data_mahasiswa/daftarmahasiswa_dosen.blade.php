@@ -84,7 +84,6 @@
                   <th>IPK</th>
                   <th>IPS Terakhir</th>
                   <th>Kondisi</th>
-                  <th>Rating</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -106,10 +105,6 @@
                      @else
                       <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-danger btn-sm">Kurang</a>
                      @endif
-                    </td>
-                    <td> 
-                      <span class="fa fa-star checked" ></span>
-                      +{{$m->poin}}
                     </td>
 
                     <td>

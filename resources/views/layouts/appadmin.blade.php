@@ -188,7 +188,6 @@
 <script src="{{url('asset/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- ChartJS -->
 <script src="{{url('asset/plugins/chart.js/Chart.min.js')}}"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <!-- Sparkline -->
 <script src="{{url('asset/plugins/sparklines/sparkline.js')}}"></script>
