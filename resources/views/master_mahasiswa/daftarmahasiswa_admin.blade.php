@@ -153,95 +153,40 @@
                    <td>{{$m->namadosen}} ({{$m->npkdosen}})</td>
                   </tr>
                   <tr>
-                    <th>Rating Mahasiswa</th>
+                    <th>Chart</th>
                     <td>    
-                     <label style="font-family: times-new-roman;font-style: italic;">Durasi Konsultasi:</label> <br>
-                      @if($m->aspek_durasi_konsultasi != "0")
-                        @for($i=0; $i < $m->aspek_durasi_konsultasi; $i++)
-                          <span class="fa fa-star checked"></span>
-                        @endfor
-                        @for($i=0; $i < (5-$m->aspek_durasi_konsultasi); $i++)
-                          <span class="fa fa-star"></span>
-                        @endfor
-                      @else
-                        @for($i=0; $i < 5; $i++)
-                          <span class="fa fa-star"></span>
-                        @endfor 
-                      @endif
-                      <br>
-                      <label style="font-family: times-new-roman;font-style: italic;">Manfaat dari Hasil Konsultasi:</label> <br>
-                      @if($m->aspek_manfaat_konsultasi != "0")
-                        @for($i=0; $i < $m->aspek_manfaat_konsultasi; $i++)
-                          <span class="fa fa-star checked"></span>
-                        @endfor
-                        @for($i=0; $i < (5-$m->aspek_manfaat_konsultasi); $i++)
-                          <span class="fa fa-star"></span>
-                        @endfor
-                      @else
-                        @for($i=0; $i < 5; $i++)
-                          <span class="fa fa-star"></span>
-                        @endfor 
-                      @endif
-                      <br>
-                      
-                      <label style="font-family: times-new-roman;font-style: italic;">Sifat Mahasiswa Dalam Konsultasi:</label> <br>
-                      @if($m->aspek_sifat_konsultasi != "0")
-                        @for($i=0; $i < $m->aspek_sifat_konsultasi; $i++)
-                          <span class="fa fa-star checked"></span>
-                        @endfor
-                        @for($i=0; $i < (5-$m->aspek_sifat_konsultasi); $i++)
-                          <span class="fa fa-star"></span>
-                        @endfor
-                      @else
-                        @for($i=0; $i < 5; $i++)
-                          <span class="fa fa-star"></span>
-                        @endfor 
-                      @endif
-                      <br>
-
-                      <label style="font-family: times-new-roman;font-style: italic;">Interaksi Mahasiswa:</label> <br>
-                      @if($m->aspek_interaksi != "0")
-                        @for($i=0; $i < $m->aspek_interaksi; $i++)
-                          <span class="fa fa-star checked"></span>
-                        @endfor
-                        @for($i=0; $i < (5-$m->aspek_interaksi); $i++)
-                          <span class="fa fa-star"></span>
-                        @endfor
-                      @else
-                        @for($i=0; $i < 5; $i++)
-                          <span class="fa fa-star"></span>
-                        @endfor 
-                      @endif
-                      <br>
-
-                      <label style="font-family: times-new-roman;font-style: italic;">Pencapaian Mahasiswa:</label> <br>
-                      @if($m->aspek_pencapaian != "0")
-                        @for($i=0; $i < $m->aspek_pencapaian; $i++)
-                          <span class="fa fa-star checked"></span>
-                        @endfor
-                        @for($i=0; $i < (5-$m->aspek_pencapaian); $i++)
-                          <span class="fa fa-star"></span>
-                        @endfor
-                      @else
-                        @for($i=0; $i < 5; $i++)
-                          <span class="fa fa-star"></span>
-                        @endfor 
-                      @endif
+                      <div style="width: 365px;height: 200px">
+                        <canvas id="radarChart_{{$m->nrpmahasiswa}}"></canvas>
+                      </div>
                     </td>
                   </tr>
 
                   <tr>
                    <th>Level</th>
                    <td>
-                    <a class="float-left">
+                    <a class="">
                       @if($m->level == "Bronze")
-                      <img src="{{url('rank_pictures/Bronze.png')}}" class="rounded mx-auto d-block" alt="rank image">
+                        <img src="{{url('rank_pictures/Bronze.png')}}" class="rounded mx-auto d-block" alt="rank image"> 
+                        <a class="float-left" style="font-weight: bold;">BRONZE MEMBER</a>
                       @elseif($m->level == "Silver")
-                      <img src="{{url('rank_pictures/Silver.png')}}" class="rounded mx-auto d-block" alt="rank image">
-                      @else
-                      <img src="{{url('rank_pictures/Gold.png')}}" class="rounded mx-auto d-block" alt="rank image">
+                        <img src="{{url('rank_pictures/Silver.png')}}" class="rounded mx-auto d-block" alt="rank image">
+                        <a class="float-left" style="font-weight: bold;">SILVER MEMBER</a>
+                      @else 
+                        <img src="{{url('rank_pictures/Gold.png')}}" class="rounded mx-auto d-block" alt="rank image">
+                        <a class="float-left" style="font-weight: bold;">GOLD MEMBER</a>
                       @endif
-                    </a>
+                  
+                      <br>
+                      <div class="float-left">
+                        @for($i=0; $i < $m->aspek_manfaat_konsultasi; $i++)
+                          <span class="fa fa-star checked"></span>
+                        @endfor
+                        @for($i=0; $i < (5-$m->aspek_manfaat_konsultasi); $i++)
+                          <span class="fa fa-star"></span>
+                        @endfor 
+                      </div>
+                    
+                    </a> 
                    </td>
                   </tr>
                 </table>
@@ -268,6 +213,48 @@
     $('#tabel_mahasiswa').DataTable({
       "dom": '<"pull-right"f><"pull-left"l>tip'
     });
+
+    
+    @foreach($mahasiswa as $m)
+
+      var value=[
+        {{$m->aspek_durasi_konsultasi}},
+        {{$m->aspek_manfaat_konsultasi}},
+        {{$m->aspek_sifat_konsultasi}},
+        {{$m->aspek_interaksi}},
+        {{$m->aspek_pencapaian}}
+      ];
+  
+      new Chart(document.getElementById("radarChart_{{$m->nrpmahasiswa}}"), {
+        type: 'radar',
+        data: {
+          labels: ["Durasi konsultasi", "Manfaat konsultasi", "Sifat mahasiswa dalam konsultasi", "Interaksi mahasiswa", "Pencapaian mahasiswa"],
+          datasets: [{
+            label: "#nilai per bagian",
+            data: value,
+
+            borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)'
+            ],
+            borderWidth: 2
+          }],
+        },
+        options: {
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItem, data) {
+                return data.datasets[tooltipItem.datasetIndex].label + ": " + tooltipItem.yLabel;
+              }
+            }
+          }
+        }
+      });
+    @endforeach
+
   });
 </script>
 @endpush

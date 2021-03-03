@@ -97,12 +97,11 @@
                     @elseif($u->level == "Silver")
                       <img src="{{url('rank_pictures/Silver.png')}}" class="rounded mx-auto d-block float-left" alt="rank image">
                       <a class="float-right" style="font-weight: bold;">SILVER MEMBER</a>
-                    <br>
                     @else 
                       <img src="{{url('rank_pictures/Gold.png')}}" class="rounded mx-auto d-block float-left" alt="rank image">
                       <a class="float-right" style="font-weight: bold;">GOLD MEMBER</a>
-                    <br>
                     @endif
+                    
                     <br>
 
                     <div class="float-right">
