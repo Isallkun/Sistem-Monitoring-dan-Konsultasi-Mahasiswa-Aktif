@@ -133,7 +133,11 @@ class MasterMahasiswaController extends Controller
 
             // Bronze - Silver - Gold
             $gamifikasi = Gamifikasi::insert([
-                'poin' =>'0',
+                'aspek_durasi_konsultasi' =>'0',
+                'aspek_manfaat_konsultasi' =>'0',
+                'aspek_sifat_konsultasi' =>'0',
+                'aspek_interaksi' =>'0',
+                'aspek_pencapaian' =>'0',
                 'level' =>'Bronze'
             ]);
             $select_gamifikasi = DB::table('gamifikasi')

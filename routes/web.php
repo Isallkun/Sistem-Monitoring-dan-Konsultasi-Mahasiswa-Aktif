@@ -215,6 +215,11 @@ Route::group(['prefix' => '/' ], function()
 		Route::get('profil/profilmahasiswa', 'profilmahasiswaController@profil_mahasiswa');
 		//Ubah halaman profil mahasiswa
 		Route::post('profil/profilmahasiswa/ubahproses', 'profilmahasiswaController@ubahprofilmahasiswa_proses');	
+
+		//5. DATA NON KONSULTASI
+		//localhost:8000/dosen/data/non konsultasi
+		Route::get('data/nonkonsultasimahasiswa','DataNonKonsultasiController@daftarnonkonsultasi_mahasiswa');
+
 	});
 
 });

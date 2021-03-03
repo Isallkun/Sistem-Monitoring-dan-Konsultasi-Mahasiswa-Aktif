@@ -872,7 +872,7 @@
 <!-- Bootstrap 4 -->
 <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- ChartJS -->
-<script src="../../plugins/chart.js/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
@@ -942,7 +942,7 @@
 
     // This will get the first returned node in the jQuery collection.
     var areaChart       = new Chart(areaChartCanvas, { 
-      type: 'line',
+      type: 'radar',
       data: areaChartData, 
       options: areaChartOptions
     })

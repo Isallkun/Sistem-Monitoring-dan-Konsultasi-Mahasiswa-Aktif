@@ -384,7 +384,12 @@ class HomeController extends Controller
             ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
             ->count();
 
-            
+            $nonkonsultasi_berikutnya = DB::table('non_konsultasi')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=', 'non_konsultasi.mahasiswa_nrpmahasiswa')
+            ->where('non_konsultasi.mahasiswa_nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa )
+            ->wheredate('non_konsultasi.tanggalpertemuan','>=',Carbon::now())
+            ->count();
+
             $menunggu_konfirmasi = DB::table('konsultasi_dosenwali')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
             ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
@@ -402,7 +407,7 @@ class HomeController extends Controller
             ->orderBy('idkonsultasi','ASC')
             ->get();
             
-            return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','hukuman_mahasiswa','konsultasi_berikutnya', 'menunggu_konfirmasi','data_konsultasi_mhs'));
+            return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','hukuman_mahasiswa','konsultasi_berikutnya', 'menunggu_konfirmasi','data_konsultasi_mhs','nonkonsultasi_berikutnya'));
         }
         else
         {

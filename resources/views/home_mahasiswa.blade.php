@@ -35,7 +35,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>{{$konsultasi_mahasiswa}}</h3>
+                <h3>{{$menunggu_konfirmasi}} / {{$konsultasi_mahasiswa}}</h3>
 
                 <p>Konsultasi Dosen Wali</p>
               </div>
@@ -65,12 +65,12 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>{{$menunggu_konfirmasi}}</h3>
+                <h3>{{$konsultasi_berikutnya}}</h3>
 
-                <p>Menunggu Konfirmasi</p>
+                <p>Jadwal Konsultasi</p>
               </div>
               <div class="icon">
-                <i class="ion ion-person"></i>
+                <i class="ion ion-calendar"></i>
               </div>
                 <a href="{{url('mahasiswa/data/konsultasimahasiswa')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
@@ -81,14 +81,14 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>{{$konsultasi_berikutnya}}</h3>
+                <h3>{{$nonkonsultasi_berikutnya}}</h3>
 
-                <p>Konsultasi Berikutnya</p>
+                <p>Jadwal Non-Konsultasi</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-alarm"></i>
               </div>
-              <a href="{{url('mahasiswa/data/konsultasimahasiswa')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('mahasiswa/data/nonkonsultasimahasiswa')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

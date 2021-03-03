@@ -231,9 +231,6 @@ class DataNonKonsultasiController extends Controller
         }
     }
 
-
-
-
     public function ubah_status()
     {
         if(Session::get('dosen')!=null)
@@ -264,7 +261,43 @@ class DataNonKonsultasiController extends Controller
         {
             return redirect("/");
         }
+    }
 
+
+     public function daftarnonkonsultasi_mahasiswa()
+    {
+        if(Session::get('mahasiswa') != null)
+        {
+            $mahasiswa = DB::table('users')
+            ->join('mahasiswa','mahasiswa.users_username','=','users.username')
+            ->where('users.username',Session::get('mahasiswa'))
+            ->get();
+
+            $data_non_konsultasi = DB::table('non_konsultasi')
+            ->select('non_konsultasi.*','dosen.namadosen','dosen.npkdosen','mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
+            ->join('dosen','dosen.npkdosen','=','non_konsultasi.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','non_konsultasi.mahasiswa_nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa', $mahasiswa[0]->nrpmahasiswa)
+            ->get();
+
+            $non_konsultasi_berikutnya = DB::table('non_konsultasi')
+            ->select('non_konsultasi.tanggalpertemuan','dosen.namadosen','dosen.npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','non_konsultasi.mahasiswa_nrpmahasiswa')
+            ->join('dosen','dosen.npkdosen','=', 'non_konsultasi.dosen_npkdosen')
+            ->where('mahasiswa.nrpmahasiswa', $mahasiswa[0]->nrpmahasiswa)
+            ->where('non_konsultasi.status',0)
+            ->wheredate('non_konsultasi.tanggalpertemuan','>=',Carbon::now())
+            ->orderBy('non_konsultasi.tanggalpertemuan','ASC')
+            ->get();
+
+            // dd($non_konsultasi_berikutnya);
+
+            return view('data_nonkonsultasi.daftarnonkonsultasi_mahasiswa', compact('data_non_konsultasi','non_konsultasi_berikutnya'));
+        }
+        else
+        {
+            return redirect("/");
+        }
     }
 
 }

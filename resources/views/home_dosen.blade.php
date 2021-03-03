@@ -70,7 +70,7 @@
                 <p>Jadwal Konsultasi</p>
               </div>
               <div class="icon">
-                <i class="ion ion-archive"></i>
+                <i class="ion ion-calendar"></i>
               </div>
               <a href="{{url('dosen/data/konsultasi')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>

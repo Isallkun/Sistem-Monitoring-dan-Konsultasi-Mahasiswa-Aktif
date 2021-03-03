@@ -1,5 +1,5 @@
 <!--Wajib untuk inisialisasi file views/layouts/appadmin-->
-@extends('layouts.appdosen')
+@extends('layouts.appmahasiswa')
 
 @push('styles')
   <!-- Untuk menambahkan style baru -->
@@ -16,7 +16,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{url('mahasiswa')}}">Home</a></li>
               <li class="breadcrumb-item active">Daftar Data Non-Konsultasi</li>
             </ol>
           </div><!-- /.col -->
@@ -34,33 +34,15 @@
       </div>
     @endif
 
-    @if (\Session::has('Success'))
-      <div class="alert alert-success alert-block">
-        <ul>
-            <li>{!! \Session::get('Success') !!}</li>
-        </ul>
-      </div>
-    @endif
-
-    @if (\Session::has('Error'))
-      <div class="alert alert-danger alert-block">
-        <ul>
-            <li>{!! \Session::get('Error') !!}</li>
-        </ul>
-      </div>
-    @endif
-    
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <a href="{{url('dosen/data/nonkonsultasi/tambah')}}" class="btn btn-primary" role="button">Tambah Data</a>
-        <br><br>
-
+        
          @if(!empty($non_konsultasi_berikutnya))
           <div class="alert alert-primary">
             <p style="font-weight: bold">Informasi Jadwal Non-Konsultasi: </p>
             @foreach($non_konsultasi_berikutnya as $no => $n)
-            ({{$no+1}}). Tanggal {{$n->tanggalpertemuan}},   {{$n->namamahasiswa}} ({{$n->nrpmahasiswa}}) akan melakukan bertemu dengan anda.
+            ({{$no+1}}). Tanggal {{$n->tanggalpertemuan}}, anda harus menemui Bapak/Ibu {{$n->namadosen}} ({{$n->npkdosen}}).
             <br>
             @endforeach
           </div>
@@ -78,9 +60,8 @@
                   <th width="1%">Tanggal Input</th>
                   <th width="1%">Tanggal Pertemuan</th>
                   <th width="1%">Status</th>
-                  <th width="1%">Pesan</th>
-                  <th width="1%">Mahasiswa</th>
-                  <th width="1%">Action</th>
+                  <th width="1%">Dosen</th>
+                  <th width="1%">Isi Pesan</th>
                 </tr>
               </thead>
               <tbody>
@@ -96,25 +77,17 @@
                     <i class="btn btn-success btn-sm"> Selesai</i>
                     @endif
                   </td>
+                  <td>{{$dn->namadosen}} {{$dn->npkdosen}}</td>
                   <td>{{$dn->pesan}}</td>
-                  <td>{{$dn->namamahasiswa}} {{$dn->nrpmahasiswa}}</td>
-                  <td>
-                    @if($dn->status == "0")
-                    <a href="{{url('dosen/data/nonkonsultasi/ubah/'.$dn->idnonkonsultasi)}}" class="btn btn-warning">Ubah</a>
-                    @endif
-
-                    <form method="get" action="{{url('dosen/data/nonkonsultasi/hapus/'.$dn->idnonkonsultasi)}}">
-                      <button type="submmit" class="btn btn-danger">Hapus</button>
-                    </form>
-
-                  </td>
                 </tr>
                 @endforeach
               </tbody>
             </table>  
           </div>
         </div>
-        
+
+
+   
        
       </div>
     </section>
