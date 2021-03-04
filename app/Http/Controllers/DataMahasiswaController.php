@@ -181,7 +181,7 @@ class DataMahasiswaController extends Controller
             ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
             ->where('mahasiswa.nrpmahasiswa',$id)
             ->where('idkartustudi',$whereinCondition)
-            ->get();
+            ->get(); 
 
             //3. Kartu Hasil Studi
             // Menampilkan data semester dan tahun akademik di Combobox

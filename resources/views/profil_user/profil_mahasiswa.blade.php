@@ -92,7 +92,7 @@
                     <b>Level Information</b> <br>
 
                     @if($u->level == "Bronze")
-                      <img src="{{url('rank_pictures/Bronze.png')}}" class="rounded mx-auto d-block float-left" alt="rank image"> 
+                      <img src="{{url('rank_pictures/Bronze.png')}}" class="rounded mx-auto d-block float-left" alt="rank image">
                       <a class="float-right" style="font-weight: bold;">BRONZE MEMBER</a>
                     @elseif($u->level == "Silver")
                       <img src="{{url('rank_pictures/Silver.png')}}" class="rounded mx-auto d-block float-left" alt="rank image">
@@ -101,7 +101,7 @@
                       <img src="{{url('rank_pictures/Gold.png')}}" class="rounded mx-auto d-block float-left" alt="rank image">
                       <a class="float-right" style="font-weight: bold;">GOLD MEMBER</a>
                     @endif
-                    
+
                     <br>
 
                     <div class="float-right">
@@ -112,7 +112,6 @@
                         <span class="fa fa-star"></span>
                       @endfor 
                     </div>
-                  
                   </li>
 
                   <li class="list-group-item">

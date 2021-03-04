@@ -76,15 +76,16 @@
             <table id="tabel_mahasiswa" class="table table-bordered table-striped">
               <thead>
                 <tr> 
-                  <th>No.</th>
-                  <th>Nama</th>
-                  <th>NRP</th>
-                  <th>Angkatan</th>
-                  <th>SKS Kumulatif</th>
-                  <th>IPK</th>
-                  <th>IPS Terakhir</th>
-                  <th>Kondisi</th>
-                  <th>Action</th>
+                  <th width="1%">No.</th>
+                  <th width="1%">Nama</th>
+                  <th width="1%">NRP</th>
+                  <th width="1%">Angkatan</th>
+                  <th width="1%">SKS Kumulatif</th>
+                  <th width="1%">IPK</th>
+                  <th width="1%">IPS Terakhir</th>
+                  <th width="1%">Kondisi</th>
+                  <th width="7%">Rate</th>
+                  <th width="1%">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -106,7 +107,14 @@
                       <a href="{{url('dosen/data/mahasiswa/ubahflag/'.$m->nrpmahasiswa)}}" class="btn btn-danger btn-sm">Kurang</a>
                      @endif
                     </td>
-
+                    <td>
+                    @for($i=0; $i < $m->aspek_manfaat_konsultasi; $i++)
+                      <span class="fa fa-star checked" ></span>
+                    @endfor
+                    @for($i=0; $i < (5-$m->aspek_manfaat_konsultasi); $i++)
+                      <span class="fa fa-star"></span>
+                    @endfor 
+                    </td>
                     <td>
                      <a href="{{url('dosen/data/mahasiswa/detail/'.$m->nrpmahasiswa)}}" class="btn btn-primary">Detail</a>
                     </td>

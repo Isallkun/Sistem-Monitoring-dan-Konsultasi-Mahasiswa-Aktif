@@ -214,33 +214,37 @@
 
                         <ul class="list-group list-group-unbordered mb-3">
                           <li class="list-group-item">
-                            <a class="float-left">
-                              @if($m->level == "Bronze")
-                              <img src="{{url('rank_pictures/Bronze.png')}}" class="rounded mx-auto d-block" alt="rank image">
-                              <center>Bronze</center>
-                              @elseif($m->level == "Silver")
-                              <img src="{{url('rank_pictures/Silver.png')}}" class="rounded mx-auto d-block" alt="rank image">
-                              <center>Silver</center>
-                              @else
-                              <img src="{{url('rank_pictures/Gold.png')}}" class="rounded mx-auto d-block" alt="rank image">
-                              <center>Gold</center>
-                              @endif 
-                            </a>
-                            <a class="float-left">
-                              <b>Rating Mahasiswa </b>
-                              <br> 
-                               @if($m->poin != "0")
-                                  @for($i=0; $i < $m->poin; $i++)
-                                    <span class="fa fa-star checked"></span>
-                                  @endfor
-                               @else
-                                  @for($i=0; $i < 5; $i++)
-                                    <span class="fa fa-star"></span>
-                                  @endfor 
-                               @endif 
-                            </a>
+                            <b>Chart Information</b> 
+                            <div class="chart">
+                              <canvas id="radarChart" width= "100%"; height="25%"></canvas>
+                            </div>
                           </li>
 
+                          <li class="list-group-item">
+                            <b>Level Information</b> <br>
+
+                            @if($m->level == "Bronze")
+                              <img src="{{url('rank_pictures/Bronze.png')}}" class="rounded mx-auto d-block float-left" alt="rank image">
+                              <a class="float-right" style="font-weight: bold;">BRONZE MEMBER</a>
+                            @elseif($m->level == "Silver")
+                              <img src="{{url('rank_pictures/Silver.png')}}" class="rounded mx-auto d-block float-left" alt="rank image">
+                              <a class="float-right" style="font-weight: bold;">SILVER MEMBER</a>
+                            @else 
+                              <img src="{{url('rank_pictures/Gold.png')}}" class="rounded mx-auto d-block float-left" alt="rank image">
+                              <a class="float-right" style="font-weight: bold;">GOLD MEMBER</a>
+                            @endif
+
+                            <br>
+
+                            <div class="float-right">
+                              @for($i=0; $i < $m->aspek_manfaat_konsultasi; $i++)
+                                <span class="fa fa-star checked"></span>
+                              @endfor
+                              @for($i=0; $i < (5-$m->aspek_manfaat_konsultasi); $i++)
+                                <span class="fa fa-star"></span>
+                              @endfor 
+                            </div>
+                          </li>
                           
                           <li class="list-group-item"></li>
                           
@@ -592,8 +596,7 @@
       data: areaChartData, 
       options: areaChartOptions
     })
-  })
-
+  });
 
   $(function () {
     var tahunakademik= new Array();
@@ -649,7 +652,49 @@
       data: areaChartData, 
       options: areaChartOptions
     })
-  })
+  });
+
+  $(function () {
+    
+    var data_poin = [];
+    @foreach($data_mahasiswa as $m)
+      data_poin.push({{$m->aspek_durasi_konsultasi}});
+      data_poin.push({{$m->aspek_manfaat_konsultasi}});
+      data_poin.push({{$m->aspek_sifat_konsultasi}});
+      data_poin.push({{$m->aspek_interaksi}});
+      data_poin.push({{$m->aspek_pencapaian}});
+    @endforeach
+
+    new Chart(document.getElementById("radarChart"), {
+      type: 'radar',
+      data: {
+        labels: ["Durasi konsultasi", "Manfaat konsultasi", "Sifat mahasiswa dalam konsultasi", "Interaksi mahasiswa", "Pencapaian mahasiswa"],
+        datasets: [{
+          label: "#nilai per bagian",
+          data: data_poin,
+
+          borderColor: [
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)'
+          ],
+          borderWidth: 2
+        }],
+      },
+      options: {
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              return data.datasets[tooltipItem.datasetIndex].label + ": " + tooltipItem.yLabel;
+            }
+          }
+        }
+      }
+    });
+  });
+
 </script>
 
 <script>
