@@ -108,12 +108,12 @@
                      @endif
                     </td>
                     <td>
-                    @for($i=0; $i < $m->aspek_manfaat_konsultasi; $i++)
-                      <span class="fa fa-star checked" ></span>
-                    @endfor
-                    @for($i=0; $i < (5-$m->aspek_manfaat_konsultasi); $i++)
-                      <span class="fa fa-star"></span>
-                    @endfor 
+                      @for($i=0; $i < $m->total; $i++)
+                        <span class="fa fa-star checked" ></span>
+                      @endfor
+                      @for($i=0; $i < (5-$m->total); $i++)
+                        <span class="fa fa-star"></span>
+                      @endfor 
                     </td>
                     <td>
                      <a href="{{url('dosen/data/mahasiswa/detail/'.$m->nrpmahasiswa)}}" class="btn btn-primary">Detail</a>

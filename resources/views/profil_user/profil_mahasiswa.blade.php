@@ -105,10 +105,10 @@
                     <br>
 
                     <div class="float-right">
-                      @for($i=0; $i < $u->aspek_manfaat_konsultasi; $i++)
+                      @for($i=0; $i < $u->total; $i++)
                         <span class="fa fa-star checked"></span>
                       @endfor
-                      @for($i=0; $i < (5-$u->aspek_manfaat_konsultasi); $i++)
+                      @for($i=0; $i < (5-$u->total); $i++)
                         <span class="fa fa-star"></span>
                       @endfor 
                     </div>
