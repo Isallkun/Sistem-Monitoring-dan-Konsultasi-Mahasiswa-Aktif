@@ -11,10 +11,11 @@
   }
   .rating{
     position: absolute;
-    top:50%;
-    left: 50%;
+    margin-left: 70px;
+    margin-top: 5px;
     transform: translate(-50%, -50%) rotateY(180deg);
     display: flex;
+
   }
   .rating input{
     display: none;
@@ -22,7 +23,7 @@
   .rating label{
     display: block;
     cursor: pointer;
-    width: 50px;
+    width: 30px;
     /*background: #ccc;*/
   }
   .rating label:before{
@@ -30,7 +31,7 @@
     font-family: fontAwesome;
     position: relative;
     display: block;
-    font-size: 50px;
+    font-size: 25px;
     color: #101010;
   }
   .rating label:after{
@@ -38,7 +39,7 @@
     font-family: fontAwesome;
     position: absolute;
     display: block;
-    font-size: 50px;
+    font-size: 25px;
     color: #fffa00;
     top:0;
     opacity: 0;
@@ -151,23 +152,59 @@
 
                 <div class="modal-body">
                   <p style="text-align: center;text-transform: uppercase;"><b>{{$d->namamahasiswa}} - {{$d->nrpmahasiswa}}</b></p>
+
+                  <div class="alert alert-danger alert-block">
+                    Informasi
+                    <p style="font-size: 15px;font-weight: bold;">Durasi konsultasi mahasiswa: 00:00</p>     
+                  </div>
+                 
+
                   <!--UNTUK RATING -->
-                  <br><br><br>
+                  <p>1. Manfaat dari hasil konsultasi dosen wali: </p>
                   <div class="rating">
-                    <input type="radio" name="star" id="star5" value="5"><label for="star5"></label>
-                    <input type="radio" name="star" id="star4" value="4"><label for="star4"></label>
-                    <input type="radio" name="star" id="star3" value="3"><label for="star3"></label>
-                    <input type="radio" name="star" id="star2" value="2"><label for="star2"></label>
-                    <input type="radio" name="star" id="star1" value="1"><label for="star1"></label>
+                    <input type="radio" name="star_manfaatkonsultasi" id="star5_manfaatkonsultasi" value="5"><label for="star5_manfaatkonsultasi"></label>
+                    <input type="radio" name="star_manfaatkonsultasi" id="star4_manfaatkonsultasi" value="4"><label for="star4_manfaatkonsultasi"></label>
+                    <input type="radio" name="star_manfaatkonsultasi" id="star3_manfaatkonsultasi" value="3"><label for="star3_manfaatkonsultasi"></label>
+                    <input type="radio" name="star_manfaatkonsultasi" id="star2_manfaatkonsultasi" value="2"><label for="star2_manfaatkonsultasi"></label>
+                    <input type="radio" name="star_manfaatkonsultasi" id="star1_manfaatkonsultasi" value="1"><label for="star1_manfaatkonsultasi"></label>
                   </div>
                   <br>
-                  <p style="text-align: center;">Terima kasih atas penilaian <br> yang diberikan :)</p>
+                  <p>2. Sifat mahasiswa selama melakukan konsultasi dosen wali: </p>
+                  <div class="rating">
+                    <input type="radio" name="star_sifatkonsultasi" id="star5_sifatkonsultasi" value="5"><label for="star5_sifatkonsultasi"></label>
+                    <input type="radio" name="star_sifatkonsultasi" id="star4_sifatkonsultasi" value="4"><label for="star4_sifatkonsultasi"></label>
+                    <input type="radio" name="star_sifatkonsultasi" id="star3_sifatkonsultasi" value="3"><label for="star3_sifatkonsultasi"></label>
+                    <input type="radio" name="star_sifatkonsultasi" id="star2_sifatkonsultasi" value="2"><label for="star2_sifatkonsultasi"></label>
+                    <input type="radio" name="star_sifatkonsultasi" id="star1_sifatkonsultasi" value="1"><label for="star1_sifatkonsultasi"></label>
+                  </div>
+                  <br>
+                  <p>3. Interaksi/keaktifan mahasiswa selama konsultasi dosen wali: </p>
+                  <div class="rating">
+                    <input type="radio" name="star_interaksi" id="star5_interaksi" value="5"><label for="star5_interaksi"></label>
+                    <input type="radio" name="star_interaksi" id="star4_interaksi" value="4"><label for="star4_interaksi"></label>
+                    <input type="radio" name="star_interaksi" id="star3_interaksi" value="3"><label for="star3_interaksi"></label>
+                    <input type="radio" name="star_interaksi" id="star2_interaksi" value="2"><label for="star2_interaksi"></label>
+                    <input type="radio" name="star_interaksi" id="star1_interaksi" value="1"><label for="star1_interaksi"></label>
+                  </div>
+                  <br>
+                  <p>4. Pencapaian yang berhasil dicapai oleh mahasiswa: </p>
+                  <div class="rating">
+                    <input type="radio" name="star_pencapaian" id="star5_pencapaian" value="5"><label for="star5_pencapaian"></label>
+                    <input type="radio" name="star_pencapaian" id="star4_pencapaian" value="4"><label for="star4_pencapaian"></label>
+                    <input type="radio" name="star_pencapaian" id="star3_pencapaian" value="3"><label for="star3_pencapaian"></label>
+                    <input type="radio" name="star_pencapaian" id="star2_pencapaian" value="2"><label for="star2_pencapaian"></label>
+                    <input type="radio" name="star_pencapaian" id="star1_pencapaian" value="1"><label for="star1_pencapaian"></label>
+                  </div>
+
+                  <br><br>
+                  <p style="text-align: center;">Terima kasih, <br> atas penilaian yang diberikan :)</p>
                 </div>
 
                 
                 <!-- footer modal -->
                 <div class="modal-footer">
                   <a href="{{url('dosen/data/konsultasi')}}" class="btn btn-default">Skip</a>
+                  <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
               </form>
             </div>
@@ -180,9 +217,9 @@
 @endsection
  
 @push('scripts')
-<script type="text/javascript">
+<!-- <script type="text/javascript">
   $('input[type=radio]').on('change', function() {
     $(this).closest("form").submit();
 });
-</script>
+</script> -->
 @endpush
