@@ -68,7 +68,7 @@
                 @endif
                
                 <div class="card-body">
-                  <div class="form-group p-2 mb-3 bg-dark text-white" style="font-family: times-new-roman">
+                  <div class="form-group p-2 mb-3 bg-danger text-white" style="font-family: times-new-roman">
                     <h6>Durasi konsultasi dosen wali</h6> 
                     <p id="demo" name="demo">00 Menit :: 00 Detik</p>
                     <input type="hidden" name="temp_value" id="temp_value">

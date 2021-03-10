@@ -153,7 +153,7 @@
                 <div class="modal-body">
                   <p style="text-align: center;text-transform: uppercase;"><b>{{$d->namamahasiswa}} - {{$d->nrpmahasiswa}}</b></p>
 
-                  <div class="alert alert-warning alert-block">
+                  <div class="alert alert-danger alert-block">
                     <label style="font-weight: bold;font-family: times-new-roman">Informasi Durasi Konsultasi</label>
                     <br>
                     <p style="font-family: times-new-roman; font-size: 16px;">{{$durasi}}</p>
