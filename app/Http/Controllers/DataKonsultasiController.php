@@ -111,8 +111,9 @@ class DataKonsultasiController extends Controller
             $mahasiswa =$request->get('mahasiswa');
             $semester=$request->get('semester');
             $tahun_akademik=$request->get('tahun_akademik');
-
-            // dd($dosen[0]->npkdosen);
+            
+            $durasi_konsultasi = $request->get('temp_value');
+            Session::put('durasi', $durasi_konsultasi);
 
             $this->validate($request,[
                 'mahasiswa' =>'required',
@@ -146,7 +147,7 @@ class DataKonsultasiController extends Controller
                 'semester_idsemester'=>$semester,
                 'thnakademik_idthnakademik'=>$tahun_akademik
             ]);
-
+            
             return redirect('dosen/data/konsultasi/rangkumankondisi/'.$mahasiswa)->with(['Success' => 'Berhasil Menambahkan Data Konsultasi Mahasiswa ('. $mahasiswa.')']);
 
         }
@@ -162,6 +163,8 @@ class DataKonsultasiController extends Controller
     {
         if(Session::get('dosen') != null)
         {   
+            $durasi = Session::get('durasi');
+
             $konsultasi_mhs = DB::table('konsultasi_dosenwali')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
             ->join('topik_konsultasi','topik_konsultasi.idtopikkonsultasi','=','konsultasi_dosenwali.topik_idtopikkonsultasi')
@@ -170,8 +173,8 @@ class DataKonsultasiController extends Controller
             ->where('mahasiswa_nrpmahasiswa',$id)
             ->orderby('idkonsultasi','DESC')
             ->get();
-            // dd($konsultasi_mhs);
-            return view('data_konsultasi.rangkumankondisi_dosen', compact('konsultasi_mhs'));
+
+            return view('data_konsultasi.rangkumankondisi_dosen', compact('konsultasi_mhs','durasi'));
         }
         else
         {
@@ -221,6 +224,9 @@ class DataKonsultasiController extends Controller
                     'poin' => $poin_terbaru,
                     'level' =>$level_user
                 ]);
+
+                //Menghapus session durasi konsultasi
+                Session::forget('durasi');
 
                 return redirect("dosen/data/konsultasi");
             }

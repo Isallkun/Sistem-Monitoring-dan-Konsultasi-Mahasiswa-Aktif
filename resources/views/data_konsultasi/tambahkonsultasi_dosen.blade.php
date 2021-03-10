@@ -68,6 +68,12 @@
                 @endif
                
                 <div class="card-body">
+                  <div class="form-group p-2 mb-3 bg-dark text-white" style="font-family: times-new-roman">
+                    <h6>Durasi konsultasi dosen wali</h6> 
+                    <p id="demo" name="demo">00 Menit :: 00 Detik</p>
+                    <input type="hidden" name="temp_value" id="temp_value">
+                  </div>
+
                   <div class="form-group">
                     <label for="exampleInputMahasiswa">Mahasiswa</label>
                     <br>
@@ -123,9 +129,10 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" name="submit" id="submit" class="btn btn-primary" onClick="stopTimeFunction()">Submit</button>
                 </div>
               </form>
+
             </div>
             <!-- /.card -->
             </div>
@@ -155,5 +162,53 @@
 <script src="{{url('../../asset/dist/js/adminlte.min.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{url('../../asset/dist/js/demo.js')}}"></script>
+
+<script type="text/javascript">
+  
+  var myVar = setInterval(setTime, 1000);
+  var time="";
+  var totalSeconds = 0;
+
+  function stopTimeFunction() 
+  { 
+    clearInterval(myVar); 
+
+  }
+
+  function setTime() 
+  {
+    document.getElementById("demo").innerHTML = time;
+    var time = pad(parseInt(totalSeconds / 60))+" Menit"+" :: "+pad(totalSeconds % 60)+" Detik";
+    
+    //Display Time
+    document.getElementById("demo").innerHTML = time;
+    //Temp time untuk dikirim ke controller
+    $("#temp_value").val(time);
+  
+    if(pad(parseInt(totalSeconds / 60)) < 10)
+    { 
+      ++totalSeconds; 
+    }
+    else
+    {
+      ++totalSeconds;
+      alert('Batas waktu konsultasi telah melebihi 10 menit');
+    } 
+  }
+
+  function pad(val) 
+  {
+    var valString = val + "";
+    if (valString.length < 2) 
+    { 
+      return "0" + valString; 
+    } 
+    else 
+    { 
+      return valString; 
+    }
+  }
+
+</script>
 
 @endpush

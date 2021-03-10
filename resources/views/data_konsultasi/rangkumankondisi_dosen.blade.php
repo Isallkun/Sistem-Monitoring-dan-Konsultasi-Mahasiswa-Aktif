@@ -153,9 +153,10 @@
                 <div class="modal-body">
                   <p style="text-align: center;text-transform: uppercase;"><b>{{$d->namamahasiswa}} - {{$d->nrpmahasiswa}}</b></p>
 
-                  <div class="alert alert-danger alert-block">
-                    Informasi
-                    <p style="font-size: 15px;font-weight: bold;">Durasi konsultasi mahasiswa: 00:00</p>     
+                  <div class="alert alert-warning alert-block">
+                    <label style="font-weight: bold;font-family: times-new-roman">Informasi Durasi Konsultasi</label>
+                    <br>
+                    <p style="font-family: times-new-roman; font-size: 16px;">{{$durasi}}</p>
                   </div>
                  
 
@@ -222,4 +223,5 @@
     $(this).closest("form").submit();
 });
 </script> -->
+
 @endpush
