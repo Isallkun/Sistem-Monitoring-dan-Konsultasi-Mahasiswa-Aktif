@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\QueryException;
 
 use Session;
 use Carbon\Carbon;
 use DB;
 use PDF;
+
 
 class HomeController extends Controller
 {
@@ -27,7 +30,7 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index_admin()
-    {
+    { 
         if(Session::get('admin') != null)
         {
             $dosen_aktif = DB::table('dosen')
@@ -47,6 +50,7 @@ class HomeController extends Controller
             $konsultasi = DB::table('konsultasi_dosenwali')
                         ->select('*')
                         ->count();
+
 
             $total_konsultasi = DB::table('konsultasi_dosenwali')
             ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan,MONTH(tanggalkonsultasi) as bln'))
@@ -71,7 +75,20 @@ class HomeController extends Controller
             ->orderBy('bln','DESC')
             ->get();
 
-            return view('home_admin',compact('dosen_aktif', 'mahasiswa_aktif', 'matakuliah','konsultasi','total_konsultasi','total_konsultasi_sekarang','aktifitaskonsultasi'));
+
+            $semester = DB::table('semester')
+            ->get();
+            $semester_aktif = DB::table('semester')
+            ->where('status',1)
+            ->get();
+
+            $tahun = DB::table('tahun_akademik')
+            ->get();
+            $tahun_aktif = DB::table('tahun_akademik')
+            ->where('status',1)
+            ->get();
+
+            return view('home_admin',compact('dosen_aktif', 'mahasiswa_aktif', 'matakuliah','konsultasi','total_konsultasi','total_konsultasi_sekarang','aktifitaskonsultasi','semester','semester_aktif','tahun','tahun_aktif'));
 
             //Untuk Multi login user (dengan hak akses berbeda)
             // if(Session::get('dosen') != null)
@@ -89,6 +106,49 @@ class HomeController extends Controller
             return redirect('/');  
         }
     }
+
+    public function ubahtahun_proses(Request $request)
+    {
+        try
+        {
+            $this->validate($request,[
+                'semester' =>'required',
+                'tahun'=>'required'
+            ]);
+
+            //Mengubah Status Semester dan Tahun Akademik yg aktif menjadi tidak aktif
+            $semester = DB::table('semester') 
+            ->where('idsemester',$request->get('semester_aktif'))
+            ->update([
+                'status' =>0
+            ]);
+            $tahunakademik = DB::table('tahun_akademik') 
+            ->where('idtahunakademik',$request->get('tahun_aktif'))
+            ->update([
+                'status' =>0
+            ]);
+
+
+            //Mengubah status semester dan tahun akademik yg dipilih user menjadi aktif
+            $semester = DB::table('semester') 
+            ->where('idsemester',$request->get('semester'))
+            ->update([
+                'status' =>1
+            ]);
+            $tahunakademik = DB::table('tahun_akademik') 
+            ->where('idtahunakademik',$request->get('tahun'))
+            ->update([
+                'status' =>1
+            ]);
+
+            return redirect('admin')->with(['Success' => 'Berhasil Mengubah Tahun Akademik']);
+        }
+        catch(QueryException $e)
+        {
+            return redirect('admin')->with(['Error' => 'Gagal Mengubah Tahun Akademik <br> Pesan Kesalahan: '.$message[0]]);
+        }
+    }
+
 
     public function index_dosen()
     {

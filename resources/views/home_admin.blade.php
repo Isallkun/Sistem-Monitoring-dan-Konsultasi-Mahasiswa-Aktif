@@ -97,6 +97,77 @@
         <!-- Main row -->
         <div class="row">
           <!-- Left col -->
+            <section class="col-lg-12 content">
+              <form action="{{url('admin/tahunakademik/ubahproses')}}" role="form" method="post">
+              {{ csrf_field() }}
+                <div class="container-fluid ">
+                  <div class="card " >
+                    <div class="card-header" style="text-transform: uppercase; font-weight: bold;">
+                      Tahun Akademik
+                      @foreach($semester_aktif as $s)
+                          @foreach($tahun_aktif as $t)
+                          ( {{$s->semester}} {{$t->tahun}} )
+                          <input type="hidden" name="semester_aktif" value="{{$s->idsemester}}">
+                          <input type="hidden" name="tahun_aktif" value="{{$t->idtahunakademik}}">
+                          @endforeach
+                        @endforeach
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                      </div>
+                    </div>
+                    <div class="card-body">    
+                      @if (\Session::has('Success'))
+                        <div class="alert alert-success alert-block">
+                          <ul>
+                            <li>{!! \Session::get('Success') !!}</li>
+                          </ul>
+                        </div>
+                      @endif
+
+                      @if (\Session::has('Error'))
+                      <div class="alert alert-danger alert-block">
+                        <ul>
+                          <li>{!! \Session::get('Error') !!}</li>
+                        </ul>
+                      </div>
+                      @endif
+
+                      @if (count($errors) > 0)
+                      <div class="alert alert-danger">
+                        <ul>
+                          @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                          @endforeach
+                        </ul>
+                      </div>
+                    @endif
+
+                      <label for="exampleInputSemester">Pilih Semester: </label>
+                      &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                      <select class="btn btn-secondary dropdown-toggle" name="semester" data-toggle="dropdown" id="exampleInputSemester">
+                        <option value="">-- Semester --</option>
+                        @foreach($semester as $s)
+                          <option value="{{$s->idsemester}}">{{$s->semester}}</option>                         
+                        @endforeach
+                      </select>
+
+                      <br>
+                      <label for="exampleInputTahunAkademik">Pilih Tahun Akademik: </label>
+                      <select class="btn btn-secondary dropdown-toggle" name="tahun" data-toggle="dropdown" id="exampleInputTahunAkademik">
+                        <option value="">-- Tahun Akademik --</option>
+                        @foreach($tahun as $t)
+                          <option value="{{$t->idtahunakademik}}">{{$t->tahun}}</option>                         
+                        @endforeach
+                      </select>
+                    </div>
+                    <div class="card-footer">
+                      <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </section>
+          
 
           <section class="col-lg-12 connectedSortable">
             <!-- Custom tabs (Charts with tabs)-->
@@ -105,7 +176,6 @@
                 <h3 class="card-title">Monitoring Konsultasi Dosen Wali</h3>
               </div>
               <div class="card-body">
-                
                 <div class="chart">
                   <canvas id="areaChart1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                   <br>

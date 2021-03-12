@@ -26,12 +26,15 @@ Route::group(['prefix' => '/' ], function()
 	Route::group(['prefix' => 'admin'], function()
 	{
 		//localhost:8000/admin/(halaman home admin)
-		Route::get('/', 'HomeController@index_admin');
+		Route::get('/', 'HomeController@index_admin');		
+		//Mengubah tahun akademik
+		Route::post('tahunakademik/ubahproses', 'HomeController@ubahtahun_proses');
+
 		
 		//1. MASTER DOSEN
 		//localhost:8000/admin/dosen
 		Route::get('master/dosen', 'MasterDosenController@daftardosen');
-	
+
 		//Tambah data dosen
 		Route::get('master/dosen/tambah', 'MasterDosenController@tambahdosen');
 		Route::post('master/dosen/prosestambah', 'MasterDosenController@tambahdosen_proses');
