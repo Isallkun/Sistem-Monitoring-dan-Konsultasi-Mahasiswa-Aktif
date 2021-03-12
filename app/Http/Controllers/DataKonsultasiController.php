@@ -188,42 +188,102 @@ class DataKonsultasiController extends Controller
         {
             try
             {
-                $nilai_rating = $request->get('star');
+                $durasi = Session::get('durasi');
+                $explode_durasi = (explode('::',$durasi));
+        
+                $nilai_durasikonsultasi =0;
+                $nilai_manfaatkonsultasi = $request->get('star_manfaatkonsultasi');
+                $nilai_sifatkonsultasi = $request->get('star_sifatkonsultasi');
+                $nilai_interaksi = $request->get('star_interaksi');
+                $nilai_pencapaian = $request->get('star_pencapaian');
 
+
+                if($explode_durasi[0] <= "01 Menit")
+                {
+                    //dibawah 1 menit = *
+                    $nilai_durasikonsultasi=1;
+                }
+                elseif($explode_durasi[0] > "01 Menit" ||  $explode_durasi[0] <= "03 Menit")
+                {
+                    //antara 1menit - 3menit = **  
+                    $nilai_durasikonsultasi=2;  
+                }
+                elseif($explode_durasi[0] > "03 Menit" ||  $explode_durasi[0] <= "05 Menit")
+                {
+                    //antara 3menit - 5menit = ***    
+                    $nilai_durasikonsultasi=3;
+                }
+                elseif($explode_durasi[0] > "05 Menit" ||  $explode_durasi[0] <= "08 Menit")    
+                {
+                    //antara 5menit - 8menit = ****
+                    $nilai_durasikonsultasi=4;    
+                }   
+                else
+                {
+                    // 9menit keatas = *****
+                    $nilai_durasikonsultasi=5;
+                }         
+                
+
+                // Mengambil data poin setiap aspek yang dimiliki o/ mahasiswa
                 $mahasiswa_gamifikasi = DB::table("mahasiswa")
-                ->select(DB::raw('AVG(gamifikasi.poin) as jumlahpoin'),'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','gamifikasi.idgamifikasi','gamifikasi.level')
+                ->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa', 'gamifikasi.idgamifikasi', 
+                         'gamifikasi.aspek_durasi_konsultasi as poin_durasi', 'gamifikasi.aspek_manfaat_konsultasi as poin_manfaat', 
+                         'gamifikasi.aspek_sifat_konsultasi as poin_sifat', 'gamifikasi.aspek_interaksi as poin_interaksi',
+                         'gamifikasi.aspek_pencapaian as poin_pencapaian','gamifikasi.total','gamifikasi.level')
                 ->join('gamifikasi','idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
                 ->where('mahasiswa.nrpmahasiswa',$id)
                 ->get();
 
-                $total_konsultasi_mahasiswa = DB::table("konsultasi_dosenwali")
+                // Menghitung total konsultasi mahasiswa
+                 $total_konsultasi_mahasiswa = DB::table("konsultasi_dosenwali")
                 ->select(DB::raw('count(*) as jumlahkonsultasi'),'mahasiswa.nrpmahasiswa','mahasiswa.namamahasiswa')
                 ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
                 ->where('mahasiswa.nrpmahasiswa',$id)
                 ->get();
 
-                //perhitungan untuk penambahan poin baru
-                $poin_terbaru = ($mahasiswa_gamifikasi[0]->jumlahpoin + $nilai_rating)/$total_konsultasi_mahasiswa[0]->jumlahkonsultasi;  
+                //Proses penghitungan poin (per aspek)
+                //1. Aspek Durasi Konsultasi
+                $durasi = $mahasiswa_gamifikasi[0]->poin_durasi + $nilai_durasikonsultasi;
+                //2. Aspek Manfaat Konsultasi
+                $manfaat = $mahasiswa_gamifikasi[0]->poin_manfaat + $nilai_manfaatkonsultasi;
+                //3. Aspek Sifat Konsultasi
+                $sifat = $mahasiswa_gamifikasi[0]->poin_sifat + $nilai_sifatkonsultasi;
+                //4. Aspek Interaksi
+                $interaksi = $mahasiswa_gamifikasi[0]->poin_interaksi + $nilai_interaksi;
+                //5. Aspek Pencapaian
+                $pencapaian = $mahasiswa_gamifikasi[0]->poin_pencapaian + $nilai_pencapaian;
+
+                //Perhitungan rata-rata poin 
+                $avg_total_poin = (($durasi+$manfaat+$sifat+$interaksi+$pencapaian)/5)/$total_konsultasi_mahasiswa[0]->jumlahkonsultasi;
+
+              
                 $level_user ="";
-                if($poin_terbaru <= 2)
+                if($avg_total_poin <= 2)
                 {   
                     $level_user="Bronze";
                 }
-                elseif($poin_terbaru > 2 && $poin_terbaru <= 4 )
+                elseif($avg_total_poin > 2 && $avg_total_poin <= 4 )
                 {
                     $level_user="Silver";
                 }
-                elseif($poin_terbaru > 4)
+                elseif($avg_total_poin > 4)
                 {
                     $level_user="Gold";
                 }
-                
+
                 $gamifikasi = DB::table('gamifikasi')
                 ->where('idgamifikasi',$mahasiswa_gamifikasi[0]->idgamifikasi)
                 ->update([
-                    'poin' => $poin_terbaru,
+                    'aspek_durasi_konsultasi' => $durasi,
+                    'aspek_manfaat_konsultasi' => $manfaat,
+                    'aspek_sifat_konsultasi' => $sifat,
+                    'aspek_interaksi'=>$interaksi,
+                    'aspek_pencapaian' => $pencapaian,
+                    'total' => $avg_total_poin,
                     'level' =>$level_user
                 ]);
+
 
                 //Menghapus session durasi konsultasi
                 Session::forget('durasi');
