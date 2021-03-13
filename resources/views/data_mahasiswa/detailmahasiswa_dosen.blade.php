@@ -147,7 +147,7 @@
                         <div class="row">
 
                           <!-- /.col (RIGHT) -->
-                          <div class="col-md-6">
+                          <div class="col-md-12">
                             <div class="card card-primary">
                               <div class="card-header">
                                 <h3 class="card-title">Grafik IPS dan IPK Mahasiswa</h3>
@@ -171,26 +171,7 @@
                           </div>
 
                           <!-- /.col (LEFT) -->
-                          <div class="col-md-6">
-                            <div class="card card-secondary">
-                              <div class="card-header">
-                                <h3 class="card-title">Grafik SKS Mahasiswa (per Semester)</h3>
-                              </div>
-                              <div class="card-body">
-                                <div class="chart">
-                                  <canvas id="areaChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                                  <br>
-                                   <p style="font-size: 11px;">
-                                    Keterangan:
-                                    <br>
-                                    Biru: Total SKS mahasiswa dalam setiap semester.
-                                  </p>
-                                </div>
-                              </div>
-                              <!-- /.card-body -->
-                            </div>
-                            <!-- /.card -->
-                          </div>
+                          
                           <!-- /.col (RIGHT) -->
                         </div>
                         <!-- /.row -->
@@ -598,61 +579,7 @@
     })
   });
 
-  $(function () {
-    var tahunakademik= new Array();
-    var sks = new Array();
-    
-    @foreach($grafik_akademik as $g)
-      tahunakademik.push('{{$g->semester}} {{$g->tahun}}');
-      sks.push({{$g->totalsks}});
-    @endforeach
-   
-    var areaChartCanvas = $('#areaChart2').get(0).getContext('2d')
-
-    var areaChartData = {
-      labels  : tahunakademik,
-      datasets: [
-        {
-          label               : 'SKS mahasiswa',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
-          pointRadius          : true,
-          pointColor          : '#3b8bba',
-          pointStrokeColor    : 'rgba(60,141,188,1)',
-          pointHighlightFill  : '#fff',
-          pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : sks
-        },
-      ]
-    }
-
-    var areaChartOptions = {
-      maintainAspectRatio : false,
-      responsive : true,
-      legend: {
-        display: false
-      },
-      scales: {
-        xAxes: [{
-          gridLines : {
-            display : false,
-          }
-        }],
-        yAxes: [{
-          gridLines : {
-            display : false,
-          }
-        }]
-      }
-    }
-
-    // This will get the first returned node in the jQuery collection.
-    var areaChart       = new Chart(areaChartCanvas, { 
-      type: 'line',
-      data: areaChartData, 
-      options: areaChartOptions
-    })
-  });
+  
 
   $(function () {
     
