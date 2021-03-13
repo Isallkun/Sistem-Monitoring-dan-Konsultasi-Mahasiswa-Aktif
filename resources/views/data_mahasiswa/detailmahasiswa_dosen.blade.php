@@ -658,11 +658,11 @@
     
     var data_poin = [];
     @foreach($data_mahasiswa as $m)
-      data_poin.push({{$m->aspek_durasi_konsultasi}});
-      data_poin.push({{$m->aspek_manfaat_konsultasi}});
-      data_poin.push({{$m->aspek_sifat_konsultasi}});
-      data_poin.push({{$m->aspek_interaksi}});
-      data_poin.push({{$m->aspek_pencapaian}});
+      data_poin.push({{$m->avg_aspek1}});
+      data_poin.push({{$m->avg_aspek2}});
+      data_poin.push({{$m->avg_aspek3}});
+      data_poin.push({{$m->avg_aspek4}});
+      data_poin.push({{$m->avg_aspek5}});
     @endforeach
 
     new Chart(document.getElementById("radarChart"), {
@@ -670,7 +670,7 @@
       data: {
         labels: ["Durasi konsultasi", "Manfaat konsultasi", "Sifat mahasiswa dalam konsultasi", "Interaksi mahasiswa", "Pencapaian mahasiswa"],
         datasets: [{
-          label: "#nilai per bagian",
+          label: "#rata-rata per bagian",
           data: data_poin,
 
           borderColor: [

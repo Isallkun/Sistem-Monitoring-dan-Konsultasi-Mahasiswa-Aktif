@@ -175,6 +175,13 @@ class DataMahasiswaController extends Controller
             
             //2. Detail Profil Mahasiswa
             $data_mahasiswa = DB::table('kartu_studi')
+            ->select('*',
+                     DB::raw("gamifikasi.aspek_durasi_konsultasi/5 AS avg_aspek1"),
+                     DB::raw("gamifikasi.aspek_manfaat_konsultasi/5 AS avg_aspek2"),
+                     DB::raw("gamifikasi.aspek_sifat_konsultasi/5 AS avg_aspek3"),
+                     DB::raw("gamifikasi.aspek_interaksi/5 AS avg_aspek4"),
+                     DB::raw("gamifikasi.aspek_pencapaian/5 AS avg_aspek5"))
+
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('jurusan','jurusan.idjurusan','=','mahasiswa.jurusan_idjurusan')
             ->join('fakultas','fakultas.idfakultas','=', 'jurusan.fakultas_idfakultas')
@@ -340,6 +347,13 @@ class DataMahasiswaController extends Controller
 
         //2. Detail Profil Mahasiswa
         $data_mahasiswa = DB::table('kartu_studi')
+        ->select('*',
+                 DB::raw("gamifikasi.aspek_durasi_konsultasi/5 AS avg_aspek1"),
+                 DB::raw("gamifikasi.aspek_manfaat_konsultasi/5 AS avg_aspek2"),
+                 DB::raw("gamifikasi.aspek_sifat_konsultasi/5 AS avg_aspek3"),
+                 DB::raw("gamifikasi.aspek_interaksi/5 AS avg_aspek4"),
+                 DB::raw("gamifikasi.aspek_pencapaian/5 AS avg_aspek5"))
+        
         ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
         ->join('jurusan','jurusan.idjurusan','=','mahasiswa.jurusan_idjurusan')
         ->join('fakultas','fakultas.idfakultas','=', 'jurusan.fakultas_idfakultas')

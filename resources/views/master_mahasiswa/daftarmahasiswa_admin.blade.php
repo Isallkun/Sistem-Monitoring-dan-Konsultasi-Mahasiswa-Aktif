@@ -209,7 +209,7 @@
 
 
 <script>
-  $(function () {
+  $(function () { 
     $('#tabel_mahasiswa').DataTable({
       "dom": '<"pull-right"f><"pull-left"l>tip'
     });
@@ -218,11 +218,11 @@
     @foreach($mahasiswa as $m)
 
       var value=[
-        {{$m->aspek_durasi_konsultasi}},
-        {{$m->aspek_manfaat_konsultasi}},
-        {{$m->aspek_sifat_konsultasi}},
-        {{$m->aspek_interaksi}},
-        {{$m->aspek_pencapaian}}
+        {{$m->avg_aspek1}},
+        {{$m->avg_aspek2}},
+        {{$m->avg_aspek3}},
+        {{$m->avg_aspek4}},
+        {{$m->avg_aspek5}}
       ];
   
       new Chart(document.getElementById("radarChart_{{$m->nrpmahasiswa}}"), {
@@ -230,7 +230,7 @@
         data: {
           labels: ["Durasi konsultasi", "Manfaat konsultasi", "Sifat mahasiswa dalam konsultasi", "Interaksi mahasiswa", "Pencapaian mahasiswa"],
           datasets: [{
-            label: "#nilai per bagian",
+            label: "#rata-rata per bagian",
             data: value,
 
             borderColor: [

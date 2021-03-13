@@ -32,7 +32,14 @@ class MasterMahasiswaController extends Controller
         if(Session::get('admin') != null)
         {
             $mahasiswa = DB::table('mahasiswa')
-            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan','gamifikasi.*')
+            ->select('mahasiswa.*', 'dosen.npkdosen','dosen.namadosen','tahun_akademik.tahun','jurusan.namajurusan',
+                     DB::raw("gamifikasi.aspek_durasi_konsultasi/5 AS avg_aspek1"),
+                     DB::raw("gamifikasi.aspek_manfaat_konsultasi/5 AS avg_aspek2"),
+                     DB::raw("gamifikasi.aspek_sifat_konsultasi/5 AS avg_aspek3"),
+                     DB::raw("gamifikasi.aspek_interaksi/5 AS avg_aspek4"),
+                     DB::raw("gamifikasi.aspek_pencapaian/5 AS avg_aspek5"),
+                    'gamifikasi.*')
+
             ->join('dosen', 'dosen.npkdosen','=', 'mahasiswa.dosen_npkdosen')
             ->join('jurusan', 'jurusan.idjurusan', '=', 'mahasiswa.jurusan_idjurusan')
             ->join('tahun_akademik', 'tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
