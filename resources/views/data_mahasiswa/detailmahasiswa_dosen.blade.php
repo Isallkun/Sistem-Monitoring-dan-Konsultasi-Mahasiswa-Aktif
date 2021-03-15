@@ -63,7 +63,7 @@
                     <a class="nav-link active" id="custom-tabs-two-informasi-tab" data-toggle="pill" href="#custom-tabs-two-informasi" role="tab" aria-controls="custom-tabs-two-informasi" aria-selected="true">Informasi</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-two-profil-tab" data-toggle="pill" href="#custom-tabs-two-profil" role="tab" aria-controls="custom-tabs-two-profil" aria-selected="false">Profil Mahasiswa</a>
+                    <a class="nav-link" id="custom-tabs-two-profil-tab" data-toggle="pill" href="#custom-tabs-two-profil" role="tab" aria-controls="custom-tabs-two-profil" aria-selected="false">Profil</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-two-kartuhasilstudi-tab" data-toggle="pill" href="#custom-tabs-two-kartuhasilstudi" role="tab" aria-controls="custom-tabs-two-kartuhasilstudi" aria-selected="false">Kartu Hasil Studi</a>
@@ -72,7 +72,7 @@
                     <a class="nav-link" id="custom-tabs-two-transkrip-tab" data-toggle="pill" href="#custom-tabs-two-transkrip" role="tab" aria-controls="custom-tabs-two-transkrip" aria-selected="false">Transkrip</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-two-konsultasi-tab" data-toggle="pill" href="#custom-tabs-two-konsultasi" role="tab" aria-controls="custom-tabs-two-konsultasi" aria-selected="false">Konsultasi</a>
+                    <a class="nav-link" id="custom-tabs-two-konsultasi-tab" data-toggle="pill" href="#custom-tabs-two-konsultasi" role="tab" aria-controls="custom-tabs-two-konsultasi" aria-selected="false">Konsultasi & Non Konsultasi</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-two-hukuman-tab" data-toggle="pill" href="#custom-tabs-two-hukuman" role="tab" aria-controls="custom-tabs-two-hukuman" aria-selected="false">Hukuman</a>
@@ -359,40 +359,85 @@
                   </div>
 
                   <div class="tab-pane fade" id="custom-tabs-two-konsultasi" role="tabpanel" aria-labelledby="custom-tabs-two-konsultasi-tab">
-                    <table id="tabel_konsultasi" class="table table-bordered table-striped" >
-                      <thead>
-                        <tr> 
-                          <th>No.</th>
-                          <th>Tanggal Konsultasi</th>
-                          <th>Topik Konsultasi</th>
-                          <th>Tahun Akademik</th>
-                          <th>Konsultasi Selanjutnya</th>
-                          <th>Konfirmasi</th>
-                          <th>Detail</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @foreach($data_konsultasi as $no => $dk)
-                        <tr>
-                          <td>{{$no+1}}</td>
-                          <td>{{$dk->tanggalkonsultasi}}</td>
-                          <td>{{$dk->namatopik}}</td>
-                          <td>{{$dk->semester}} {{$dk->tahun}}</td>
-                          <td>{{$dk->konsultasiselanjutnya}}</td>
-                          <td>
-                            @if($dk->konfirmasi == "0")
-                            <i class="fas fa-thumbs-down btn btn-danger btn-sm"></i>
-                            @else
-                            <i class="fas fa-thumbs-up btn btn-success btn-sm"></i>
-                            @endif
-                          </td>
-                          <td>
-                            <a href="#" class="fas fa-eye" data-toggle="modal" data-target="#detailKonsultasi_{{$dk->idkonsultasi}}"></a>
-                          </td>
-                        </tr>
-                        @endforeach
-                      </tbody>
-                    </table>  
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Data Konsultasi</h3>
+                      </div>  
+                      <div class="card-body">
+                        <table id="tabel_konsultasi" class="table table-bordered table-striped">
+                          <thead>
+                            <tr> 
+                              <th>No.</th>
+                              <th>Tanggal Konsultasi</th>
+                              <th>Topik Konsultasi</th>
+                              <th>Tahun Akademik</th>
+                              <th>Konsultasi Selanjutnya</th>
+                              <th>Konfirmasi</th>
+                              <th>Detail</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @foreach($data_konsultasi as $no => $dk)
+                            <tr>
+                              <td>{{$no+1}}</td>
+                              <td>{{$dk->tanggalkonsultasi}}</td>
+                              <td>{{$dk->namatopik}}</td>
+                              <td>{{$dk->semester}} {{$dk->tahun}}</td>
+                              <td>{{$dk->konsultasiselanjutnya}}</td>
+                              <td>
+                                @if($dk->konfirmasi == "0")
+                                <i class="fas fa-thumbs-down btn btn-danger btn-sm"></i>
+                                @else
+                                <i class="fas fa-thumbs-up btn btn-success btn-sm"></i>
+                                @endif
+                              </td>
+                              <td>
+                                <a href="#" class="fas fa-eye" data-toggle="modal" data-target="#detailKonsultasi_{{$dk->idkonsultasi}}"></a>
+                              </td>
+                            </tr>
+                            @endforeach
+                          </tbody>
+                        </table>  
+                      </div>
+                    </div>
+
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">Data Non Konsultasi </h3>
+                      </div>  
+                      <div class="card-body">
+                        <table id="tabel_nonkonsultasi" class="table table-bordered table-striped">
+                          <thead>
+                            <tr> 
+                              <th width="1%">No.</th>
+                              <th width="1%">Tanggal Input</th>
+                              <th width="1%">Tanggal Pertemuan</th>
+                              <th width="1%">Status</th>
+                              <th width="1%">Dosen</th>
+                              <th width="1%">Isi Pesan</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @foreach($data_nonkonsultasi as $no => $dn)
+                            <tr>
+                              <td>{{$no+1}}</td>
+                              <td>{{$dn->tanggalinput}}</td>
+                              <td>{{$dn->tanggalpertemuan}}</td>
+                              <td>
+                                @if($dn->status == "0")
+                                <i class="btn btn-danger btn-sm"> Dalam proses...</i>
+                                @else
+                                <i class="btn btn-success btn-sm"> Selesai</i>
+                                @endif
+                              </td>
+                              <td>{{$dn->namadosen}} {{$dn->npkdosen}}</td>
+                              <td>{{$dn->pesan}}</td>
+                            </tr>
+                            @endforeach
+                          </tbody>
+                        </table>  
+                      </div>
+                    </div>
                   </div>
 
                   <div class="tab-pane fade" id="custom-tabs-two-hukuman" role="tabpanel" aria-labelledby="custom-tabs-two-hukuman-tab">
@@ -633,6 +678,12 @@
 
   $(function () {
     $('#tabel_konsultasi').DataTable({
+      "dom": '<"pull-right"f><"pull-left"l>tip'
+    });
+  });
+
+  $(function () {
+    $('#tabel_nonkonsultasi').DataTable({
       "dom": '<"pull-right"f><"pull-left"l>tip'
     });
   });

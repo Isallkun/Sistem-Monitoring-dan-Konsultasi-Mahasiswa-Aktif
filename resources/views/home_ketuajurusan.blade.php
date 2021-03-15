@@ -1,5 +1,5 @@
 <!--Wajib untuk inisialisasi file views/layouts/appadmin-->
-@extends('layouts.appadmin')
+@extends('layouts.appketuajurusan')
 
 @push('styles')
   <!-- Untuk menambahkan style baru -->
@@ -13,11 +13,11 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Dashboard Administrator</h1>
+            <h1 class="m-0 text-dark">Dashboard Ketua Jurusan</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{url('admin/')}}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{url('ketuajurusan/')}}">Home</a></li>
               <li class="breadcrumb-item active">Dashboard</li>
             </ol>
           </div><!-- /.col -->
@@ -35,14 +35,14 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>{{$dosen_aktif}} / {{$dosen}}</h3>
+                <h3>{{$mahasiswa_aktif}} / {{$mahasiswa}}</h3>
 
-                <p>Total Dosen Aktif</p>
+                <p>Total Mahasiswa </p>
               </div>
               <div class="icon">
                 <i class="ion ion-person"></i>
               </div>
-              <a href="{{url('admin/master/dosen')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('ketuajurusan/submaster/mahasiswa')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -50,14 +50,14 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>{{$mahasiswa_aktif}} / {{$mahasiswa}}</h3>
+                <h3>{{$konsultasi}}</h3>
 
-                <p>Total Mahasiswa Aktif</p>
+                <p>Total Konsultasi</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-people"></i>
               </div>
-              <a href="{{url('admin/master/mahasiswa')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -65,9 +65,9 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>{{$matakuliah}}</h3>
+                <h3>{{$non_konsultasi}}</h3>
 
-                <p>Total Matakuliah</p>
+                <p>Total Non-Konsultasi</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-book"></i>
@@ -81,9 +81,9 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>{{$konsultasi}}</h3>
+                <h3>{{$hukuman}}</h3>
 
-                <p>Total Konsultasi</p>
+                <p>Total Hukuman</p>
               </div>
               <div class="icon">
                 <i class="ion ion-archive"></i>
@@ -96,80 +96,7 @@
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
-          <!-- Left col -->
-            <section class="col-lg-12 content">
-              <form action="{{url('admin/tahunakademik/ubahproses')}}" role="form" method="post">
-              {{ csrf_field() }}
-                <div class="container-fluid ">
-                  <div class="card " >
-                    <div class="card-header" style="text-transform: uppercase; font-weight: bold;">
-                      Tahun Akademik
-                      @foreach($semester_aktif as $s)
-                          @foreach($tahun_aktif as $t)
-                          ( {{$s->semester}} {{$t->tahun}} )
-                          <input type="hidden" name="semester_aktif" value="{{$s->idsemester}}">
-                          <input type="hidden" name="tahun_aktif" value="{{$t->idtahunakademik}}">
-                          @endforeach
-                        @endforeach
-                      <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-                      </div>
-                    </div>
-                    <div class="card-body">    
-                      @if (\Session::has('Success'))
-                        <div class="alert alert-success alert-block">
-                          <ul>
-                            <li>{!! \Session::get('Success') !!}</li>
-                          </ul>
-                        </div>
-                      @endif
-
-                      @if (\Session::has('Error'))
-                      <div class="alert alert-danger alert-block">
-                        <ul>
-                          <li>{!! \Session::get('Error') !!}</li>
-                        </ul>
-                      </div>
-                      @endif
-
-                      @if (count($errors) > 0)
-                      <div class="alert alert-danger">
-                        <ul>
-                          @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                          @endforeach
-                        </ul>
-                      </div>
-                    @endif
-
-                      <label for="exampleInputSemester">Pilih Semester: </label>
-                      &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
-                      <select class="btn btn-secondary dropdown-toggle" name="semester" data-toggle="dropdown" id="exampleInputSemester">
-                        <option value="">-- Semester --</option>
-                        @foreach($semester as $s)
-                          <option value="{{$s->idsemester}}">{{$s->semester}}</option>                         
-                        @endforeach
-                      </select>
-
-                      <br>
-                      <label for="exampleInputTahunAkademik">Pilih Tahun Akademik: </label>
-                      <select class="btn btn-secondary dropdown-toggle" name="tahun" data-toggle="dropdown" id="exampleInputTahunAkademik">
-                        <option value="">-- Tahun Akademik --</option>
-                        @foreach($tahun as $t)
-                          <option value="{{$t->idtahunakademik}}">{{$t->tahun}}</option>                         
-                        @endforeach
-                      </select>
-                    </div>
-                    <div class="card-footer">
-                      <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </section>
-          
-
-          <section class="col-lg-12 connectedSortable">
+          <section class="col-lg-6 connectedSortable">
             <!-- Custom tabs (Charts with tabs)-->
             <div class="card card-primary">
               <div class="card-header">
@@ -188,6 +115,36 @@
                     <a href="#" class="btn btn-secondary btn-sm"></a> 
                     Total konsultasi saat ini (3 bulan).
                   </p>
+
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </section>
+
+          <section class="col-lg-6 connectedSortable">
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Monitoring Hukuman Mahasiswa</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart">
+                  <canvas id="areaChart3" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  <br>
+                  <p style="font-size: 11px;">
+                    Keterangan: 
+                    <br>
+                    <a href="#" class="btn btn-primary btn-sm"></a> 
+                    Hukuman dalam bulan tersebut
+                    <br>
+                    <a href="#" class="btn btn-secondary btn-sm"></a> 
+                    Hukuman yang sedang aktif (sedang berjalan) dalam bulan tersebut
+                    <br>
+                    <a href="#" class="btn btn-success btn-sm"></a> 
+                    Hukuman yang telah berakhir dalam bulan tersebut
+                  </p>
                 </div>
               </div>
               <!-- /.card-body -->
@@ -199,7 +156,7 @@
             <!-- Custom tabs (Charts with tabs)-->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Monitoring Konsultasi Dosen Wali Dalam Setahun ({{$tahun_sekarang}})</h3>
+                <h3 class="card-title">Monitoring Konsultasi Dosen Wali Dalam Setahun ({{$tahun_sekarang}}) </h3>
               </div>
               <div class="card-body">
                 
@@ -212,9 +169,6 @@
             </div>
             <!-- /.card -->
           </section>
-          <!-- /.Left col -->
-         
-          <!-- right col -->
         </div>
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
@@ -305,6 +259,7 @@
     })    
   })
 
+
   $(function () {
     var nama_bulan = new Array();
     var total = new Array();
@@ -359,10 +314,107 @@
       type: 'line',
       data: areaChartData, 
       options: areaChartOptions
-    })
-
-    
+    })    
   })
-</script>
 
+
+  $(function () {  
+    //Total seluruh hukuman 
+    var nama_bulan= new Array();
+    var total= new Array();
+
+    @foreach($total_hukuman as $h)
+      nama_bulan.push('{{$h->bulan}}');
+      total.push({{$h->total}});
+    @endforeach
+
+    //Total seluruh hukuman berlangsung
+    var nama_bulan_berlangsung = new Array();
+    var total_berlangsung = new Array();
+
+    @foreach($hukuman_berlangsung as $hb)
+      nama_bulan_berlangsung.push('{{$hb->bulan}}');
+      total_berlangsung.push({{$hb->total}});
+    @endforeach
+
+    //Total seluruh hukuman selesai
+    var nama_bulan_selesai = new Array();
+    var total_selesai = new Array();
+
+    @foreach($hukuman_selesai as $hs)
+      nama_bulan_selesai.push('{{$hs->bulan}}');
+      total_selesai.push({{$hs->total}});
+    @endforeach
+    
+
+    var areaChartCanvas = $('#areaChart3').get(0).getContext('2d')
+
+    var areaChartData = {
+      labels  : nama_bulan,
+      datasets: [
+        {
+          label               : 'Total Hukuman',
+          backgroundColor     : 'rgba(60,141,188,0.9)',
+          borderColor         : 'rgba(60,141,188,0.8)',
+          pointRadius          : true,
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : total
+        },
+        {
+          label               : 'Total Hukuman Berlangsung',
+          backgroundColor     : 'rgba(210, 214, 222, 1)',
+          borderColor         : 'rgba(210, 214, 222, 0.9)',
+          pointRadius         : true,
+          pointColor          : 'rgba(210, 214, 222, 1)',
+          pointStrokeColor    : '#c1c7d1',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(220,220,220,1)',
+          data                : total_berlangsung
+        },
+        {
+          label               : 'Total Hukuman Selesai',
+          backgroundColor     : 'rgba(78,211,90)',
+          borderColor         : 'rgba(78,211,90)',
+          pointRadius         : true,
+          pointColor          : 'rgba(0,255,0,0.3)',
+          pointStrokeColor    : '#039c18',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(78,211,90)',
+          data                : total_selesai
+        },
+      ]
+    }
+
+    var areaChartOptions = {
+      maintainAspectRatio : false,
+      responsive : true,
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }],
+        yAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }]
+      }
+    }
+
+    // This will get the first returned node in the jQuery collection.
+    var areaChart       = new Chart(areaChartCanvas, { 
+      type: 'line',
+      data: areaChartData, 
+      options: areaChartOptions
+    })    
+  })
+
+</script>
 @endpush

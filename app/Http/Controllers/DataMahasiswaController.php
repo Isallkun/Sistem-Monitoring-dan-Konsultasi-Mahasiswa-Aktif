@@ -257,8 +257,14 @@ class DataMahasiswaController extends Controller
             ->where('mahasiswa.nrpmahasiswa',$id)
             ->orderBy('konsultasi_dosenwali.idkonsultasi','DESC')
             ->get();
-            
 
+            $data_nonkonsultasi = DB::table('non_konsultasi')
+            ->join('dosen','dosen.npkdosen','=','non_konsultasi.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','non_konsultasi.mahasiswa_nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa',$id)
+            ->orderBy('non_konsultasi.idnonkonsultasi','DESC')
+            ->get();
+        
             //6. Detail Hukuman Mahasiswa
             $data_hukuman = DB::table('hukuman')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
@@ -267,7 +273,7 @@ class DataMahasiswaController extends Controller
             ->get();
             
             
-            return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_kartustudi','data_transkrip','data_hukuman','semester','tahunakademik'));
+            return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_nonkonsultasi','data_kartustudi','data_transkrip','data_hukuman','semester','tahunakademik'));
         }
         else
         {
@@ -405,6 +411,13 @@ class DataMahasiswaController extends Controller
         ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
         ->orderBy('konsultasi_dosenwali.idkonsultasi','DESC')
         ->get();
+
+         $data_nonkonsultasi = DB::table('non_konsultasi')
+        ->join('dosen','dosen.npkdosen','=','non_konsultasi.dosen_npkdosen')
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','non_konsultasi.mahasiswa_nrpmahasiswa')
+        ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->orderBy('non_konsultasi.idnonkonsultasi','DESC')
+        ->get();
         
         //6. Detail Hukuman Mahasiswa
         $data_hukuman = DB::table('hukuman')
@@ -414,7 +427,7 @@ class DataMahasiswaController extends Controller
         ->get();
             
             
-         return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_kartustudi','data_transkrip','data_hukuman','semester','tahunakademik'));
+         return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_nonkonsultasi','data_kartustudi','data_transkrip','data_hukuman','semester','tahunakademik'));
     }
 
    

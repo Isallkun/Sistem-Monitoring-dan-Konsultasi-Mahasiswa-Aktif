@@ -33,15 +33,22 @@ class HomeController extends Controller
     { 
         if(Session::get('admin') != null)
         {
+            $dosen = DB::table('dosen')
+                    ->select('*')
+                    ->count();
             $dosen_aktif = DB::table('dosen')
                         ->select('*')
                         ->where('status','aktif')
                         ->count();
-
+            
+            $mahasiswa = DB::table('mahasiswa')
+                        ->select('*')
+                        ->count();
             $mahasiswa_aktif = DB::table('mahasiswa')
                         ->select('*')
                         ->where('status','aktif')
                         ->count();
+            
 
             $matakuliah = DB::table('matakuliah')
                         ->select('*')
@@ -75,6 +82,8 @@ class HomeController extends Controller
             ->orderBy('bln','DESC')
             ->get();
 
+            $tahun_sekarang=Carbon::now()->year;
+
 
             $semester = DB::table('semester')
             ->get();
@@ -88,7 +97,7 @@ class HomeController extends Controller
             ->where('status',1)
             ->get();
 
-            return view('home_admin',compact('dosen_aktif', 'mahasiswa_aktif', 'matakuliah','konsultasi','total_konsultasi','total_konsultasi_sekarang','aktifitaskonsultasi','semester','semester_aktif','tahun','tahun_aktif'));
+            return view('home_admin',compact('dosen','dosen_aktif', 'mahasiswa','mahasiswa_aktif', 'matakuliah','konsultasi','total_konsultasi','total_konsultasi_sekarang','aktifitaskonsultasi','tahun_sekarang','semester','semester_aktif','tahun','tahun_aktif'));
 
             //Untuk Multi login user (dengan hak akses berbeda)
             // if(Session::get('dosen') != null)
@@ -494,6 +503,86 @@ class HomeController extends Controller
 
         $pdf = PDF::loadview('data_konsultasi/konsultasi_pdf',['konsultasi'=>$data_konsultasi_mhs,'mhs'=>$mahasiswa]);
         return $pdf->download('laporan-konsultasi-dosenwali-'.$id);
+    }
+
+
+    public function index_ketuajurusan()
+    { 
+        if(Session::get('ketuajurusan') != null)
+        {
+            $mahasiswa = DB::table('mahasiswa')
+            ->select('*')
+            ->count();
+            $mahasiswa_aktif = DB::table('mahasiswa')
+            ->select('*')
+            ->where('status','aktif')
+            ->count();
+
+            $konsultasi = DB::table('konsultasi_dosenwali')
+            ->select('*')
+            ->count();
+
+            $non_konsultasi = DB::table('non_konsultasi')
+            ->select('*')
+            ->count();
+
+            $hukuman = DB::table('hukuman')
+            ->select('*')
+            ->count();
+
+            $total_konsultasi = DB::table('konsultasi_dosenwali')
+            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan,MONTH(tanggalkonsultasi) as bln'))
+            ->groupBy('bln')
+            ->orderBy('bln','DESC')
+            ->get();
+
+            $start=Carbon::now()->month-3;
+            $end=Carbon::now()->month;
+            $total_konsultasi_sekarang = DB::table('konsultasi_dosenwali')
+            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan,MONTH(tanggalkonsultasi) as bln'))
+            ->whereBetween(DB::raw('MONTH(tanggalkonsultasi)'),[$start,$end])
+            ->whereYear('tanggalkonsultasi','=',Carbon::now()->year)
+            ->groupBy('bln')
+            ->orderBy('bln','DESC')
+            ->get();
+
+            $aktifitaskonsultasi = DB::table('konsultasi_dosenwali')
+            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan,MONTH(tanggalkonsultasi) as bln'))
+            ->whereYear('tanggalkonsultasi','=',Carbon::now()->year)
+            ->groupBy('bln')
+            ->orderBy('bln','DESC')
+            ->get();
+
+            $tahun_sekarang=Carbon::now()->year;
+
+            $total_hukuman = DB::table('hukuman')
+            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalinput) as bulan,MONTH(tanggalinput) as bln'))
+            ->groupBy('bln')
+            ->orderBy('bln','DESC')
+            ->get();
+
+            $hukuman_berlangsung = DB::table('hukuman')
+            ->select('*',DB::raw('COUNT(*) as total, MONTHNAME(tanggalinput) as bulan,MONTH(tanggalinput) as bln'))
+            ->whereDate('masaberlaku','>=',Carbon::now())
+            ->where('status',1)
+            ->groupBy('bln')
+            ->orderBy('bln','DESC')
+            ->get();
+
+            $hukuman_selesai = DB::table('hukuman')
+            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalinput) as bulan,MONTH(tanggalinput) as bln'))
+            ->whereDate('masaberlaku','<=',Carbon::now())
+            ->where('status',2)
+            ->groupBy('bln')
+            ->orderBy('bln','DESC')
+            ->get();
+
+            return view('home_ketuajurusan', compact('mahasiswa','mahasiswa_aktif','konsultasi','non_konsultasi','hukuman','total_konsultasi','total_konsultasi_sekarang','aktifitaskonsultasi','tahun_sekarang','total_hukuman','hukuman_berlangsung','hukuman_selesai'));
+        }
+        else
+        {
+            return redirect('/');  
+        }
     }
 
 }

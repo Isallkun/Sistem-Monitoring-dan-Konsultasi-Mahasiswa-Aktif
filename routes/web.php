@@ -225,6 +225,19 @@ Route::group(['prefix' => '/' ], function()
 
 	});
 
+	Route::group(['prefix' => 'ketuajurusan'], function()
+	{
+		//localhost:8000/admin/(halaman home ketua jurusan)
+		Route::get('/', 'HomeController@index_ketuajurusan');		
+
+		//1. DATA MAHASISWA
+		//localhost:8000/dosen/data/mahasiswa
+		Route::get('submaster/mahasiswa', 'SubmasterMahasiswaController@daftarmahasiswa');
+		//Menampilkan Detail Mahasiswa
+		Route::get('submaster/mahasiswa/detail/{id}', 'SubmasterMahasiswaController@detailmahasiswa')->name('detail');
+		
+	});
+
 });
 
 
