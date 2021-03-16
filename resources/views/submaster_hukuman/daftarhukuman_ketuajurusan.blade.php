@@ -1,5 +1,5 @@
 <!--Wajib untuk inisialisasi file views/layouts/appadmin-->
-@extends('layouts.appmahasiswa')
+@extends('layouts.appketuajurusan')
 
 @push('styles')
   <!-- Untuk menambahkan style baru -->
@@ -12,12 +12,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Daftar Data Hukuman</h1>
+            <h1 class="m-0 text-dark">Daftar Data Hukuman Mahasiswa</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{url('mahasiswa')}}">Home</a></li>
-              <li class="breadcrumb-item active">Daftar Data Hukuman</li>
+              <li class="breadcrumb-item"><a href="{{url('ketuajurusan')}}">Home</a></li>
+              <li class="breadcrumb-item active">Daftar Data Hukuman Mahasiswa</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -33,44 +33,10 @@
         </ul>
       </div>
     @endif
-
-    @if (\Session::has('Success'))
-      <div class="alert alert-success alert-block">
-        <ul>
-            <li>{!! \Session::get('Success') !!}</li>
-        </ul>
-      </div>
-    @endif
-
-    @if (\Session::has('Error'))
-      <div class="alert alert-danger alert-block">
-        <ul>
-            <li>{!! \Session::get('Error') !!}</li>
-        </ul>
-      </div>
-    @endif
-    
     
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-         @if(!empty($notifikasi_hukuman))
-          <div class="alert alert-info">
-            <p style="font-weight: bold">Informasi Masa Berlaku Hukuman: </p>
-            @foreach($notifikasi_hukuman as $no => $d)
-              @if($d->total <= "30" AND $d->total > "0")
-                <ul>
-                  <li>
-                    {{$d->namamahasiswa}} ({{$d->nrpmahasiswa}}) memiliki masa berlaku hukuman kurang dari {{$d->total}} Hari.
-                    <br>
-                    ID: {{$d->idhukuman}} &nbsp [Keterangan: {{$d->keterangan}}]
-                  </li>
-                </ul>
-              @endif
-            @endforeach
-          </div>
-        @endif
-
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Data Hukuman</h3>
@@ -79,12 +45,13 @@
             <table id="tabel_hukuman" class="table table-bordered table-striped">
               <thead>
                 <tr> 
-                  <th width="1%">Nama Dosen</th>
                   <th width="1%">Tanggal Input</th>
+                  <th width="1%">Nama Dosen</th>
                   <th width="1%">Keterangan</th>
                   <th width="1%">Tanggal Konfirmasi</th>
                   <th width="1%">Status</th>
                   <th width="1%">Penilaian</th>
+                  <th width="1%">Mahasiswa</th>
                   <th width="1%">Masa Berlaku</th>
                   <th width="1%">Unggah Berkas</th>
                 </tr>
@@ -92,8 +59,8 @@
               <tbody>
                  @foreach($data_hukuman as $no => $d)
                 <tr>
-                  <td>{{$d->namadosen}}</td>
                   <td>{{$d->tanggalinput}}</td>
+                  <td>{{$d->namadosen}} ({{$d->npkdosen}})</td>
                   <td>{{$d->keterangan}}</td>
                   <td>{{$d->tanggalkonfirmasi}}</td>
                   <td>
@@ -130,12 +97,13 @@
                       @endif
                     @endif
                   </td>
+                  <td>{{$d->namamahasiswa}} ({{$d->nrpmahasiswa}})</td>
                   <td>{{$d->masaberlaku}}</td>
                   <td>
                     @if($d->status == "0")
-                      <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#upload_{{$d->idhukuman}}">Upload</a>
+                      -
                     @else
-                      <form action="{{url('mahasiswa/data/hukumanmahasiswa/prosesunduh/'.$d->idhukuman)}}" role="form" method="post">
+                      <form action="{{url('ketuajurusan/submaster/hukuman/prosesunduh/'.$d->idhukuman)}}" role="form" method="post">
                         {{ csrf_field() }}
                         <input type="hidden" name="nrpmahasiswa" value="{{$d->nrpmahasiswa}}">
                         <button type="submit" class="btn btn-link">Lihat Berkas</button>
@@ -148,51 +116,6 @@
             </table>  
           </div>
         </div>
-        
-
-        @foreach($data_hukuman as $d)
-        <div id="upload_{{$d->idhukuman}}" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-            <!-- konten modal-->
-            <div class="modal-content">
-              <!-- heading modal -->
-              <div class="modal-header">
-                <h4 class="modal-title">Unggah Berkas Hukuman</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </div>
-              <!-- body modal -->
-              <form action="{{url('mahasiswa/data/hukumanmahasiswa/prosesunggah/'.$d->idhukuman)}}" role="form" method="post" enctype="multipart/form-data">
-                {{ csrf_field() }}
-                <input type="hidden" name="nrpmahasiswa" value="{{$d->nrpmahasiswa}}">
-                <div class="modal-body">
-                  <p style="text-align: left;text-transform: uppercase;">
-                    <b>{{$d->namamahasiswa}} - {{$d->nrpmahasiswa}}</b>
-                  </p>
-                
-                  <p style="text-align: left;">
-                  ID: {{$d->idhukuman}} <br>
-                  {{$d->keterangan}}
-                  </p>
-                  <!--UNTUK UPLOAD -->
-                  
-                  <div class="unggah">
-                    Pilih File: <input type="file" name="berkas[]" multiple="multiple" required>
-                  </div>
-                  <br>
-                  <p style="text-transform: uppercase; font-weight: bold;font-size: 12px; color: red">* maksimal upload: 2 Berkas</p>
-                </div>
-
-                
-                <!-- footer modal -->
-                <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        @endforeach
-
       </div>
     </section>
 @endsection

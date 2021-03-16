@@ -73,7 +73,7 @@ class DataHukumanController extends Controller
             ->groupBy('idhukuman')
             ->whereNotNull('masaberlaku')
             ->get();
-
+ 
         	return view('data_hukuman.daftarhukuman_dosen', compact('data_hukuman','notifikasi_hukuman'));
         }
         else
@@ -353,12 +353,11 @@ class DataHukumanController extends Controller
             ->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
-            ->where('npkdosen', $mahasiswa[0]->nrpmahasiswa)
+            ->where('nrpmahasiswa', $mahasiswa[0]->nrpmahasiswa)
             ->orderby('tanggalinput','DESC')
             ->groupBy('idhukuman')
             ->whereNotNull('masaberlaku')
             ->get();
-
 
             return view('data_hukuman.daftarhukuman_mahasiswa', compact('data_hukuman','notifikasi_hukuman'));
         }
@@ -400,12 +399,12 @@ class DataHukumanController extends Controller
                     }
 
                     //Lakukan update data hukuman
-                    $pengguna = DB::table('hukuman')
-                        ->where('idhukuman',$id)
-                        ->update([
-                            'status' => 1,
-                            'tanggalkonfirmasi' => Carbon::now(),
-                            'masaberlaku' =>Carbon::now()->addMonths(6)
+                    $hukuman = DB::table('hukuman')
+                            ->where('idhukuman',$id)
+                            ->update([
+                                'status' => 1,
+                                'tanggalkonfirmasi' => Carbon::now(),
+                                'masaberlaku' =>Carbon::now()->addMonths(6)
                     ]);
 
                     return redirect("mahasiswa/data/hukumanmahasiswa")->with(['Success' => 'Berhasil mengunggah berkas hukuman']);

@@ -97,30 +97,30 @@
           </li>
           
           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+            <a href="{{url('ketuajurusan/submaster/konsultasi')}}" class="nav-link">
               <i class="nav-icon fas fa-calendar"></i>
               <p>
-                #Konsultasi
+                Data Konsultasi
                 <i class="fas fa-angle-right right"></i>
               </p>
             </a>
           </li>
 
           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+            <a href="{{url('ketuajurusan/submaster/nonkonsultasi')}}" class="nav-link">
               <i class="nav-icon fas fa-calendar"></i>
               <p>
-                #Non-Konsultasi
+                Data Non-Konsultasi
                 <i class="fas fa-angle-right right"></i>
               </p>
             </a>
           </li>
 
           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
+            <a href="{{url('ketuajurusan/submaster/hukuman')}}" class="nav-link">
               <i class="nav-icon fas fa-calendar"></i>
               <p>
-                #Hukuman
+                Data Hukuman
                 <i class="fas fa-angle-right right"></i>
               </p>
             </a>

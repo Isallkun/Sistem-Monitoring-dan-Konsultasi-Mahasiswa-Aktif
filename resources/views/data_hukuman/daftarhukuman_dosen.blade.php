@@ -62,9 +62,14 @@
             <p style="font-weight: bold">Informasi Masa Berlaku Hukuman: </p>
             @foreach($notifikasi_hukuman as $no => $d)
               @if($d->total <= "30" AND $d->total > "0")
-                {{$no+1}}. {{$d->namamahasiswa}} ({{$d->nrpmahasiswa}}) memiliki masa berlaku hukuman kurang dari {{$d->total}} Hari.
+                <ul>
+                  <li>
+                    {{$d->namamahasiswa}} ({{$d->nrpmahasiswa}}) memiliki masa berlaku hukuman kurang dari {{$d->total}} Hari.
+                    <br>
+                    ID: {{$d->idhukuman}} &nbsp [Keterangan: {{$d->keterangan}}]
+                  </li>
+                </ul>
               @endif
-            <br>
             @endforeach
           </div>
         @endif

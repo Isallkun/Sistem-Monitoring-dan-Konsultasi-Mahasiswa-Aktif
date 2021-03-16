@@ -232,10 +232,24 @@ Route::group(['prefix' => '/' ], function()
 
 		//1. DATA MAHASISWA
 		//localhost:8000/dosen/data/mahasiswa
-		Route::get('submaster/mahasiswa', 'SubmasterMahasiswaController@daftarmahasiswa');
+		Route::get('submaster/mahasiswa', 'SubmasterReportController@daftarmahasiswa');
 		//Menampilkan Detail Mahasiswa
-		Route::get('submaster/mahasiswa/detail/{id}', 'SubmasterMahasiswaController@detailmahasiswa')->name('detail');
-		
+		Route::get('submaster/mahasiswa/detail/{id}', 'SubmasterReportController@detailmahasiswa')->name('detail');
+
+		//2. DATA KONSULTASI
+		//localhost:8000/dosen/data/konsultasi
+		Route::get('submaster/konsultasi','SubmasterReportController@daftarkonsultasi');
+
+		//3. DATA NON KONSULTASI
+		//localhost:8000/dosen/data/non konsultasi
+		Route::get('submaster/nonkonsultasi','SubmasterReportController@daftarnonkonsultasi');
+
+		//4. DATA HUKUMAN
+		//localhost:8000/dosen/data/hukuman
+		Route::get('submaster/hukuman','SubmasterReportController@daftarhukuman');
+		//Unduh berkas
+		Route::post('submaster/hukuman/prosesunduh/{id}', 'SubmasterReportController@unduhberkas_proses');
+
 	});
 
 });
