@@ -326,6 +326,12 @@ class HomeController extends Controller
         ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
         ->count();
 
+        $nonkonsultasi_berikutnya = DB::table('non_konsultasi')
+            ->join('dosen','dosen.npkdosen','=', 'non_konsultasi.dosen_npkdosen')
+            ->where('non_konsultasi.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->wheredate('non_konsultasi.tanggalpertemuan','>=',Carbon::now())
+            ->count();
+
 
         $ips1_mahasiswa = DB::table('kartu_studi')
         ->select(DB::raw('COUNT(*) as total, round((ips),0) as ips, nrpmahasiswa'))
@@ -425,7 +431,7 @@ class HomeController extends Controller
         ->orderBy('bln','DESC')
         ->get();
 
-        return view('home_dosen', compact('mahasiswa','hukuman','konsultasi','konsultasi_berikutnya','results_ips','results_ipk','results_ipkm','matakuliah','data_nisbi','kondisi_mahasiswa','total_konsultasi','total_konsultasi_sekarang'));
+        return view('home_dosen', compact('mahasiswa','hukuman','konsultasi','konsultasi_berikutnya','nonkonsultasi_berikutnya','results_ips','results_ipk','results_ipkm','matakuliah','data_nisbi','kondisi_mahasiswa','total_konsultasi','total_konsultasi_sekarang'));
     }
 
     public function index_mahasiswa()
