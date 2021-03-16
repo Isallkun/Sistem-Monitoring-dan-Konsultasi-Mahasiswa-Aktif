@@ -61,46 +61,32 @@ class ProfilDosenController extends Controller
             $password_lama = $request->get('password_lama');
             $password_baru = $request->get('password_baru');
             $password_re_baru = $request->get('password_re-baru');
-
-
-            if($namalengkap)
+           
+            if($password_lama == $request->get('password'))
             {
-                $dosen = DB::table('dosen') 
-                ->join('users','users.username','=','dosen.users_username')
-                ->where('npkdosen',$request->get('npk_dosen'))
-                ->update([    
-                    'namadosen'=>$namalengkap
-                ]);    
-
-                $message=["Success","Berhasil Mengubah Profil Pengguna"];
-            }
-            else
-            {
-                if($password_lama == $request->get('password'))
+                if($password_baru == $password_re_baru)
                 {
-                    if($password_baru == $password_re_baru)
-                    {
-                        $encrypted = Crypt::encryptString($password_baru);
+                    $encrypted = Crypt::encryptString($password_baru);
 
-                        $dosen = DB::table('dosen') 
-                        ->join('users','users.username','=','dosen.users_username')
-                        ->where('npkdosen',$request->get('npk_dosen'))
-                        ->update([    
-                            'password'=>$encrypted
-                        ]); 
+                    $dosen = DB::table('dosen') 
+                    ->join('users','users.username','=','dosen.users_username')
+                    ->where('npkdosen',$request->get('npk_dosen'))
+                    ->update([    
+                        'password'=>$encrypted
+                    ]); 
 
-                        $message=["Success","Berhasil Mengubah Password Pengguna"];
-                    }
-                    else
-                    {
-                        $message=["Error","Harap Periksa Ulang Password Baru dan Konfirmasi Password yang di Inputkan"];
-                    }
+                    $message=["Success","Berhasil Mengubah Password Pengguna"];
                 }
                 else
                 {
-                    $message=["Error","Password Lama Yang Anda Masukan Salah"];
+                    $message=["Error","Harap Periksa Ulang Password Baru dan Konfirmasi Password yang di Inputkan"];
                 }
             }
+            else
+            {
+                $message=["Error","Password Lama Yang Anda Masukan Salah"];
+            }
+            
 
 	        return redirect('dosen/profil/profildosen')->with([$message[0] => $message[1]]);
     	}

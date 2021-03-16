@@ -75,8 +75,6 @@
                   <li class="list-group-item">
                     <b>Nama Lengkap</b> 
                     <a class="float-right">{{$u->namadosen}} </a>
-                    <br>
-                    <a href="#" class="float-right" style="text-decoration: underline;" data-toggle="modal" data-target="#ubahData_{{$u->npkdosen}}">ubah</a>
                   </li>
 
                   <li class="list-group-item">
@@ -123,41 +121,8 @@
           </div>
         </div>
         
+      
         @foreach($user_dosen as $d)
-        <div id="ubahData_{{$d->npkdosen}}" class="modal fade" role="dialog">
-          <div class="modal-dialog">
-            <!-- konten modal-->
-            <div class="modal-content">
-              <!-- heading modal -->
-              <div class="modal-header">
-                <h4 class="modal-title">Ubah Data Profil Pengguna</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </div>
-              <!-- body modal -->
-              <div class="modal-body">
-                
-                <form action="{{url('dosen/profil/profildosen/ubahproses')}}" role="form" method="post" enctype="multipart/form-data">
-                {{ csrf_field() }}  
-                  <input type="hidden" name="npk_dosen" value="{{$d->npkdosen}}">
-
-                  <div class="form-group">
-                    <label for="exampleInputNamaLengkap">Nama Lengkap</label>
-                    <input type="text" class="form-control" id="exampleInputNamaLengkap" name="namalengkap" placeholder="Enter Nama Lengkap" value="{{$d->namadosen}}" required>
-                  </div>
-
-                 <button type="submit" class="btn btn-success float-right">Simpan</button>
-                </form>
-              
-              </div>
-              <!-- footer modal -->
-              <div class="modal-footer">
-              </div>
-            </div>
-          </div>
-        </div>
-        @endforeach
-        
-         @foreach($user_dosen as $d)
         <div id="ubahPassword_{{$d->npkdosen}}" class="modal fade" role="dialog">
           <div class="modal-dialog">
             <!-- konten modal-->

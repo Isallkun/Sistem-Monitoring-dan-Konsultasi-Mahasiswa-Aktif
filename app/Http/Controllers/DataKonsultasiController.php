@@ -412,7 +412,9 @@ class DataKonsultasiController extends Controller
             ->orderBy('konsultasiselanjutnya','ASC')
             ->get();
 
-            return view('data_konsultasi.daftarkonsultasi_mahasiswa',compact('data_konsultasi','semua_konsultasi','konsultasi_berikutnya'));
+            $tanggal_sekarang = Carbon::now();
+
+            return view('data_konsultasi.daftarkonsultasi_mahasiswa',compact('data_konsultasi','semua_konsultasi','konsultasi_berikutnya','tanggal_sekarang'));
         }
         else
         {

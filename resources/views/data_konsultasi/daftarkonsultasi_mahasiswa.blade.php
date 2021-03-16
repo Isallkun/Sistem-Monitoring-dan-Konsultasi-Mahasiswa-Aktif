@@ -57,44 +57,7 @@
           </div>
         @endif
 
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Data Konsultasi (Menunggu Konfirmasi)</h3>
-          </div>  
-          <div class="card-body">
-            <table id="tabel_konsultasi_menunggu" class="table table-bordered table-striped">
-              <thead>
-                <tr> 
-                  <th width="1%">No.</th>
-                  <th width="1%">Tanggal</th>
-                  <th width="1%">Tahun Akademik</th>
-                  <th width="1%">Topik</th>
-                  <th width="1%">Konsultasi Selanjutnya</th>
-                  <th width="1%">Konfirmasi</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($data_konsultasi as $no => $dk)
-                <tr>
-                  <td>{{$no+1}}</td>
-                  <td>{{$dk->tanggalkonsultasi}}</td>
-                  <td>{{$dk->semester}} {{$dk->tahun}}</td>
-                  <td>{{$dk->namatopik}}</td>
-                  <td>{{$dk->konsultasiselanjutnya}}</td>
-                  <td>
-                    @if($dk->konfirmasi == "0")
-                    <a href="{{url('mahasiswa/data/konsultasimahasiswa/proseskonfirmasi/'.$dk->idkonsultasi)}}" class="btn btn-primary btn-sm">konfirmasi</a>
-                    @else
-                    <i class="fas fa-thumbs-up btn btn-success btn-sm"></i>
-                    @endif
-                  </td>
-                 
-                </tr>
-                @endforeach
-              </tbody>
-            </table>  
-          </div>
-        </div>
+        
 
         <div class="card">
           <div class="card-header">
@@ -111,6 +74,7 @@
                   <th width="1%">Konsultasi Selanjutnya</th>
                   <th width="1%">Konfirmasi</th>
                   <th width="1%">Detail</th>
+                  <th width="1%">Konfirmasi</th>
                 </tr>
               </thead>
               <tbody>
@@ -130,6 +94,17 @@
                   </td>
                   <td>
                     <a href="#" class="fas fa-eye" data-toggle="modal" data-target="#detailKonsultasi_{{$ds->idkonsultasi}}"></a>
+                  </td>
+                  <td>
+                    @if($ds->konfirmasi == "0")
+                      @if($tanggal_sekarang <= $ds->konsultasiselanjutnya)
+                      <a href="#" class="btn btn-secondary btn-sm">Konfirmasi</a>
+                      @else
+                      <a href="{{url('mahasiswa/data/konsultasimahasiswa/proseskonfirmasi/'.$ds->idkonsultasi)}}" class="btn btn-primary btn-sm">konfirmasi</a>
+                      @endif
+                    @else
+                      -
+                    @endif
                   </td>
                 </tr>
                 @endforeach
