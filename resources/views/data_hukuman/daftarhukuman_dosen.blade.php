@@ -131,7 +131,7 @@
                   </td>
                   
                   <td>
-                    <a href="{{url('dosen/data/hukuman/detailhukuman/'.$d->idhukuman)}}" class="fas fa-eye"></a>
+                    <a href="#" class="fas fa-eye" data-toggle="modal" data-target="#detail_{{$d->idhukuman}}"></a>
                   </td>
                   
                   <td>
@@ -149,6 +149,68 @@
             </table>  
           </div>
         </div>  
+
+        @foreach($data_hukuman as $d)
+        <div id="detail_{{$d->idhukuman}}" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- konten modal-->
+            <div class="modal-content">
+              <!-- heading modal -->
+              <div class="modal-header">
+                <h4 class="modal-title">Detail Hukuman Mahasiswa</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <!-- body modal -->
+              <div class="modal-body">
+                <p><b>ID Hukuman: {{$d->idhukuman}}</b></p>
+                <table class="table table-head-fixed text-nowrap">
+                  <tr>
+                    <th>Mahasiswa</th>
+                    <td>{{$d->namamahasiswa}} - {{$d->nrpmahasiswa}}</td>
+                  </tr>
+                  <tr>
+                    <th>Tanggal Input</th>
+                    <td>{{$d->tanggalinput}}</td>
+                  </tr>
+                  <tr>
+                    <th>Keterangan </th>
+                    <td>{{$d->keterangan}}</td>
+                  </tr>
+                  <tr>
+                    <th>Tanggal Konfirmasi </th>
+                    <td>{{$d->tanggalkonfirmasi}}</td>
+                  </tr>
+                  <tr>
+                    <th>Masa Berlaku </th>
+                    <td>{{$d->masaberlaku}}</td>
+                  </tr>
+                  <tr>
+                    <th>Download</th>
+                    <td>
+                      @if($d->status == "0")
+                      <p style="color: red">Berkas tidak tersedia</p>
+                      @else
+                      <form action="{{url('dosen/data/hukuman/prosesunduh/'.$d->idhukuman)}}" role="form" method="post">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="nrpmahasiswa" value="{{$d->nrpmahasiswa}}">
+                        <button type="submit" class="btn btn-info">Unduh berkas</button>
+                      </form>
+                      @endif
+                    </td>
+                    <br>
+                  </tr>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        @endforeach
+
+
+
       </div>
     </section>
 @endsection

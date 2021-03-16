@@ -82,36 +82,6 @@ class DataHukumanController extends Controller
         }
     }
 
-    public function detailhukuman($id)
-    {
-    	if(Session::get('dosen') != null)
-    	{
-            $data_hukuman = DB::table('hukuman')
-            ->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
-            ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
-            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
-            ->where('idhukuman', $id)
-            ->orderby('tanggalinput','DESC')
-            ->groupBy('idhukuman')
-            ->get();
-
-    		$data_detail_hukuman = DB::table('hukuman')
-        	->select("berkas_hukuman.*","hukuman.*",'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
-        	->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
-        	->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
-        	->join('berkas_hukuman','berkas_hukuman.hukuman_idhukuman','=','hukuman.idhukuman')
-        	->where('idhukuman',$id)
-        	->get();
-
-        	return view('data_hukuman.detailhukuman_dosen', compact('data_hukuman','data_detail_hukuman'));
-    	}
-    	else
-    	{
-    		return redirect("/");
-    	}
-    }
-
-
     public function ubahnilai($id)
     {
     	if(Session::get('dosen') != null)

@@ -149,8 +149,6 @@ Route::group(['prefix' => '/' ], function()
 		//Ubah penilaian hukuman
 		Route::get('data/hukuman/ubahnilai/{id}', 'DataHukumanController@ubahnilai');
 
-		//Tampilkan Berkas hukuman
-		Route::get('data/hukuman/detailhukuman/{id}', 'DataHukumanController@detailhukuman');
 		//Unduh Berkas
 		Route::post('data/hukuman/prosesunduh/{id}', 'DataHukumanController@unduhberkas_proses');
 

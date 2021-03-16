@@ -101,7 +101,7 @@
                   <td>{{$d->masaberlaku}}</td>
                   <td>
                     @if($d->status == "0")
-                      -
+                      <p style="color: red">Berkas tidak tersedia</p>
                     @else
                       <form action="{{url('ketuajurusan/submaster/hukuman/prosesunduh/'.$d->idhukuman)}}" role="form" method="post">
                         {{ csrf_field() }}
