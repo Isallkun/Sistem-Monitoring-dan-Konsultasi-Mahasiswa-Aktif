@@ -2,8 +2,8 @@
 <h3>{{$data['judul']}}</h3>
 
 <p style="font-family: times-new-roman;font-size: 13px">
-	Kepada mahasiswa {{$data['nama_mahasiswa']}} ({{$data['nrp_mahasiswa']}}), <br>
-	diberitahukan bahwa anda harus menemui bapak/ibu dosen {{$data['nama_dosen']}} ({{$data['npk_dosen']}}), dengan keterangan sebagai berikut: <br>
+	Kepada seluruh mahasiswa bimbingan Bpk/Ibu dosen {{$data['nama_dosen']}} ({{$data['npk_dosen']}}), <br>
+	diberitahukan bahwa anda harus menemui dosen wali, dengan keterangan sebagai berikut: <br>
 	Tanggal: {{$data['tanggal']}}
 	<br> 
 	Pesan:
