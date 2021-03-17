@@ -73,10 +73,15 @@
                     <label for="exampleInputMahasiswa">Mahasiswa</label>
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="mahasiswa" data-toggle="dropdown" id="exampleInputMahasiswa">
-                      <option value="">-- Pilih Mahasiswa --</option>
-                       @foreach($mahasiswa as $m)
-                        <option value="{{$m->nrpmahasiswa}}">{{$m->nrpmahasiswa}} - {{$m->namamahasiswa}}</option>
-                       @endforeach
+                      <optgroup label="Broadcast (email)">
+                        <option value="all_mahasiswa">Seluruh mahasiswa</option>
+                      </optgroup>
+                      
+                      <optgroup label="Private chat (whatsapp)">
+                        @foreach($mahasiswa as $m)
+                          <option value="{{$m->nrpmahasiswa}}">{{$m->nrpmahasiswa}} - {{$m->namamahasiswa}}</option>
+                        @endforeach
+                      </optgroup>
                     </select>
                   </div>
 
@@ -89,7 +94,7 @@
                     <label for="exampleInputPesan">Pesan</label>
                      <textarea class="form-control" name="pesan" id="exampleInputPesan" rows="3" placeholder="Enter Pesan"></textarea>
                   </div>
-
+                  
                   <!-- /.card-body -->
                   <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>

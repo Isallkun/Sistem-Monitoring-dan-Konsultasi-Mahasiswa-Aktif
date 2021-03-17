@@ -53,6 +53,7 @@ class DataNonKonsultasiController extends Controller
 
 
             $this->ubah_status();
+            
         	return view('data_nonkonsultasi.daftarnonkonsultasi_dosen', compact('data_non_konsultasi','non_konsultasi_berikutnya'));
         }
         else
@@ -93,9 +94,6 @@ class DataNonKonsultasiController extends Controller
             ->where('users.username',Session::get('dosen'))
             ->get();
 
-            $tanggalpertemuan= $request->get('tanggal_pertemuan');
-            $pesan = $request->get('pesan');
-            $mahasiswa = $request->get('mahasiswa');
 
             $this->validate($request,[
                 'mahasiswa' =>'required',
@@ -103,39 +101,71 @@ class DataNonKonsultasiController extends Controller
                 'pesan'=>'required|max:100',
             ]);
 
-			$tambah_nonkonsultasi= Non_konsultasi::insert([
-			    'tanggalinput'=> now(),
-			    'tanggalpertemuan'=> $tanggalpertemuan,
-			    'status'=>0,
-			    'pesan'=>$pesan,
-			    'mahasiswa_nrpmahasiswa'=>$mahasiswa,
-			    'dosen_npkdosen'=>$dosen[0]->npkdosen
-			]);
+
+            $tanggalpertemuan= $request->get('tanggal_pertemuan');
+            $pesan = $request->get('pesan');
+            $mahasiswa = $request->get('mahasiswa');
+
+            if($mahasiswa == 'all_mahasiswa')
+            {
+                $pengguna_mahasiswa= DB::table('mahasiswa')
+                ->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','mahasiswa.email','dosen.npkdosen','dosen.namadosen')
+                ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
+                ->where('dosen.npkdosen','=',$dosen[0]->npkdosen)
+                ->get();
+
+                $email_pengguna=array();
+                foreach ($pengguna_mahasiswa as $pm)
+                {
+                    $email_pengguna[]=$pm->email;
+                }
+
+                $data=[
+                    'judul' => 'Pengumuman Konsultasi Tidak Terjadwal',
+                    'nama_dosen' => $dosen[0]->namadosen,
+                    'npk_dosen' => $dosen[0]->npkdosen,
+                    'tanggal' =>$tanggalpertemuan,
+                    'pesan' => $pesan
+
+                ];
+                Mail::to($email_pengguna)->cc($dosen[0]->email)->send(new NonKonsultasiMail($data));
+
+                $pesan="Berhasil Melakukan Broadcast Pesan Ke Seluruh Mahasiswa";
+            }
+            else
+            {   
+                $tambah_nonkonsultasi= Non_konsultasi::insert([
+                    'tanggalinput'=> now(),
+                    'tanggalpertemuan'=> $tanggalpertemuan,
+                    'status'=>0,
+                    'pesan'=>$pesan,
+                    'mahasiswa_nrpmahasiswa'=>$mahasiswa,
+                    'dosen_npkdosen'=>$dosen[0]->npkdosen
+                ]);
 
 
-			$data_pengguna= DB::table('mahasiswa')
-			->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','mahasiswa.email','dosen.npkdosen','dosen.namadosen')
-			->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
-			->where('mahasiswa.nrpmahasiswa','=',$mahasiswa)
-			->get();
+                $data_pengguna= DB::table('mahasiswa')
+                ->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','mahasiswa.email','mahasiswa.telepon','dosen.npkdosen','dosen.namadosen')
+                ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
+                ->where('mahasiswa.nrpmahasiswa','=',$mahasiswa)
+                ->get();
 
-			$data=array();
-			foreach ($data_pengguna as $d)
-			{
-				$data=[
-					'judul'=> 'Pengumuman Non-Konsultasi Mahasiswa',
-					'nama_mahasiswa'=> $d->namamahasiswa,
-					'nrp_mahasiswa'=>$d->nrpmahasiswa,
-					'email_mahasiswa'=>$d->email,
-					'nama_dosen'=>$d->namadosen,
-					'npk_dosen' =>$d->npkdosen,
-					'tanggal'=>$tanggalpertemuan,
-					'pesan'=>$pesan	
-				];
-			}
-			Mail::to($data['email_mahasiswa'])->send(new NonKonsultasiMail($data));
+                $substring_phone = substr($data_pengguna[0]->telepon,1);
 
-    		return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Berhasil Menambahkan Data Non-Konsultasi Mahasiswa ('. $mahasiswa.')']);
+                $informasi="Informasi%20Konsultasi%20Tidak%20Terjadwal,";
+                $url ="https://api.whatsapp.com/send?phone=62".$substring_phone.
+                      "&text=".$informasi."%0A".
+                      "kepada%20mahasiswa%20".$data_pengguna[0]->namamahasiswa."%20(".$data_pengguna[0]->nrpmahasiswa."),%20diberitahukan%20bahwa%20ada%20hal%20penting%20yang%20ingin%20disampaikan%20kepada%20anda,%20dengan%20keterangan%20sebagai%20berikut:%0A".
+                      "Tanggal%20Pertemuan:%20".$tanggalpertemuan."%0A".
+                      "Pesan:%20".$pesan."%0A".
+                      "Atas%20perhatiannya%20kami%20sampaikan%20terima%20kasih.%0A%0A".
+                      "Dari:%20".$dosen[0]->namadosen."%20(".$dosen[0]->npkdosen.")";
+
+                $pesan='Berhasil Menambahkan Data Non-Konsultasi Mahasiswa ('. $mahasiswa.')';
+            }
+
+
+    		return redirect('dosen/data/nonkonsultasi')->with(['Success' => $pesan]);
     	}
     	catch (QueryException $e)
     	{
@@ -167,6 +197,11 @@ class DataNonKonsultasiController extends Controller
     {
     	try
         {
+            $dosen = DB::table('users')
+            ->join('dosen','dosen.users_username','=','users.username')
+            ->where('users.username',Session::get('dosen'))
+            ->get();
+            
             $this->validate($request,[
                 'tanggal_pertemuan'=>'required|after:today',
                 'pesan'=>'required|max:100',
@@ -180,28 +215,24 @@ class DataNonKonsultasiController extends Controller
             ]);
 
             $data_pengguna= DB::table('non_konsultasi')
-			->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','mahasiswa.email','dosen.npkdosen','dosen.namadosen')
+			->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','mahasiswa.telepon','dosen.npkdosen','dosen.namadosen')
 			->join('dosen','dosen.npkdosen','=','non_konsultasi.dosen_npkdosen')
 			->join('mahasiswa','mahasiswa.nrpmahasiswa','=','non_konsultasi.mahasiswa_nrpmahasiswa')
 			->where('non_konsultasi.idnonkonsultasi','=',$request->get('idnonkonsultasi'))
 			->get();
 			
-			$data=array();
-			foreach ($data_pengguna as $d)
-			{
-				$data=[
-					'judul'=> 'Re-Pengumuman Non-Konsultasi Mahasiswa',
-					'nama_mahasiswa'=> $d->namamahasiswa,
-					'nrp_mahasiswa'=>$d->nrpmahasiswa,
-					'email_mahasiswa'=>$d->email,
-					'nama_dosen'=>$d->namadosen,
-					'npk_dosen' =>$d->npkdosen,
-					'tanggal'=>$request->get('tanggal_pertemuan'),
-					'pesan'=> $request->get('pesan')
-				];
-			}
-			Mail::to($data['email_mahasiswa'])->send(new NonKonsultasiMail($data));
+            $substring_phone = substr($data_pengguna[0]->telepon,1);
 
+            $informasi="Re-Informasi%20Konsultasi%20Tidak%20Terjadwal,";
+            $url ="https://api.whatsapp.com/send?phone=62".$substring_phone.
+                  "&text=".$informasi."%0A".
+                  "kepada%20mahasiswa%20".$data_pengguna[0]->namamahasiswa."%20(".$data_pengguna[0]->nrpmahasiswa."),%20diberitahukan%20bahwa%20terdapat%20perubahan%20beberapa%20informasi%20yang%20ingin%20disampaikan%20kepada%20anda,%20dengan%20keterangan%20sebagai%20berikut:%0A".
+                  "Tanggal%20Pertemuan:%20".$request->get('tanggal_pertemuan')."%0A".
+                  "Pesan:%20".$request->get('pesan')."%0A".
+                  "Atas%20perhatiannya%20kami%20sampaikan%20terima%20kasih.%0A%0A".
+                  "Dari:%20".$dosen[0]->namadosen."%20(".$dosen[0]->npkdosen.")";
+            dd($url);
+               
             return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Berhasil Mengubah Data Non-Konsultasi (ID) '.$request->get('idnonkonsultasi')]);
         }
         catch(QueryException $e)

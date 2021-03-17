@@ -95,7 +95,7 @@
 
                   <div class="form-group">
                     <label for="exampleInputTelepon">Telepon</label>
-                    <input type="text" name="telepon" class="form-control" id="exampleInputTelepon" placeholder="Enter Telepon">
+                    <input type="text" name="telepon" class="form-control" id="exampleInputTelepon" placeholder="Enter Telepon (ex. 081233xxxxxx)">
                   </div>
 
                   <div class="form-group">
