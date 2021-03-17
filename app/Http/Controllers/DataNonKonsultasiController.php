@@ -231,7 +231,7 @@ class DataNonKonsultasiController extends Controller
                   "Pesan:%20".$request->get('pesan')."%0A".
                   "Atas%20perhatiannya%20kami%20sampaikan%20terima%20kasih.%0A%0A".
                   "Dari:%20".$dosen[0]->namadosen."%20(".$dosen[0]->npkdosen.")";
-            dd($url);
+            
                
             return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Berhasil Mengubah Data Non-Konsultasi (ID) '.$request->get('idnonkonsultasi')]);
         }
