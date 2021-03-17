@@ -172,6 +172,7 @@ class DataKonsultasiController extends Controller
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','konsultasi_dosenwali.thnakademik_idthnakademik')
             ->where('mahasiswa_nrpmahasiswa',$id)
             ->orderby('idkonsultasi','DESC')
+            ->limit(5)
             ->get();
 
             return view('data_konsultasi.rangkumankondisi_dosen', compact('konsultasi_mhs','durasi'));

@@ -102,6 +102,7 @@
             <h3 class="card-title">{{$konsultasi_mhs[0]->namamahasiswa}} ({{$konsultasi_mhs[0]->nrpmahasiswa}})</h3>
           </div>  
           <div class="card-body">
+
             <table class="table table-bordered table-striped">
               <thead>
                 <tr> 
@@ -127,11 +128,15 @@
               </tbody>
             </table>
             <br>
+            <p style="font-size: 12px">
+              Keterangan: <br>
+              Data konsutasi diambil dari 5 (lima) data konsultasi dosen wali terakhir
+            </p>
+            <br>
+
             <div class="float-sm-right">
-              
               <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#rating_{{$konsultasi_mhs[0]->nrpmahasiswa}}">
               Berikutnya</a>
-              
             </div>  
           </div>
         </div>
