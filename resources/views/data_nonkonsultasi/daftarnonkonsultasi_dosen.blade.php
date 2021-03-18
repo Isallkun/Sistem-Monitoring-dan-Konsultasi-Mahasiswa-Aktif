@@ -37,7 +37,10 @@
     @if (\Session::has('Success'))
       <div class="alert alert-success alert-block">
         <ul>
-            <li>{!! \Session::get('Success') !!}</li>
+            <li>
+              {!! \Session::get('Success') !!} <br>
+              <a href="{!! \Session::get('url') !!}" target="_blank" class="fab fa-whatsapp"> Click WhatsApp link!</a>
+            </li>
         </ul>
       </div>
     @endif

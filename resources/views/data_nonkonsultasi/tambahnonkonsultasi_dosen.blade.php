@@ -73,16 +73,11 @@
                   <div class="form-group">
                     <label for="exampleInputMahasiswa">Mahasiswa</label>
                     <br>
-                    <select class="btn btn-primary dropdown-toggle" name="mahasiswa" data-toggle="dropdown" id="exampleInputMahasiswa">
-                      <optgroup label="Broadcast (email)">
-                        <option value="all_mahasiswa">Seluruh mahasiswa</option>
-                      </optgroup>
-                      
-                      <optgroup label="Private chat (whatsapp)">
-                        @foreach($mahasiswa as $m)
-                          <option value="{{$m->nrpmahasiswa}}">{{$m->nrpmahasiswa}} - {{$m->namamahasiswa}}</option>
-                        @endforeach
-                      </optgroup>
+                    <select class="btn btn-primary dropdown-toggle" name="mahasiswa" data-toggle="dropdown" id="exampleInputMahasiswa">        
+                      <option value="">Pilih Mahasiswa</option>
+                      @foreach($mahasiswa as $m)
+                        <option value="{{$m->nrpmahasiswa}}">{{$m->nrpmahasiswa}} - {{$m->namamahasiswa}}</option>
+                      @endforeach
                     </select>
                   </div>
 
@@ -95,10 +90,15 @@
                     <label for="exampleInputPesan">Pesan</label>
                      <textarea class="form-control" name="pesan" id="exampleInputPesan" rows="3" placeholder="Enter Pesan"></textarea>
                   </div>
+
+                  <p style="font-family: times-new-roman; font-size: 13px; font-weight: bold;color: red;">
+                    *Keterangan: <br>
+                    Untuk pesan private yang diinputkan dalam menu "Non-Konsultasi" akan dikirim <br> melalui aplikasi whatsApp. 
+                  </p>
                   
                   <!-- /.card-body -->
                   <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary" >Submit</button>
                   </div>
                 </div>
               </form>
