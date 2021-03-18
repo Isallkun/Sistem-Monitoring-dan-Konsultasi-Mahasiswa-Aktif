@@ -12,7 +12,7 @@ use DB;
 use Session;
 use Carbon\Carbon;
 
-use App\Mail\NonKonsultasiMail;
+use App\Mail\BroadcastNonKonsultasiMail;
 use App\User;
 use App\Mahasiswa;
 use App\Dosen;
@@ -59,6 +59,59 @@ class DataNonKonsultasiController extends Controller
         else
         {
         	return redirect("/");
+        }
+    }
+
+    public function broadcast_proses(Request $request)
+    {
+        try
+        {
+            $dosen = DB::table('users')
+            ->join('dosen','dosen.users_username','=','users.username')
+            ->where('users.username',Session::get('dosen'))
+            ->get();
+
+
+            $this->validate($request,[
+                'judul'=>'required|max:50',
+                'tanggal_pertemuan'=>'required|after:today',
+                'keterangan'=>'required|max:100',
+            ]);
+
+            $pengguna_mahasiswa= DB::table('mahasiswa')
+            ->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','mahasiswa.email','dosen.npkdosen','dosen.namadosen')
+            ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
+            ->where('dosen.npkdosen','=',$dosen[0]->npkdosen)
+            ->get();
+
+            $judul = $request->get('judul');
+            $tanggalpertemuan= $request->get('tanggal_pertemuan');
+            $keterangan = $request->get('keterangan');
+            
+            $email_pengguna=array();
+            foreach ($pengguna_mahasiswa as $pm)
+            {
+                $email_pengguna[]=$pm->email;
+            }
+
+            $data=[
+                'judul' => $judul,
+                'nama_dosen' => $dosen[0]->namadosen,
+                'npk_dosen' => $dosen[0]->npkdosen,
+                'tanggal' =>$tanggalpertemuan,
+                'pesan' => $keterangan
+            ];
+            Mail::to($email_pengguna)->cc($dosen[0]->email)->send(new BroadcastNonKonsultasiMail($data));
+
+            
+
+            return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Pesan Broadcast Berhasil Dikirimkan']);
+        }
+        catch (QueryException $e)
+        {
+            $message= explode("in C:",$e);
+
+            return redirect('dosen/data/nonkonsultasi/tambah')->with(['Error' => 'Pesan Broadcast Gagal Dikirimkan <br> Pesan Kesalahan: '.$message[0]]);
         }
     }
 
@@ -164,7 +217,6 @@ class DataNonKonsultasiController extends Controller
                 $pesan='Berhasil Menambahkan Data Non-Konsultasi Mahasiswa ('. $mahasiswa.')';
             }
 
-
     		return redirect('dosen/data/nonkonsultasi')->with(['Success' => $pesan]);
     	}
     	catch (QueryException $e)
@@ -232,8 +284,9 @@ class DataNonKonsultasiController extends Controller
                   "Atas%20perhatiannya%20kami%20sampaikan%20terima%20kasih.%0A%0A".
                   "Dari:%20".$dosen[0]->namadosen."%20(".$dosen[0]->npkdosen.")";
             
-               
             return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Berhasil Mengubah Data Non-Konsultasi (ID) '.$request->get('idnonkonsultasi')]);
+
+         
         }
         catch(QueryException $e)
         {

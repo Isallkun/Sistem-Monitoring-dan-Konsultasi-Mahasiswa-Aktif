@@ -71,6 +71,8 @@
             <h3 class="card-title">Data Non-Konsultasi</h3>
           </div>  
           <div class="card-body">
+            <a style="float: right;" href="{{url('dosen/data/nonkonsultasi/broadcast')}}" class="btn btn-warning btn-sm fa fa-bullhorn" role="button"> Broadcast Informasi</a>
+            <br><br>
             <table id="tabel_nonkonsultasi" class="table table-bordered table-striped">
               <thead>
                 <tr> 

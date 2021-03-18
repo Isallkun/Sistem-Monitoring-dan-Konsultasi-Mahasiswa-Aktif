@@ -14,7 +14,7 @@ use App\Dosen;
 use App\Mahasiswa;
 use App\Non_konsultasi;
 
-class NonKonsultasiMail extends Mailable
+class BroadcastNonKonsultasiMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $data;
@@ -37,10 +37,7 @@ class NonKonsultasiMail extends Mailable
     public function build()
     {
         return $this->from($address = 'noreply@domain.com', $name = 'konsultasi.dosenwali@gmail.com')
-            ->subject('Informasi Non-Konsultasi Mahasiswa')
-            ->view('data_nonkonsultasi.nonkonsultasi_mailformat');
-
-
+                    ->subject('Informasi Konsultasi Tidak Terjadwal')
+                    ->view('data_nonkonsultasi.broadcast_nonkonsultasi_mailformat');
     }
 }
- 

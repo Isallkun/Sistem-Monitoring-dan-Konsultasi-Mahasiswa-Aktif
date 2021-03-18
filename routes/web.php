@@ -176,6 +176,12 @@ Route::group(['prefix' => '/' ], function()
 		//localhost:8000/dosen/data/non konsultasi
 		Route::get('data/nonkonsultasi','DataNonKonsultasiController@daftarnonkonsultasi');
 
+		//Broadcast Informasi
+		Route::get('data/nonkonsultasi/broadcast',function(){
+		   return View::make("data_nonkonsultasi.broadcast_nonkonsultasi_dosen");
+		});
+		Route::post('data/nonkonsultasi/prosesbroadcast', 'DataNonKonsultasiController@broadcast_proses');
+
 		//Tambah data non konsultasi
 		Route::get('data/nonkonsultasi/tambah', 'DataNonKonsultasiController@tambahnonkonsultasi');
 		Route::post('data/nonkonsultasi/prosestambah', 'DataNonKonsultasiController@tambahnonkonsultasi_proses');

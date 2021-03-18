@@ -68,6 +68,7 @@ class DataMahasiswaController extends Controller
             ->orderBy('mahasiswa_nrpmahasiswa','ASC')
             ->get();
 
+            // dd($kartu_studi);
             return view('data_mahasiswa.daftarmahasiswa_dosen', compact('mahasiswa'));
         }
         else
@@ -241,11 +242,9 @@ class DataMahasiswaController extends Controller
             ->join('mahasiswa','nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
             ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
+            ->whereIn('kartu_studi.thnakademik_idthnakademik', $whereinTahun)
             ->where('kartu_studi.mahasiswa_nrpmahasiswa',$id)
-            ->whereIn('kartu_studi.semester_idsemester', $whereinSemester)
-            ->orwhereIn('kartu_studi.thnakademik_idthnakademik', $whereinTahun)
             ->get();
-
 
             //5. Detail Konsultasi Mahasiswa
             $data_konsultasi = DB::table('konsultasi_dosenwali')

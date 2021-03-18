@@ -20,13 +20,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Tambah Data Non-Konsultasi</h1>
+            <h1>Broadcast Informasi Mahasiswa</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
               <li class="breadcrumb-item"><a href="{{url('dosen/data/nonkonsultasi')}}">Daftar Non-Konsultasi</a></li>
-              <li class="breadcrumb-item active">Tambah Data Non-Konsultasi</li>
+              <li class="breadcrumb-item active">Broadcast Informasi</li>
             </ol>
           </div>
         </div>
@@ -42,11 +42,11 @@
             <!-- jquery validation -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Form Input Data Non-Konsultasi</h3>
+                <h3 class="card-title">Form Input Data</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{url('dosen/data/nonkonsultasi/prosestambah')}}" role="form" method="post">
+              <form action="{{url('dosen/data/nonkonsultasi/prosesbroadcast')}}" role="form" method="post">
                 {{ csrf_field() }}
 
                 @if (count($errors) > 0)
@@ -68,22 +68,9 @@
                 @endif
                
                 <div class="card-body">
-               
-
                   <div class="form-group">
-                    <label for="exampleInputMahasiswa">Mahasiswa</label>
-                    <br>
-                    <select class="btn btn-primary dropdown-toggle" name="mahasiswa" data-toggle="dropdown" id="exampleInputMahasiswa">
-                      <optgroup label="Broadcast (email)">
-                        <option value="all_mahasiswa">Seluruh mahasiswa</option>
-                      </optgroup>
-                      
-                      <optgroup label="Private chat (whatsapp)">
-                        @foreach($mahasiswa as $m)
-                          <option value="{{$m->nrpmahasiswa}}">{{$m->nrpmahasiswa}} - {{$m->namamahasiswa}}</option>
-                        @endforeach
-                      </optgroup>
-                    </select>
+                    <label for="exampleInputJudul">Judul</label>
+                    <input type="text" name="judul" class="form-control" id="exampleInputJudul" placeholder="Enter Judul">
                   </div>
 
                   <div class="form-group">
@@ -92,10 +79,15 @@
                   </div>
                  
                   <div class="form-group">
-                    <label for="exampleInputPesan">Pesan</label>
-                     <textarea class="form-control" name="pesan" id="exampleInputPesan" rows="3" placeholder="Enter Pesan"></textarea>
+                    <label for="exampleInputKeterangan">Keterangan Tambahan</label>
+                     <textarea class="form-control" name="keterangan" id="exampleInputKeterangan" rows="3" placeholder="Enter Keterangan Tambahan"></textarea>
                   </div>
                   
+                  <br>
+                  <p style="font-family: times-new-roman; font-size: 13px; font-weight: bold;color: red;">
+                    *Keterangan: <br>
+                    Untuk seluruh pesan yang diinputkan dalam menu "broadcast informasi" akan dikirim melalui email <br> dan tidak tersimpan kedalam database. 
+                  </p>
                   <!-- /.card-body -->
                   <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>
