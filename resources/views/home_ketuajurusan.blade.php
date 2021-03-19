@@ -35,7 +35,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>{{$mahasiswa_aktif}} / {{$mahasiswa}}</h3>
+                <h3>{{$mahasiswa_aktif}} : {{$mahasiswa}}</h3>
 
                 <p>Total Mahasiswa </p>
               </div>

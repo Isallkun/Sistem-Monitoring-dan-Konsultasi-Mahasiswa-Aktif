@@ -498,13 +498,13 @@
         position: 'bottomRight',
         body: '<ul>'+
               '<li>Konsultasi Terjadwal (selanjutnya) <br> {{$notif_konsultasi_berikutnya}} &nbsp'+  
-                   '<a href="{{url('dosen/data/konsultasi')}}"> (Detail) </a>'+
+                   '<a href="{{url('dosen/data/konsultasi')}}"> [Detail] </a>'+
               '</li>'+
               '<li>Konsultasi Tidak Terjadwal (selanjutnya) <br> {{$notif_nonkonsultasi_berikutnya}} &nbsp'+  
-                   '<a href="{{url('dosen/data/nonkonsultasi')}}"> (Detail) </a>'+
+                   '<a href="{{url('dosen/data/nonkonsultasi')}}"> [Detail] </a>'+
               '</li>'+
               '<li>Hukuman Aktif Terbaru (7 hari terakhir) <br> {{$notif_hukumanaktif_terbaru}} &nbsp'+  
-                   '<a href="{{url('dosen/data/hukuman')}}"> (Detail) </a>'+
+                   '<a href="{{url('dosen/data/hukuman')}}"> [Detail] </a>'+
               '</li>'+
 
 

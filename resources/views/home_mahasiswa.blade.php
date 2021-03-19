@@ -4,6 +4,11 @@
 @push('styles')
   <!-- Untuk menambahkan style baru -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
+
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="{{url('asset/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="{{url('asset/plugins/toastr/toastr.min.css')}}">
 @endpush
 
 <!-- Isi dari yield -->
@@ -35,7 +40,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>{{$menunggu_konfirmasi}} / {{$konsultasi_mahasiswa}}</h3>
+                <h3>{{$konsultasi_setujui}} : {{$konsultasi_mahasiswa}}</h3>
 
                 <p>Konsultasi Dosen Wali</p>
               </div>
@@ -60,30 +65,15 @@
               <a href="{{url('mahasiswa/data/hukumanmahasiswa')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-              <div class="inner">
-                <h3>{{$konsultasi_berikutnya}}</h3>
-
-                <p>Jadwal Konsultasi</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-calendar"></i>
-              </div>
-                <a href="{{url('mahasiswa/data/konsultasimahasiswa')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
+        
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>{{$nonkonsultasi_berikutnya}}</h3>
+                <h3>{{$nonkonsultasi}}</h3>
 
-                <p>Jadwal Non-Konsultasi</p>
+                <p>Total Non-Konsultasi</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-alarm"></i>
@@ -149,4 +139,37 @@
 @push('scripts')
 <!-- Untuk Menambahkan script baru -->
 
+<!-- SweetAlert2 -->
+<script src="{{url('asset/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
+<!-- Toastr -->
+<script src="{{url('asset/plugins/toastr/toastr.min.js')}}"></script>
+
+<script type="text/javascript">
+  window.onload = function(event) {
+     $(document).Toasts('create', {
+        class: 'bg-dark', 
+        icon: 'fas fa-envelope fa-lg',
+        title: 'Instant Messages ',
+        subtitle: 'System',
+        position: 'bottomRight',
+        body: '<ul>'+
+              '</li>'+
+              '<li>Menunggu Konfirmasi Konsultasi Dosen Wali <br> {{$notif_konfirmasi_konsultasi}} &nbsp'+  
+                   '<a href="{{url('mahasiswa/data/konsultasimahasiswa')}}"> [Detail] </a>'+
+              '</li>'+
+              '<li>Konsultasi Terjadwal (selanjutnya) <br> {{$notif_konsultasi_berikutnya}} &nbsp'+  
+                   '<a href="{{url('mahasiswa/data/konsultasimahasiswa')}}"> [Detail] </a>'+
+              '</li>'+
+              '<li>Konsultasi Tidak Terjadwal (selanjutnya) <br> {{$notif_nonkonsultasi_berikutnya}} &nbsp'+  
+                   '<a href="{{url('mahasiswa/data/nonkonsultasimahasiswa')}}"> [Detail] </a>'+
+              '</li>'+
+              '<li>Hukuman Terbaru (dari dosen wali) <br> {{$notif_hukumaninput_terbaru}} &nbsp'+  
+                   '<a href="{{url('mahasiswa/data/hukumanmahasiswa')}}"> [Detail] </a>'+
+              '</li>'+
+
+
+              '</ul>'
+      })
+  };  
+</script>
 @endpush

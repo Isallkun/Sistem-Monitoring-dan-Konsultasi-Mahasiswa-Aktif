@@ -286,7 +286,6 @@ class HomeController extends Controller
             ->get();
             
 
-
             $notif_konsultasi_berikutnya = DB::table('konsultasi_dosenwali')
             ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
             ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
@@ -442,6 +441,7 @@ class HomeController extends Controller
         ->orderBy('bln','DESC')
         ->get();
 
+
         $notif_konsultasi_berikutnya = DB::table('konsultasi_dosenwali')
         ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
         ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
@@ -477,29 +477,22 @@ class HomeController extends Controller
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
             ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
             ->count();
+            $konsultasi_setujui = DB::table('konsultasi_dosenwali')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
+            ->where('konsultasi_dosenwali.konfirmasi', 1)
+            ->count();
 
             $hukuman_mahasiswa = DB::table('hukuman')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
             ->count();
 
-            $konsultasi_berikutnya = DB::table('konsultasi_dosenwali')
-            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
-            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
-            ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
-            ->count();
-
-            $nonkonsultasi_berikutnya = DB::table('non_konsultasi')
-            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=', 'non_konsultasi.mahasiswa_nrpmahasiswa')
+            $nonkonsultasi = DB::table('non_konsultasi')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','non_konsultasi.mahasiswa_nrpmahasiswa')
             ->where('non_konsultasi.mahasiswa_nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa )
-            ->wheredate('non_konsultasi.tanggalpertemuan','>=',Carbon::now())
             ->count();
 
-            $menunggu_konfirmasi = DB::table('konsultasi_dosenwali')
-            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
-            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
-            ->where('konsultasi_dosenwali.konfirmasi', 0)
-            ->count();
 
             $data_konsultasi_mhs = DB::table('konsultasi_dosenwali')
             ->join('topik_konsultasi','topik_konsultasi.idtopikkonsultasi','=','konsultasi_dosenwali.topik_idtopikkonsultasi')
@@ -511,8 +504,33 @@ class HomeController extends Controller
             ->where('konsultasi_dosenwali.konfirmasi', 1)
             ->orderBy('idkonsultasi','ASC')
             ->get();
+
+
+            $notif_konfirmasi_konsultasi = DB::table('konsultasi_dosenwali')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
+            ->where('konsultasi_dosenwali.konfirmasi', 0)
+            ->count();
+
+            $notif_konsultasi_berikutnya = DB::table('konsultasi_dosenwali')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
+            ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
+            ->count();
+
+            $notif_nonkonsultasi_berikutnya = DB::table('non_konsultasi')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=', 'non_konsultasi.mahasiswa_nrpmahasiswa')
+            ->where('non_konsultasi.mahasiswa_nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa )
+            ->wheredate('non_konsultasi.tanggalpertemuan','>=',Carbon::now())
+            ->count();
+
+            $notif_hukumaninput_terbaru = DB::table('hukuman')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=', 'hukuman.mahasiswa_nrpmahasiswa')
+            ->where('hukuman.mahasiswa_nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
+            ->where('hukuman.status',0)
+            ->count();
             
-            return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','hukuman_mahasiswa','konsultasi_berikutnya', 'menunggu_konfirmasi','data_konsultasi_mhs','nonkonsultasi_berikutnya'));
+            return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','konsultasi_setujui','hukuman_mahasiswa','nonkonsultasi','data_konsultasi_mhs','notif_konfirmasi_konsultasi','notif_konsultasi_berikutnya','notif_nonkonsultasi_berikutnya','notif_hukumaninput_terbaru'));
         }
         else
         {
