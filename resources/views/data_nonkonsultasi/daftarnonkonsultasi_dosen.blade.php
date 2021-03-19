@@ -40,6 +40,12 @@
             <li>
               {!! \Session::get('Success') !!} <br>
               <a href="{!! \Session::get('url') !!}" target="_blank" class="fab fa-whatsapp"> Click WhatsApp link!</a>
+
+              <script type="text/javascript">
+                window.onload = function(event) {
+                  window.open("{!! \Session::get('url') !!}", '_blank');
+                };  
+              </script>
             </li>
         </ul>
       </div>
