@@ -179,18 +179,16 @@ class HomeController extends Controller
             ->where('hukuman.dosen_npkdosen',$dosen[0]->npkdosen )
             ->count();
  
-            $konsultasi_berikutnya = DB::table('konsultasi_dosenwali')
+            $konsultasi = DB::table('konsultasi_dosenwali')
             ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
             ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
-            ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
             ->count();
-
-            $nonkonsultasi_berikutnya = DB::table('non_konsultasi')
+         
+            $nonkonsultasi = DB::table('non_konsultasi')
             ->join('dosen','dosen.npkdosen','=', 'non_konsultasi.dosen_npkdosen')
             ->where('non_konsultasi.dosen_npkdosen',$dosen[0]->npkdosen )
-            ->wheredate('non_konsultasi.tanggalpertemuan','>=',Carbon::now())
             ->count();
-           
+
             // Grafik IP mahasiswa berdasarkan range
             // IPS Mahasiswa
             $ips1_mahasiswa = DB::table('kartu_studi')
@@ -288,7 +286,27 @@ class HomeController extends Controller
             ->get();
             
 
-            return view('home_dosen', compact('mahasiswa','hukuman','nonkonsultasi_berikutnya','konsultasi_berikutnya','results_ips','results_ipk','results_ipkm','matakuliah','data_nisbi','kondisi_mahasiswa','total_konsultasi','total_konsultasi_sekarang'));
+
+            $notif_konsultasi_berikutnya = DB::table('konsultasi_dosenwali')
+            ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
+            ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
+            ->count();
+        
+            $notif_nonkonsultasi_berikutnya = DB::table('non_konsultasi')
+            ->join('dosen','dosen.npkdosen','=', 'non_konsultasi.dosen_npkdosen')
+            ->where('non_konsultasi.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->wheredate('non_konsultasi.tanggalpertemuan','>=',Carbon::now())
+            ->count();
+
+            $notif_hukumanaktif_terbaru = DB::table('hukuman')
+            ->join('dosen','dosen.npkdosen','=', 'hukuman.dosen_npkdosen')
+            ->where('hukuman.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->where('hukuman.status',1)
+            ->wheredate('hukuman.tanggalkonfirmasi','>=',Carbon::now()->subDays(7))
+            ->count();
+      
+            return view('home_dosen', compact('mahasiswa','hukuman','nonkonsultasi','konsultasi','results_ips','results_ipk','results_ipkm','matakuliah','data_nisbi','kondisi_mahasiswa','total_konsultasi','total_konsultasi_sekarang','notif_konsultasi_berikutnya','notif_nonkonsultasi_berikutnya','notif_hukumanaktif_terbaru'));
             
         }
         else

@@ -49,7 +49,6 @@ class DataKonsultasiController extends Controller
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
             ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
-            ->where('konsultasi_dosenwali.konfirmasi',1)
             ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
             ->orderBy('konsultasiselanjutnya','ASC')
             ->get();
@@ -408,7 +407,6 @@ class DataKonsultasiController extends Controller
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
             ->where('konsultasi_dosenwali.mahasiswa_nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa )
-            ->where('konsultasi_dosenwali.konfirmasi',1)
             ->wheredate('konsultasi_dosenwali.konsultasiselanjutnya','>=',Carbon::now())
             ->orderBy('konsultasiselanjutnya','ASC')
             ->get();

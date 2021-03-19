@@ -35,7 +35,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>{{$dosen_aktif}} / {{$dosen}}</h3>
+                <h3>{{$dosen_aktif}} : {{$dosen}}</h3>
 
                 <p>Total Dosen Aktif</p>
               </div>
@@ -50,7 +50,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>{{$mahasiswa_aktif}} / {{$mahasiswa}}</h3>
+                <h3>{{$mahasiswa_aktif}} : {{$mahasiswa}}</h3>
 
                 <p>Total Mahasiswa Aktif</p>
               </div>
@@ -88,7 +88,7 @@
               <div class="icon">
                 <i class="ion ion-archive"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('admin/master/konsultasi')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

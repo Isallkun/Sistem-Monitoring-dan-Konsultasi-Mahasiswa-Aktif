@@ -4,6 +4,11 @@
 @push('styles')
   <!-- Untuk menambahkan style baru -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
+  
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="{{url('asset/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="{{url('asset/plugins/toastr/toastr.min.css')}}">
 @endpush
 
 <!-- Isi dari yield -->
@@ -26,6 +31,7 @@
     </div>
     <!-- /.content-header -->
 
+  
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -65,9 +71,9 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>{{$konsultasi_berikutnya}}</h3>
+                <h3>{{$konsultasi}}</h3>
 
-                <p>Jadwal Konsultasi</p>
+                <p>Total Konsultasi</p>
               </div>
               <div class="icon">
                 <i class="ion ion-calendar"></i>
@@ -81,9 +87,9 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>{{$nonkonsultasi_berikutnya}}</h3>
+                <h3>{{$nonkonsultasi}}</h3>
 
-                <p>Jadwal Non-Konsultasi</p>
+                <p>Total Non-Konsultasi</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-alarm"></i>
@@ -155,7 +161,6 @@
                   @if(!empty($data_nisbi[0]->namamatakuliah))
                     {{$data_nisbi[0]->namamatakuliah}}
                   @endif
-                  
                 </p>
               </div>
 
@@ -223,6 +228,12 @@
 
 @push('scripts')
 <!-- Untuk Menambahkan script baru -->
+
+<!-- SweetAlert2 -->
+<script src="{{url('asset/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
+<!-- Toastr -->
+<script src="{{url('asset/plugins/toastr/toastr.min.js')}}"></script>
+
 <script>
   // Grafik IP
   $(function () {
@@ -307,7 +318,7 @@
       data: barChartData, 
       options: barChartOptions
     })
-  })
+  });
 
 
   //Grafik NISBI
@@ -320,8 +331,6 @@
       total.push({{$n->total}});
       label="{{$n->label}}";    
     @endforeach
-
-
 
     var barChartCanvas = $('#barChart2').get(0).getContext('2d')
     var barChartData = {
@@ -366,7 +375,7 @@
       data: barChartData, 
       options: barChartOptions
     })
-  })
+  });
 
 
   //Grafik Kondisi Mahasiswa
@@ -476,9 +485,33 @@
       data: areaChartData, 
       options: areaChartOptions
     })
-  })
+  });   
 
 
-   
+
+  window.onload = function(event) {
+     $(document).Toasts('create', {
+        class: 'bg-dark', 
+        icon: 'fas fa-envelope fa-lg',
+        title: 'Instant Messages ',
+        subtitle: 'System',
+        position: 'bottomRight',
+        body: '<ul>'+
+              '<li>Konsultasi Terjadwal (selanjutnya) <br> {{$notif_konsultasi_berikutnya}} &nbsp'+  
+                   '<a href="{{url('dosen/data/konsultasi')}}"> (Detail) </a>'+
+              '</li>'+
+              '<li>Konsultasi Tidak Terjadwal (selanjutnya) <br> {{$notif_nonkonsultasi_berikutnya}} &nbsp'+  
+                   '<a href="{{url('dosen/data/nonkonsultasi')}}"> (Detail) </a>'+
+              '</li>'+
+              '<li>Hukuman Aktif Terbaru (7 hari terakhir) <br> {{$notif_hukumanaktif_terbaru}} &nbsp'+  
+                   '<a href="{{url('dosen/data/hukuman')}}"> (Detail) </a>'+
+              '</li>'+
+
+
+              '</ul>'
+      })
+  };  
 </script>
+
+
 @endpush
