@@ -148,8 +148,8 @@
                       @endforeach
                     </select>
                   </div>
-                @endforeach
                 </div>
+                @endforeach
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>

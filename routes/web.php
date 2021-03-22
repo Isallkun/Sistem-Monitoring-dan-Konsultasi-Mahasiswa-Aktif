@@ -88,7 +88,25 @@ Route::group(['prefix' => '/' ], function()
 		Route::get('master/konsultasi/hapus/{id}', 'MasterKonsultasiController@hapuskonsultasi');
 
 
-		//5. MASTER NOTIFIKASI
+		//5. MASTER JENIS HUKUMAN
+		//localhost:8000/admin/jenishukuman
+		Route::get('master/jenishukuman', 'MasterJenisHukumanController@daftarjenishukuman');
+
+		//Tambah data jenis hukuman
+		Route::get('master/jenishukuman/tambah',function(){
+		   return View::make("master_jenishukuman.tambahjenishukuman_admin");
+		});
+		Route::post('master/jenishukuman/prosestambah', 'MasterJenisHukumanController@tambahjenishukuman_proses');
+
+		//Ubah data jenis hukuman
+		Route::get('master/jenishukuman/ubah/{id}', 'MasterJenisHukumanController@ubahjenishukuman');
+		Route::post('master/jenishukuman/ubahproses', 'MasterJenisHukumanController@ubahjenishukuman_proses');
+
+		//Hapus data jenis hukuman
+		Route::get('master/jenishukuman/hapus/{id}', 'MasterJenisHukumanController@hapusjenishukuman');
+
+
+		//6. MASTER NOTIFIKASI
 		//localhost:8000/admin/notifikasi
 		Route::get('master/notifikasi', 'MasterNotifikasiController@daftarnotifikasi');
 

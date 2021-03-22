@@ -131,7 +131,7 @@ class MasterKonsultasiController extends Controller
         }
     }
 
-     public function ubahkonsultasi($id)
+    public function ubahkonsultasi($id)
     {  
         if(Session::get('admin') != null)
         {
