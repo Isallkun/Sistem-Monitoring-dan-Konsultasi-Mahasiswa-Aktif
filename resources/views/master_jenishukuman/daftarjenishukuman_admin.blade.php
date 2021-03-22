@@ -67,7 +67,6 @@
                   <th width="1%">No.</th>
                   <th width="1%">Nama Hukuman</th>
                   <th width="1%">Kategori</th>
-                  <th width="1%">Keterangan</th>
                   <th width="1%">Action</th>
                 </tr>
               </thead>
@@ -85,8 +84,7 @@
                      <a href="#" class="btn btn-danger btn-sm">Kategori Berat</a>
                     @endif
                   </td>
-                  <td>{{$j->keterangan}}</td>
-                  
+                
                   <td>
                     <a href="{{url('admin/master/jenishukuman/ubah/'.$j->idjenishukuman)}}" class="btn btn-warning">Ubah</a>
                     

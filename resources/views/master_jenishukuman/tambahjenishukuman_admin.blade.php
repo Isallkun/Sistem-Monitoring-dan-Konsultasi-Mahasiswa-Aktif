@@ -85,10 +85,7 @@
                     </select>
                   </div>
                  
-                  <div class="form-group">
-                    <label for="exampleInputKeterangan">Keterangan</label>
-                    <textarea class="form-control" name="keterangan" id="exampleInputKeterangan" rows="3" placeholder="Enter Keterangan"></textarea>
-                  </div>
+
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

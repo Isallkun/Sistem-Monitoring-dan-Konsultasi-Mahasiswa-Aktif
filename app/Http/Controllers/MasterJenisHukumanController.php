@@ -40,20 +40,16 @@ class MasterJenisHukumanController extends Controller
         {
             $this->validate($request,[
                 'namahukuman' =>'required|max:50',
-                'kategori' =>'required',
-                'keterangan' =>'required|max:100',
+                'kategori' =>'required'
             ]);
 
 
             $namahukuman= $request->get('namahukuman');
             $kategori = $request->get('kategori');
-            $keterangan = $request->get('keterangan');
-           
 
             $tambahdata_jenishukuman= Jenis_Hukuman::insert([
                 'namahukuman'=> $namahukuman,
-                'kategori'=>$kategori,
-                'keterangan'=>$keterangan,
+                'kategori'=>$kategori
             ]);
 
             return redirect('admin/master/jenishukuman')->with(['Success' => 'Berhasil Menambahkan Data']);
@@ -91,8 +87,7 @@ class MasterJenisHukumanController extends Controller
     	{
 			$this->validate($request,[
 			'namahukuman' =>'required|max:50',
-			'kategori' =>'required',
-			'keterangan' =>'required|max:100',
+			'kategori' =>'required'
 			]);
 
 
@@ -100,8 +95,7 @@ class MasterJenisHukumanController extends Controller
 			->where('idjenishukuman',$request->get('idjenishukuman'))
 			->update([
 			    'namahukuman' => $request->get('namahukuman'),
-			    'kategori' => $request->get('kategori'),
-			    'keterangan'=> $request->get('keterangan'), 
+			    'kategori' => $request->get('kategori') 
 			]);
 
             return redirect('admin/master/jenishukuman')->with(['Success' => 'Berhasil Mengubah Data Jenis Hukuman (ID) '.$request->get('idjenishukuman')]);

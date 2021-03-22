@@ -96,10 +96,6 @@
                     </select>
                   </div>
                  
-                  <div class="form-group">
-                    <label for="exampleInputKeterangan">Keterangan</label>
-                    <textarea class="form-control" name="keterangan" id="exampleInputKeterangan" rows="3" placeholder="Enter Keterangan">{{$j->keterangan}}</textarea>
-                  </div>
                 </div>
                 @endforeach
                 <!-- /.card-body -->
