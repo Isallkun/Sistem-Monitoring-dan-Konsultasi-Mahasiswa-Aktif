@@ -54,7 +54,7 @@
                   <li>
                     {{$d->namamahasiswa}} ({{$d->nrpmahasiswa}}) memiliki masa berlaku hukuman kurang dari {{$d->total}} Hari.
                     <br>
-                    ID: {{$d->idhukuman}} &nbsp [Keterangan: {{$d->keterangan}}]
+                    ID: {{$d->idhukuman}} &nbsp [Hukuman: {{$d->namahukuman}}]
                   </li>
                 </ul>
               @endif
@@ -74,7 +74,7 @@
                   <th width="1%">Mahasiswa</th>
                   <th width="1%">Jenis Kelamin</th>
                   <th width="1%">Angkatan</th>
-                  <th width="1%">Status</th>
+                  <th width="1%">Status Mahasiswa</th>
                   <th width="1%">Kontak</th>
                   <th width="1%">Action</th>
                 </tr>

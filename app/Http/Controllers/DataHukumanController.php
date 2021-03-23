@@ -386,7 +386,7 @@ class DataHukumanController extends Controller
             ->get();
 
             $data_hukuman = DB::table('hukuman')
-            ->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa', 'dosen.namadosen')
+            ->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa', 'dosen.namadosen','dosen.npkdosen')
             ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->where('nrpmahasiswa', $mahasiswa[0]->nrpmahasiswa)

@@ -447,6 +447,7 @@
                           <th>No.</th>
                           <th>Dosen</th>
                           <th>Tanggal Input Hukuman</th>
+                          <th>Hukuman</th>
                           <th>Keterangan</th>
                           <th>Status</th>
                           <th>Nilai</th>
@@ -460,6 +461,7 @@
                           <td>{{$no+1}}</td>
                           <td>{{$dh->namadosen}} ({{$dh->npkdosen}})</td>
                           <td>{{$dh->tanggalinput}}</td>
+                          <td>{{$dh->namahukuman}}</td>
                           <td>{{$dh->keterangan}}</td>
                           <td>
                             @if($dh->status != "0")

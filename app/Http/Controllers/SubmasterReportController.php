@@ -131,12 +131,12 @@ class SubmasterReportController extends Controller
         }
     }
 
-    public function daftarhukuman()
+    public function daftarhukuman ()
     {
         if(Session::get('ketuajurusan') != null)
         {
             $data_hukuman = DB::table('hukuman')
-            ->select('hukuman.*','mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','dosen.namadosen','dosen.npkdosen')
+            ->select('hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','dosen.npkdosen','dosen.namadosen')
             ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->orderby('tanggalinput','DESC')
@@ -150,6 +150,7 @@ class SubmasterReportController extends Controller
             return redirect("/");
         }
     }
+
 
     public function unduhberkas_proses(Request $request, $id)
     {

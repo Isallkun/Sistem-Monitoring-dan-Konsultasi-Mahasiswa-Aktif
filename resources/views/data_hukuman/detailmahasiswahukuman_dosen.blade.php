@@ -90,7 +90,7 @@
                   <th width="1%">Tanggal Input</th>
                   <th width="1%">Dosen Wali</th>
                   <th width="1%">Hukuman</th>
-                  <th width="1%">Status</th>
+                  <th width="1%">Status Hukuman</th>
                   <th width="1%">Nilai</th>
                   <th width="1%">Detail</th>
                   <th width="1%">Action</th>
@@ -127,13 +127,13 @@
                     <a href="#" class="btn btn-outline-dark btn-sm disabled">Belum ada nilai</a>
                   @else
                      @if($d->penilaian == "kurang")
-                      <a href="#" class="btn btn-danger btn-sm">Kurang</a>
+                      <a href="#" class="btn btn-outline-danger btn-sm">Kurang</a>
                     @elseif($d->penilaian == "cukup")
-                      <a href="#" class="btn btn-warning btn-sm">Cukup</a>
+                      <a href="#" class="btn btn-outline-warning btn-sm">Cukup</a>
                     @elseif($d->penilaian == "baik")
-                      <a href="#" class="btn btn-success btn-sm">Baik</a>
+                      <a href="#" class="btn btn-outline-success btn-sm">Baik</a>
                     @else
-                      <a href="#" class="btn btn-info btn-sm">Tidak ada nilai</a>
+                      <a href="#" class="btn btn-outline-info btn-sm">Tidak ada nilai</a>
                     @endif
                   @endif
                   </td>

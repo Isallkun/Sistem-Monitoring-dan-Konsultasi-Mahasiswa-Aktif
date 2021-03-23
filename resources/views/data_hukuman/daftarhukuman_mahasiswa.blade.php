@@ -63,7 +63,7 @@
                   <li>
                     {{$d->namamahasiswa}} ({{$d->nrpmahasiswa}}) memiliki masa berlaku hukuman kurang dari {{$d->total}} Hari.
                     <br>
-                    ID: {{$d->idhukuman}} &nbsp [Keterangan: {{$d->keterangan}}]
+                    ID: {{$d->idhukuman}} &nbsp [Hukuman: {{$d->namahukuman}}]
                   </li>
                 </ul>
               @endif
@@ -78,24 +78,22 @@
           <div class="card-body">
             <table id="tabel_hukuman" class="table table-bordered table-striped">
               <thead>
-                <tr> 
-                  <th width="1%">Nama Dosen</th>
-                  <th width="1%">Tanggal Input</th>
-                  <th width="1%">Keterangan</th>
-                  <th width="1%">Tanggal Konfirmasi</th>
+                <tr>
+                  <th width="1%">Tanggal Input</th> 
+                  <th width="1%">Dosen Wali</th>
+                  <th width="1%">Hukuman</th>
                   <th width="1%">Status</th>
-                  <th width="1%">Penilaian</th>
-                  <th width="1%">Masa Berlaku</th>
+                  <th width="1%">Nilai</th>
+                  <th width="1%">Detail</th>
                   <th width="1%">Unggah Berkas</th>
                 </tr>
               </thead>
               <tbody>
                  @foreach($data_hukuman as $no => $d)
                 <tr>
-                  <td>{{$d->namadosen}}</td>
                   <td>{{$d->tanggalinput}}</td>
-                  <td>{{$d->keterangan}}</td>
-                  <td>{{$d->tanggalkonfirmasi}}</td>
+                  <td>{{$d->namadosen}} <br> ({{$d->npkdosen}})</td>
+                  <td>{{$d->namahukuman}}</td>
                   <td>
                     @if($d->status == "0")
                       <a href="#" class="btn btn-danger btn-sm">Tidak Aktif</a>
@@ -130,7 +128,10 @@
                       @endif
                     @endif
                   </td>
-                  <td>{{$d->masaberlaku}}</td>
+                  <td>
+                    <a href="#" class="fas fa-eye" data-toggle="modal" data-target="#detail_{{$d->idhukuman}}"></a>
+                  </td>
+                  
                   <td>
                     @if($d->status == "0")
                       <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#upload_{{$d->idhukuman}}">Upload</a>
@@ -149,6 +150,66 @@
           </div>
         </div>
         
+        @foreach($data_hukuman as $d)
+        <div id="detail_{{$d->idhukuman}}" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- konten modal-->
+            <div class="modal-content">
+              <!-- heading modal -->
+              <div class="modal-header">
+                <h4 class="modal-title">Detail Hukuman Mahasiswa</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <!-- body modal -->
+              <div class="modal-body">
+                <p>
+                  <b>ID Hukuman: {{$d->idhukuman}} <br>
+                  {{$d->namahukuman}}</b>
+                </p>
+                <table class="table table-head-fixed text-nowrap">
+                  <tr>
+                    <th>Mahasiswa</th>
+                    <td>{{$d->namamahasiswa}} - {{$d->nrpmahasiswa}}</td>
+                  </tr>
+                  <tr>
+                    <th>Tanggal Input</th>
+                    <td>{{$d->tanggalinput}}</td>
+                  </tr>
+                  <tr>
+                    <th>Kategori </th>
+                    <td>
+                      @if($d->kategori == 'ringan')
+                      <a href="#" class="btn btn-success btn-sm">Kategori Ringan</a>
+                      @elseif($d->kategori == 'sedang')
+                      <a href="#" class="btn btn-warning btn-sm">Kategori Sedang</a>
+                      @else
+                       <a href="#" class="btn btn-danger btn-sm">Kategori Berat</a>
+                      @endif
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Keterangan </th>
+                    <td>{{$d->keterangan}}</td>
+                  </tr>
+                  <tr>
+                    <th>Tanggal Konfirmasi </th>
+                    <td>{{$d->tanggalkonfirmasi}}</td>
+                  </tr>
+                  <tr>
+                    <th>Masa Berlaku </th>
+                    <td>{{$d->masaberlaku}}</td>
+                  </tr>
+                  
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        @endforeach
+
 
         @foreach($data_hukuman as $d)
         <div id="upload_{{$d->idhukuman}}" class="modal fade" role="dialog">
@@ -192,6 +253,8 @@
           </div>
         </div>
         @endforeach
+
+
 
       </div>
     </section>
