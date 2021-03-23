@@ -95,7 +95,7 @@ class MasterJenisHukumanController extends Controller
 			->where('idjenishukuman',$request->get('idjenishukuman'))
 			->update([
 			    'namahukuman' => $request->get('namahukuman'),
-			    'kategori' => $request->get('kategori') 
+			    'kategori' => $request->get('kategori')
 			]);
 
             return redirect('admin/master/jenishukuman')->with(['Success' => 'Berhasil Mengubah Data Jenis Hukuman (ID) '.$request->get('idjenishukuman')]);

@@ -81,21 +81,20 @@
                     <br>
                     <select class="btn btn-primary dropdown-toggle" name="kategori" data-toggle="dropdown" id="exampleInputKategori">
                       @if($j->kategori == 'ringan')
-                      <option value="ringan">Kategori Ringan</option>
+                      <option value="ringan" selected>Kategori Ringan</option>
                       <option value="sedang">Kategori Sedang</option>
                       <option value="berat">Kategori Berat</option>
                       @elseif($j->kategori == 'sedang')
-                      <option value="sedang">Kategori Sedang</option>
+                      <option value="sedang" selected>Kategori Sedang</option>
                       <option value="ringan">Kategori Ringan</option>
                       <option value="berat">Kategori Berat</option>
                       @else
-                      <option value="berat">Kategori Berat</option>
+                      <option value="berat" selected>Kategori Berat</option>
                       <option value="ringan">Kategori Ringan</option>
                       <option value="sedang">Kategori Sedang</option>
                       @endif
                     </select>
-                  </div>
-                 
+                  </div>                 
                 </div>
                 @endforeach
                 <!-- /.card-body -->

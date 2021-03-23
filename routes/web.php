@@ -163,24 +163,28 @@ Route::group(['prefix' => '/' ], function()
 		//3. DATA HUKUMAN
 		//localhost:8000/dosen/data/hukuman
 		Route::get('data/hukuman','DataHukumanController@daftarhukuman');
-		
-		//Ubah penilaian hukuman
-		Route::get('data/hukuman/ubahnilai/{id}', 'DataHukumanController@ubahnilai');
 
+		//Detail data hukuman mahasiswa
+		Route::get('data/hukuman/detail/{id}','DataHukumanController@detailhukuman');
+		//Ubah penilaian hukuman
+		Route::get('data/hukuman/detail/ubahnilai/{id}', 'DataHukumanController@ubahnilai');
 		//Unduh Berkas
-		Route::post('data/hukuman/prosesunduh/{id}', 'DataHukumanController@unduhberkas_proses');
+		Route::post('data/hukuman/detail/prosesunduh/{id}', 'DataHukumanController@unduhberkas_proses');
 
 
 		//Tambah data hukuman
-		Route::get('data/hukuman/tambah', 'DataHukumanController@tambahhukuman');
-		Route::post('data/hukuman/prosestambah', 'DataHukumanController@tambahhukuman_proses');
+		Route::get('data/hukuman/detail/tambah/{id}', 'DataHukumanController@tambahhukuman');
+		//Suggestion kategori hukuman
+		Route::post('data/hukuman/detail/fetch', 'DataHukumanController@fetch')->name('datahukuman.fetch');
+
+		Route::post('data/hukuman/detail/prosestambah', 'DataHukumanController@tambahhukuman_proses');
 
 		//Ubah data hukuman
-		Route::get('data/hukuman/ubah/{id}', 'DataHukumanController@ubahhukuman');
-		Route::post('data/hukuman/ubahproses', 'DataHukumanController@ubahhukuman_proses');
+		Route::get('data/hukuman/detail/ubah/{id}', 'DataHukumanController@ubahhukuman');
+		Route::post('data/hukuman/detail/ubahproses', 'DataHukumanController@ubahhukuman_proses');
 
 		//Hapus data hukuman
-		Route::get('data/hukuman/hapus/{id}', 'DataHukumanController@hapushukuman');
+		Route::get('data/hukuman/detail/hapus/{id}', 'DataHukumanController@hapushukuman');
 
 
 		//4. PROFILE DOSEN

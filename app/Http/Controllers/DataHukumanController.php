@@ -34,15 +34,23 @@ class DataHukumanController extends Controller
         	->where('users.username',Session::get('dosen'))
         	->get();
 
-        	$data_hukuman = DB::table('hukuman')
-        	->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
-        	->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
-        	->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
-        	->where('npkdosen', $dosen[0]->npkdosen)
-            ->orderby('tanggalinput','DESC')
-        	->groupBy('idhukuman')
-        	->get();
+            $mahasiswa_wali = DB::table('mahasiswa')
+            ->select('mahasiswa.*','tahun_akademik.tahun', 'gamifikasi.total AS poin_gamifikasi')
+            ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+            ->where('dosen.npkdosen',$dosen[0]->npkdosen)
+            ->get();
 
+        	
+            $data_hukuman = DB::table('hukuman')
+            ->select('hukuman.*')
+            ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
+            ->where('npkdosen', $dosen[0]->npkdosen)
+            ->orderby('tanggalinput','DESC')
+            ->groupBy('idhukuman')
+            ->get();
             foreach ($data_hukuman as $d)
             {
                 if($d->masaberlaku <= Carbon::now())
@@ -51,9 +59,9 @@ class DataHukumanController extends Controller
                     ->where('idhukuman',$d->idhukuman)
                     ->update([
                         'status' => 2
-                    ]);   
-                    
+                    ]);         
                 }
+
                 if($d->masaberlaku == null)
                 {
                     $hukuman = DB::table('hukuman') 
@@ -63,6 +71,7 @@ class DataHukumanController extends Controller
                     ]);  
                 }
             }
+
 
             $notifikasi_hukuman = DB::table('hukuman')
             ->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
@@ -74,11 +83,38 @@ class DataHukumanController extends Controller
             ->whereNotNull('masaberlaku')
             ->get();
  
-        	return view('data_hukuman.daftarhukuman_dosen', compact('data_hukuman','notifikasi_hukuman'));
+        	return view('data_hukuman.daftarmahasiswahukuman_dosen', compact('mahasiswa_wali','notifikasi_hukuman'));
         }
         else
         {
         	return redirect("/");
+        }
+    }
+
+    public function detailhukuman ($id)
+    {
+        if(Session::get('dosen') != null)
+        {
+            $mahasiswa = DB::table('mahasiswa')
+            ->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa',$id)
+            ->get();
+
+
+            $data_hukuman = DB::table('hukuman')
+            ->select('hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','dosen.npkdosen','dosen.namadosen')
+            ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa',$id)
+            ->orderby('tanggalinput','DESC')
+            ->groupBy('idhukuman')
+            ->get();
+
+            return view('data_hukuman.detailmahasiswahukuman_dosen', compact('mahasiswa','data_hukuman'));
+        }
+        else
+        {
+            return redirect("/");
         }
     }
 
@@ -125,7 +161,7 @@ class DataHukumanController extends Controller
                 ]);
             }
 
-            return redirect('dosen/data/hukuman');
+            return redirect()->back();
     	}
     	else
     	{
@@ -133,26 +169,74 @@ class DataHukumanController extends Controller
     	}
     }
 
-    public function tambahhukuman()
+    public function tambahhukuman($id)
     {
         if(Session::get('dosen') != null)
         {
-            $dosen = DB::table('users')
-            ->join('dosen','dosen.users_username','=','users.username')
-            ->where('users.username',Session::get('dosen'))
-            ->get();
-
             $mahasiswa = DB::table('mahasiswa')
-                    ->select('*')
-                    ->join("dosen","dosen.npkdosen","=","mahasiswa.dosen_npkdosen")
-                    ->where("dosen.npkdosen",$dosen[0]->npkdosen)
-                    ->get();
+            ->select('*')
+            ->where("mahasiswa.nrpmahasiswa",$id)
+            ->get();
 
             return view('data_hukuman.tambahhukuman_dosen', compact('mahasiswa'));
         }
         else
         {
             return redirect("/");
+        }
+    }
+
+    function fetch(Request $request)
+    {
+        $query = $request->get('query');
+        $pencarian =$request->get('jenis');
+
+        if($request->get('query') && $request->get('jenis'))
+        {           
+            $output = '<ul class="dropdown-menu" style="display:block; position:relative">';    
+
+            if($pencarian == 'ringan')
+            {
+                $jenishukuman = DB::table('jenis_hukuman')
+                ->select('*')
+                ->where('kategori', $pencarian)
+                ->where('namahukuman', 'LIKE', "%{$query}%")
+                ->get();
+            
+                foreach($jenishukuman as $row)
+                {
+                    $output .= '<li><a href="#">'.$row->namahukuman.'</a></li>';
+                }
+            } 
+            elseif($pencarian == 'sedang')
+            {
+                $jenishukuman = DB::table('jenis_hukuman')
+                ->select('*')
+                ->where('kategori', $pencarian)
+                ->where('namahukuman', 'LIKE', "%{$query}%")
+                ->get();
+            
+                foreach($jenishukuman as $row)
+                {
+                    $output .= '<li><a href="#">'.$row->namahukuman.'</a></li>';
+                }
+            } 
+            elseif($pencarian == 'berat')
+            {
+                $jenishukuman = DB::table('jenis_hukuman')
+                ->select('*')
+                ->where('kategori', $pencarian)
+                ->where('namahukuman', 'LIKE', "%{$query}%")
+                ->get();
+            
+                foreach($jenishukuman as $row)
+                {
+                    $output .= '<li><a href="#">'.$row->namahukuman.'</a></li>';
+                }
+            } 
+         
+            $output .= '</ul>';
+            echo $output;
         }
     }
 
@@ -166,32 +250,39 @@ class DataHukumanController extends Controller
             ->get();
 
             $tanggal_sekarang=Carbon::now()->format('Y/m/d');
+            $kategori = $request->get('kategori');
+            $hukuman = $request->get('hukuman');
             $mahasiswa= $request->get('mahasiswa');
             $keterangan = $request->get('keterangan');
 
 
             $this->validate($request,[
-                'mahasiswa' =>'required',
-                'keterangan'=>'required'               
+                'kategori' => 'required',
+                'hukuman' => 'required|max:50',
+                'keterangan'=>'max:100'               
             ]);
 
 
             $tambahdata_hukuman = Hukuman::insert([
                 'tanggalinput' =>$tanggal_sekarang,
+                'kategori' => $kategori,
+                'namahukuman' => $hukuman,
                 'keterangan' =>$keterangan,
                 'status'=>0,
                 'dosen_npkdosen'=>$dosen[0]->npkdosen,
                 'mahasiswa_nrpmahasiswa'=>$mahasiswa
             ]);
 
-             return redirect('dosen/data/hukuman')->with(['Success' => 'Berhasil Menambahkan Data Hukuman Mahasiswa ('. $mahasiswa.')']);
+
+
+             return redirect('dosen/data/hukuman/detail/'.$mahasiswa)->with(['Success' => 'Berhasil Menambahkan Data Hukuman Mahasiswa ('. $mahasiswa.')']);
         }
 
         catch (QueryException $e)
         {
             $message= explode("in C:",$e);
 
-            return redirect('dosen/data/hukuman/tambah')->with(['Error' => 'Gagal Menambahkan Data Kedalam Database <br> Pesan Kesalahan: '.$message[0]]);
+            return redirect('dosen/data/hukuman/detail/tambah/'.$mahasiswa)->with(['Error' => 'Gagal Menambahkan Data Kedalam Database <br> Pesan Kesalahan: '.$message[0]]);
         }
     }
 
@@ -218,22 +309,27 @@ class DataHukumanController extends Controller
         try
         {
             $this->validate($request,[
-                'keterangan'=>'required'               
+                'kategori' => 'required',
+                'hukuman' => 'required|max:50',
+                'keterangan'=>'max:100'               
             ]);
 
-             $hukuman = DB::table('hukuman')
+
+            $hukuman = DB::table('hukuman')
             ->where('idhukuman',$request->get('idhukuman'))
             ->update([
+                'kategori'=> $request->get('kategori'),
+                'namahukuman' =>$request->get('hukuman'),
                 'keterangan' => $request->get('keterangan')
             ]);
 
-            return redirect('dosen/data/hukuman')->with(['Success' => 'Berhasil Mengubah Data Hukuman (ID) '.$request->get('idhukuman')]);
+            return redirect('dosen/data/hukuman/detail/'.$request->get('mahasiswa'))->with(['Success' => 'Berhasil Mengubah Data Hukuman (ID) '.$request->get('idhukuman')]);
         }
         catch(QueryException $e)
         {
             $message= explode("in C:",$e);
             
-            return redirect("dosen/data/hukuman/ubah/{$request->get('idhukuman')}")->with(['Error' => 'Gagal Mengubah Data Hukuman (ID) '.$request->get('idhukuman')."<br> Pesan Kesalahan: ".$message[0]]);
+            return redirect("dosen/data/hukuman/detail/ubah/{$request->get('idhukuman')}")->with(['Error' => 'Gagal Mengubah Data Hukuman (ID) '.$request->get('idhukuman')."<br> Pesan Kesalahan: ".$message[0]]);
         }
     }
 
@@ -267,15 +363,15 @@ class DataHukumanController extends Controller
             $hapus_hukuman = DB::table('hukuman')
             ->where('idhukuman',$id)
             ->delete();
-            
-            return redirect('dosen/data/hukuman')->with(['Success' => 'Berhasil Menghapus Data Hukuman (ID) '.$id]);
+
+            return redirect('dosen/data/hukuman/detail/'.$request->get('mahasiswa'))->with(['Success' => 'Berhasil Menghapus Data Hukuman (ID) '.$id]);
 
         }
         catch (QueryException $e)
         {
             $message= explode("in C:",$e);
             
-            return redirect("dosen/data/hukuman/")->with(['Error' => 'Gagal Menghapus Data Hukuman (ID) '.$id."<br> Pesan Kesalahan: ".$message[0]]);
+            return redirect("dosen/data/hukuman/detail/".$request->get('mahasiswa'))->with(['Error' => 'Gagal Menghapus Data Hukuman (ID) '.$id."<br> Pesan Kesalahan: ".$message[0]]);
         }
     }
 

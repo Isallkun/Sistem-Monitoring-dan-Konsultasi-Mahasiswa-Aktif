@@ -84,7 +84,7 @@
                      <a href="#" class="btn btn-danger btn-sm">Kategori Berat</a>
                     @endif
                   </td>
-                
+                  
                   <td>
                     <a href="{{url('admin/master/jenishukuman/ubah/'.$j->idjenishukuman)}}" class="btn btn-warning">Ubah</a>
                     

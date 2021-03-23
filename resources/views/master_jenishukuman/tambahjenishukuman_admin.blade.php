@@ -81,11 +81,8 @@
                       <option value="ringan">Kategori Ringan</option>
                       <option value="sedang">Kategori Sedang</option>
                       <option value="berat">Kategori Berat</option>
-                      
                     </select>
                   </div>
-                 
-
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

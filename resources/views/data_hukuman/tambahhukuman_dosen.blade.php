@@ -46,8 +46,9 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{url('dosen/data/hukuman/prosestambah')}}" role="form" method="post">
+              <form action="{{url('dosen/data/hukuman/detail/prosestambah')}}" role="form" method="post">
                 {{ csrf_field() }}
+                <input type="hidden" name="_token" value="{{csrf_token() }}"> 
 
                 @if (count($errors) > 0)
                   <div class="alert alert-danger">
@@ -70,19 +71,37 @@
                 <div class="card-body">
 
                   <div class="form-group">
-                    <label for="exampleInputMahasiswa">Mahasiswa</label>
+                    <label for="exampleInputMahasiswa" style="text-transform: uppercase;">
+                      @foreach($mahasiswa as $m)
+                      {{$m->namamahasiswa}} - {{$m->nrpmahasiswa}}
+
+                      <input type="hidden" name="mahasiswa" value="{{$m->nrpmahasiswa}}">
+                      @endforeach
+
+                    </label>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputKategori">Kategori Hukuman</label>
                     <br>
-                    <select class="btn btn-primary dropdown-toggle" name="mahasiswa" data-toggle="dropdown" id="exampleInputMahasiswa">
-                      <option value="">-- Pilih Mahasiswa --</option>
-                       @foreach($mahasiswa as $m)
-                        <option value="{{$m->nrpmahasiswa}}">{{$m->nrpmahasiswa}} - {{$m->namamahasiswa}}</option>
-                       @endforeach
+                    <select class="btn btn-primary dropdown-toggle" name="kategori" data-toggle="dropdown" id="kategori">
+                      <option value="">-- Pilih Kategori Hukuman --</option>
+                      <option value="ringan">Kategori Ringan</option>
+                      <option value="sedang">Kategori Sedang</option>
+                      <option value="berat">Kategori Berat</option>
                     </select>
                   </div>
                  
                   <div class="form-group">
+                    <label for="exampleInputHukuman">Hukuman</label>
+                    <input type="text" name="hukuman" class="form-control" id="hukuman" placeholder="Enter Hukuman" >
+
+                    <div id="hukumanList" class="float-md-right" ></div>
+                  </div>
+
+                   <div class="form-group">
                     <label for="exampleInputKeterangan">Keterangan</label>
-                     <textarea class="form-control" name="keterangan" id="exampleInputKeterangan" rows="3" placeholder="Enter Keterangan"></textarea>
+                    <textarea class="form-control" name="keterangan" id="exampleInputKeterangan" rows="3" placeholder="Enter Keterangan"></textarea>
                   </div>
 
                   <!-- /.card-body -->
@@ -114,5 +133,37 @@
 <script src="{{url('../../asset/dist/js/adminlte.min.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{url('../../asset/dist/js/demo.js')}}"></script>
+
+
+<script>
+  $(document).ready(function(){
+
+  $('#hukuman').keyup(function(){ 
+    var query = $(this).val();
+
+    if(query != '')
+    {
+      var _token = $('input[name="_token"]').val();
+      var kategori = document.getElementById("kategori").value;
+
+      $.ajax({
+        url:"{{ route('datahukuman.fetch') }}",
+        method:"POST",
+        data:{query:query,_token:_token, jenis:kategori},
+        success:function(data){
+          $('#hukumanList').fadeIn();  
+          $('#hukumanList').html(data);
+        }
+      });
+    }
+  });
+  
+  $(document).on('click', 'li', function(){  
+    $('#hukuman').val($(this).text());  
+    $('#hukumanList').fadeOut();
+  }); 
+
+});
+</script>
 
 @endpush

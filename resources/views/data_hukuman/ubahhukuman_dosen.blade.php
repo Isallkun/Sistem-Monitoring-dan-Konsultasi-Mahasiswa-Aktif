@@ -45,7 +45,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{url('dosen/data/hukuman/ubahproses')}}" role="form" method="post">
+              <form action="{{url('dosen/data/hukuman/detail/ubahproses')}}" role="form" method="post">
                 {{ csrf_field() }}
 
                 @if (count($errors) > 0)
@@ -67,12 +67,40 @@
                 @endif
                @foreach($hukuman as $h)
                 <div class="card-body">
+                  <input type="hidden" name="mahasiswa" value="{{$h->nrpmahasiswa}}">
                   <input type="hidden" name="idhukuman" value="{{$h->idhukuman}}">
 
 	            	  <div class="form-group">
 	                	<label for="exampleInputMahasiswa">Mahasiswa</label>
 	                	<p>{{$h->namamahasiswa}} - {{$h->nrpmahasiswa}} </p>
 	              	</div>
+
+                  <div class="form-group">
+                    <label for="exampleInputKategori">Kategori Hukuman</label>
+                    <br>
+                    <select class="btn btn-primary dropdown-toggle" name="kategori" data-toggle="dropdown" id="kategori">
+                      @if($h->kategori == 'ringan')
+                      <option value="ringan" selected>Kategori Ringan</option>
+                      <option value="sedang">Kategori Sedang</option>
+                      <option value="berat">Kategori Berat</option>
+                      @elseif($h->kategori == 'sedang')
+                      <option value="sedang" selected>Kategori Sedang</option>
+                      <option value="ringan">Kategori Ringan</option>
+                      <option value="berat">Kategori Berat</option>
+                      @else
+                      <option value="berat" selected>Kategori Berat</option>
+                      <option value="ringan">Kategori Ringan</option>
+                      <option value="sedang">Kategori Sedang</option>
+                      @endif
+                    </select>
+                  </div>
+                 
+                  <div class="form-group">
+                    <label for="exampleInputHukuman">Hukuman</label>
+                    <input type="text" name="hukuman" class="form-control" id="hukuman" placeholder="Enter Hukuman" value="{{$h->namahukuman}}" >
+
+                    <div id="hukumanList" class="float-md-right" ></div>
+                  </div>
                  
                 	<div class="form-group">
                     	<label for="exampleInputKeterangan">Keterangan</label>
@@ -110,4 +138,34 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{url('../../asset/dist/js/demo.js')}}"></script>
 
+<script>
+  $(document).ready(function(){
+
+  $('#hukuman').keyup(function(){ 
+    var query = $(this).val();
+
+    if(query != '')
+    {
+      var _token = $('input[name="_token"]').val();
+      var kategori = document.getElementById("kategori").value;
+
+      $.ajax({
+        url:"{{ route('datahukuman.fetch') }}",
+        method:"POST",
+        data:{query:query,_token:_token, jenis:kategori},
+        success:function(data){
+          $('#hukumanList').fadeIn();  
+          $('#hukumanList').html(data);
+        }
+      });
+    }
+  });
+  
+  $(document).on('click', 'li', function(){  
+    $('#hukuman').val($(this).text());  
+    $('#hukumanList').fadeOut();
+  }); 
+
+});
+</script>
 @endpush

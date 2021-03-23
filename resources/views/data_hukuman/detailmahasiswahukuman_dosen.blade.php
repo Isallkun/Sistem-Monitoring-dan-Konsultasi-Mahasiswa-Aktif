@@ -12,12 +12,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Daftar Data Hukuman Mahasiswa</h1>
+            <h1 class="m-0 text-dark">Detail Data Hukuman Mahasiswa</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
-              <li class="breadcrumb-item active">Daftar Data Hukuman Mahasiswa</li>
+              <li class="breadcrumb-item"><a href="{{url('dosen/data/hukuman')}}">Daftar MHS Hukuman</a></li>
+              <li class="breadcrumb-item active">Detail Data Hukuman MHS</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -54,7 +55,9 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <a href="{{ url('dosen/data/hukuman/tambah') }}" class="btn btn-primary" role="button">Tambah Data</a>
+        @foreach($mahasiswa as $m)
+        <a href="{{ url('dosen/data/hukuman/detail/tambah/'.$m->nrpmahasiswa) }}" class="btn btn-primary" role="button">Tambah Data</a>
+        @endforeach
         <br><br>
 
          @if(!empty($notifikasi_hukuman))
@@ -76,14 +79,17 @@
 
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Data Hukuman</h3>
+            @foreach($mahasiswa as $m)
+            <h3 class="card-title">Data Hukuman ({{$m->namamahasiswa}} - {{$m->nrpmahasiswa}})</h3>
+            @endforeach
           </div>  
           <div class="card-body">
             <table id="tabel_hukuman" class="table table-bordered table-striped">
               <thead>
                 <tr> 
-                  <th width="1%">Tanggal</th>
-                  <th width="1%">Mahasiswa</th>
+                  <th width="1%">Tanggal Input</th>
+                  <th width="1%">Dosen Wali</th>
+                  <th width="1%">Hukuman</th>
                   <th width="1%">Status</th>
                   <th width="1%">Nilai</th>
                   <th width="1%">Detail</th>
@@ -94,7 +100,9 @@
                  @foreach($data_hukuman as $no => $d)
                 <tr>
                   <td>{{$d->tanggalinput}}</td>
-                  <td>{{$d->namamahasiswa}} <br>({{$d->nrpmahasiswa}})</td>
+                  <td>{{$d->namadosen}} <br> ({{$d->npkdosen}} )</td>
+                  <td>{{$d->namahukuman}}</td>
+                 
                   <td>
                     @if($d->status == "0")
                       <a href="#" class="btn btn-danger btn-sm">Tidak Aktif</a>
@@ -107,13 +115,13 @@
                   <td>
                   @if($d->status == "1")
                     @if($d->penilaian == "kurang")
-                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-danger btn-sm">Kurang</a>
+                      <a href="{{url('dosen/data/hukuman/detail/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-danger btn-sm">Kurang</a>
                     @elseif($d->penilaian == "cukup")
-                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-warning btn-sm">Cukup</a>
+                      <a href="{{url('dosen/data/hukuman/detail/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-warning btn-sm">Cukup</a>
                     @elseif($d->penilaian == "baik")
-                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-success btn-sm">Baik</a>
+                      <a href="{{url('dosen/data/hukuman/detail/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-success btn-sm">Baik</a>
                     @else
-                      <a href="{{url('dosen/data/hukuman/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-info btn-sm">Menunggu penilaian</a>
+                      <a href="{{url('dosen/data/hukuman/detail/ubahnilai/'.$d->idhukuman)}}" class="btn btn-outline-info btn-sm">Menunggu penilaian</a>
                     @endif
                   @elseif($d->status == "0")
                     <a href="#" class="btn btn-outline-dark btn-sm disabled">Belum ada nilai</a>
@@ -136,10 +144,11 @@
                   
                   <td>
                     @if($d->status == "0")
-                    <a href="{{url('dosen/data/hukuman/ubah/'.$d->idhukuman)}}" class="btn btn-warning">Ubah</a>
+                    <a href="{{url('dosen/data/hukuman/detail/ubah/'.$d->idhukuman)}}" class="btn btn-warning">Ubah</a>
                     @endif
 
-                    <form method="get" action="{{url('dosen/data/hukuman/hapus/'.$d->idhukuman)}}">
+                    <form method="get" action="{{url('dosen/data/hukuman/detail/hapus/'.$d->idhukuman)}}">
+                      <input type="hidden" name="mahasiswa" value="{{$d->nrpmahasiswa}}">
                       <button type="submmit" class="btn btn-danger">Hapus</button>
                     </form>
                   </td>
@@ -162,7 +171,10 @@
               </div>
               <!-- body modal -->
               <div class="modal-body">
-                <p><b>ID Hukuman: {{$d->idhukuman}}</b></p>
+                <p>
+                  <b>ID Hukuman: {{$d->idhukuman}} <br>
+                  {{$d->namahukuman}}</b>
+                </p>
                 <table class="table table-head-fixed text-nowrap">
                   <tr>
                     <th>Mahasiswa</th>
@@ -171,6 +183,18 @@
                   <tr>
                     <th>Tanggal Input</th>
                     <td>{{$d->tanggalinput}}</td>
+                  </tr>
+                  <tr>
+                    <th>Kategori </th>
+                    <td>
+                      @if($d->kategori == 'ringan')
+                      <a href="#" class="btn btn-success btn-sm">Kategori Ringan</a>
+                      @elseif($d->kategori == 'sedang')
+                      <a href="#" class="btn btn-warning btn-sm">Kategori Sedang</a>
+                      @else
+                       <a href="#" class="btn btn-danger btn-sm">Kategori Berat</a>
+                      @endif
+                    </td>
                   </tr>
                   <tr>
                     <th>Keterangan </th>
@@ -190,7 +214,7 @@
                       @if($d->status == "0")
                       <p style="color: red">Berkas tidak tersedia</p>
                       @else
-                      <form action="{{url('dosen/data/hukuman/prosesunduh/'.$d->idhukuman)}}" role="form" method="post">
+                      <form action="{{url('dosen/data/hukuman/detail/prosesunduh/'.$d->idhukuman)}}" role="form" method="post">
                         {{ csrf_field() }}
                         <input type="hidden" name="nrpmahasiswa" value="{{$d->nrpmahasiswa}}">
                         <button type="submit" class="btn btn-info">Unduh berkas</button>
@@ -221,10 +245,5 @@
     });
   });
 
-   $(document).ready(function(){
-        setTimeout(function() {
-            location.reload();
-        },900000);
-    })
 </script>
 @endpush
