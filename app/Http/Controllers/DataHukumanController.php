@@ -35,13 +35,12 @@ class DataHukumanController extends Controller
         	->get();
 
             $mahasiswa_wali = DB::table('mahasiswa')
-            ->select('mahasiswa.*','tahun_akademik.tahun', 'gamifikasi.total AS poin_gamifikasi')
+            ->select('mahasiswa.*','tahun_akademik.tahun')
             ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
-            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
             ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
             ->where('dosen.npkdosen',$dosen[0]->npkdosen)
+            ->orderby('mahasiswa.nrpmahasiswa','ASC')
             ->get();
-
         	
             $data_hukuman = DB::table('hukuman')
             ->select('hukuman.*')
@@ -88,6 +87,111 @@ class DataHukumanController extends Controller
         else
         {
         	return redirect("/");
+        }
+    }
+
+    public function tampilkan_filter(Request $request)
+    {
+        if(Session::get('dosen') != null)
+        {
+            $dosen = DB::table('users')
+            ->join('dosen','dosen.users_username','=','users.username')
+            ->where('users.username',Session::get('dosen'))
+            ->get();
+
+            
+            $user_input=$request->get('filter');
+            if($user_input == 'hukuman_mahasiswa')
+            {
+                $info='Hukuman mahasiswa (tinggi-rendah)';
+
+                $mahasiswa_wali = DB::table('mahasiswa')
+                ->select(DB::raw('COUNT(hukuman.idhukuman) as total_hukuman'),'mahasiswa.*','tahun_akademik.tahun')
+                ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
+                ->leftjoin('hukuman','hukuman.mahasiswa_nrpmahasiswa','=','mahasiswa.nrpmahasiswa')
+                ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+                ->where('dosen.npkdosen',$dosen[0]->npkdosen)
+                ->groupBy('mahasiswa.nrpmahasiswa')
+                ->orderby('total_hukuman', 'DESC')
+                ->get();
+
+            }
+            elseif($user_input == 'rating_mahasiswa')
+            {
+                $info='Rating mahasiswa (rendah-tinggi)';
+
+                $mahasiswa_wali = DB::table('mahasiswa')
+                ->select('mahasiswa.*','tahun_akademik.tahun', 'gamifikasi.total')
+                ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
+                ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+                ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+                ->where('dosen.npkdosen',$dosen[0]->npkdosen)
+                ->orderby('gamifikasi.total', 'ASC')
+                ->get();
+
+            }
+            elseif($user_input == 'konsultasi_mahasiswa')
+            {
+                $info='Konsultasi mahasiswa (rendah-tinggi)';
+
+                $mahasiswa_wali = DB::table('mahasiswa')
+                ->select(DB::raw('COUNT(konsultasi_dosenwali.idkonsultasi) as total_konsultasi'),'mahasiswa.*','tahun_akademik.tahun')
+                ->join('dosen','dosen.npkdosen','=','mahasiswa.dosen_npkdosen')
+                ->leftjoin('konsultasi_dosenwali','konsultasi_dosenwali.mahasiswa_nrpmahasiswa','=','mahasiswa.nrpmahasiswa')
+                ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+                ->where('dosen.npkdosen',$dosen[0]->npkdosen)
+                ->groupBy('mahasiswa.nrpmahasiswa')
+                ->orderby('total_konsultasi', 'ASC')
+                ->get();
+
+            }
+            
+            
+            $data_hukuman = DB::table('hukuman')
+            ->select('hukuman.*')
+            ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
+            ->where('npkdosen', $dosen[0]->npkdosen)
+            ->orderby('tanggalinput','DESC')
+            ->groupBy('idhukuman')
+            ->get();
+            foreach ($data_hukuman as $d)
+            {
+                if($d->masaberlaku <= Carbon::now())
+                {
+                    $hukuman = DB::table('hukuman') 
+                    ->where('idhukuman',$d->idhukuman)
+                    ->update([
+                        'status' => 2
+                    ]);         
+                }
+
+                if($d->masaberlaku == null)
+                {
+                    $hukuman = DB::table('hukuman') 
+                    ->where('idhukuman',$d->idhukuman)
+                    ->update([
+                        'status' => 0
+                    ]);  
+                }
+            }
+
+
+            $notifikasi_hukuman = DB::table('hukuman')
+            ->select(DB::raw("DATEDIFF(masaberlaku,now())AS total"),'hukuman.*', 'mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
+            ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
+            ->where('npkdosen', $dosen[0]->npkdosen)
+            ->orderby('tanggalinput','DESC')
+            ->groupBy('idhukuman')
+            ->whereNotNull('masaberlaku')
+            ->get();
+
+            return view('data_hukuman.daftarmahasiswahukuman_dosen', compact('mahasiswa_wali','notifikasi_hukuman','info'));
+        }
+        else
+        {
+            return redirect("/");
         }
     }
 

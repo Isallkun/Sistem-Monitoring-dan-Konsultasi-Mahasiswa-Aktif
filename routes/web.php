@@ -163,6 +163,8 @@ Route::group(['prefix' => '/' ], function()
 		//3. DATA HUKUMAN
 		//localhost:8000/dosen/data/hukuman
 		Route::get('data/hukuman','DataHukumanController@daftarhukuman');
+		//Menampilkan hasil filter data mahasiswa
+		Route::get('data/hukuman/tampilkanfilter','DataHukumanController@tampilkan_filter');
 
 		//Detail data hukuman mahasiswa
 		Route::get('data/hukuman/detail/{id}','DataHukumanController@detailhukuman');

@@ -66,34 +66,65 @@
           <div class="card-header">
             <h3 class="card-title">Data Mahasiswa (Hukuman)</h3>
           </div>  
+
           <div class="card-body">
-             <table id="tabel_mahasiswa_wali" class="table table-bordered table-striped">
-              <thead>
-                <tr> 
-                  <th width="1%">No.</th>
-                  <th width="1%">Mahasiswa</th>
-                  <th width="1%">Jenis Kelamin</th>
-                  <th width="1%">Angkatan</th>
-                  <th width="1%">Status Mahasiswa</th>
-                  <th width="1%">Kontak</th>
-                  <th width="1%">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                 @foreach($mahasiswa_wali as $no => $m)
-                <tr>
-                  <td>{{$no+1}}</td>
-                  <td>{{$m->namamahasiswa}} <br> ({{$m->nrpmahasiswa}})</td>
-                  <td>{{$m->jeniskelamin}} </td>
-                  <td>{{$m->tahun}}</td>
-                  <td>{{$m->status}}</td>
-                  <td>{{$m->email}} <br> {{$m->telepon}}</td>
-                  <td>
-                    <a href="{{url('dosen/data/hukuman/detail/'.$m->nrpmahasiswa)}}" class="btn btn-primary">Detail</a>
-                  </td>
-                </tr>
-                @endforeach
-              </tbody>
+            <div class="form-group float-sm-right">
+              <form method="GET" name="formfilter" action="{{url('dosen/data/hukuman/tampilkanfilter')}}" enctype="multipart/form-data">
+              {{ csrf_field() }}
+
+                <div class="form-group"> 
+                  <i class="fas fa-filter fa-xs"> Filter : </i>
+                  <select class="btn btn-primary btn-xs dropdown-toggle" name="filter" data-toggle="dropdown" id="filter" onchange="formfilter.submit();">
+                    <option value="">- Filter Berdasarkan -</option>
+                    <optgroup label="Rendah-Tinggi">
+                      <option value="rating_mahasiswa">Rating Mahasiswa [rendah-tinggi]</option>
+                      <option value="konsultasi_mahasiswa">Total Konsultasi Mahasiswa [rendah-tinggi]</option>
+                    </optgroup>
+                    <optgroup label="Tinggi-Rendah">
+                      <option value="hukuman_mahasiswa">Hukuman Mahasiswa [tinggi-rendah]</option>
+                    </optgroup>
+                  </select>
+                  <br>
+                  <p style="font-size: 12px; margin-top: 10px;font-weight: bold;">
+                    @if(!empty($info))
+                      {{$info}}
+                    @endif
+                  </p>
+
+                </div>
+              </form>
+            </div>
+
+            <br><br><br><br>
+
+            <table id="tabel_mahasiswa_wali" class="table table-bordered table-striped">
+            <thead>
+              <tr> 
+                <th width="1%">No.</th>
+                <th width="1%">Mahasiswa</th>
+                <th width="1%">Jenis Kelamin</th>
+                <th width="1%">Angkatan</th>
+                <th width="1%">Status Mahasiswa</th>
+                <th width="1%">Kontak</th>
+                <th width="1%">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+               @foreach($mahasiswa_wali as $no => $m)
+              <tr>
+                <td>{{$no+1}}</td>
+                <td>{{$m->namamahasiswa}} <br> ({{$m->nrpmahasiswa}})</td>
+                <td>{{$m->jeniskelamin}} </td>
+                <td>{{$m->tahun}}</td>
+                <td>{{$m->status}}</td>
+                <td>{{$m->email}} <br> {{$m->telepon}}</td>
+                
+                <td>
+                  <a href="{{url('dosen/data/hukuman/detail/'.$m->nrpmahasiswa)}}" class="btn btn-primary">Detail</a>
+                </td>
+              </tr>
+              @endforeach
+            </tbody>
             </table> 
           </div>
         </div>  
