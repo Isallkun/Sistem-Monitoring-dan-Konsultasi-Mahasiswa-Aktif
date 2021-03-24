@@ -288,10 +288,7 @@
 
                   'Total Konsultasi Dosen Wali : ' + {{$konsultasi_mahasiswa}} + '<br>'+
                   'Total Hukuman Mahasiswa &nbsp: ' + {{$hukuman_mahasiswa}} + '<br>' 
-                 
-
                   ) 
-
     });
   });
 </script>
