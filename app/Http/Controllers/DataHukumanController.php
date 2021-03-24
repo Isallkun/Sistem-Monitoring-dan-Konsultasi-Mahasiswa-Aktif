@@ -95,10 +95,22 @@ class DataHukumanController extends Controller
     {
         if(Session::get('dosen') != null)
         {
+            //Data Mahasiswa
             $mahasiswa = DB::table('mahasiswa')
-            ->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa')
+            ->select('mahasiswa.namamahasiswa','mahasiswa.nrpmahasiswa','gamifikasi.total AS total_rate')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
             ->where('mahasiswa.nrpmahasiswa',$id)
             ->get();
+
+
+            //Mendapatkan total hukuman
+            $hukuman_mahasiswa = DB::table('hukuman')
+            ->where('hukuman.mahasiswa_nrpmahasiswa',$id)
+            ->count();
+            //Mendapatkan total konsultasi 
+            $konsultasi_mahasiswa = DB::table('konsultasi_dosenwali')
+            ->where('konsultasi_dosenwali.mahasiswa_nrpmahasiswa',$id)
+            ->count();
 
 
             $data_hukuman = DB::table('hukuman')
@@ -110,7 +122,7 @@ class DataHukumanController extends Controller
             ->groupBy('idhukuman')
             ->get();
 
-            return view('data_hukuman.detailmahasiswahukuman_dosen', compact('mahasiswa','data_hukuman'));
+            return view('data_hukuman.detailmahasiswahukuman_dosen', compact('mahasiswa','hukuman_mahasiswa','konsultasi_mahasiswa','data_hukuman'));
         }
         else
         {

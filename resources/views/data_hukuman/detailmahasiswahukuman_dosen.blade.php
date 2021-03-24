@@ -2,7 +2,20 @@
 @extends('layouts.appdosen')
 
 @push('styles')
-  <!-- Untuk menambahkan style baru -->
+<!-- Untuk menambahkan style baru -->
+
+<!-- SweetAlert2 -->
+<link rel="stylesheet" href="{{url('asset/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
+<!-- Toastr -->
+<link rel="stylesheet" href="{{url('asset/plugins/toastr/toastr.min.css')}}">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style type="text/css">
+.checked {
+  color: orange;
+}
+</style>
 @endpush
 
 <!-- Isi dari yield -->
@@ -81,6 +94,8 @@
           <div class="card-header">
             @foreach($mahasiswa as $m)
             <h3 class="card-title">Data Hukuman ({{$m->namamahasiswa}} - {{$m->nrpmahasiswa}})</h3>
+
+            <a href="#" class="fas fa-info-circle float-right toastrDefaultInfo"></a>
             @endforeach
           </div>  
           <div class="card-body">
@@ -238,12 +253,46 @@
 @endsection
  
 @push('scripts')
+<!-- SweetAlert2 -->
+<script src="{{url('asset/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
+<!-- Toastr -->
+<script src="{{url('asset/plugins/toastr/toastr.min.js')}}"></script>
+
 <script>
   $(function () {
     $('#tabel_hukuman').DataTable({
       "dom": '<"pull-right"f><"pull-left"l>tip'
     });
-  });
 
+
+
+    @foreach($mahasiswa as $m)   
+      var rating = {{$m->total_rate}};              
+    @endforeach
+
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000
+    });
+
+    $('.toastrDefaultInfo').click(function() {
+      toastr.info('Rating &nbsp&nbsp&nbsp: ' + 
+                  '@for($i=0; $i < $m->total_rate; $i++)' +
+                    '<span class="fa fa-star checked" ></span>' +
+                  '@endfor'+
+                  '@for($i=0; $i < (5-$m->total_rate); $i++)'+
+                    '<span class="fa fa-star"></span>'+
+                  '@endfor' + '<br>' +
+
+                  'Total Konsultasi Dosen Wali : ' + {{$konsultasi_mahasiswa}} + '<br>'+
+                  'Total Hukuman Mahasiswa &nbsp: ' + {{$hukuman_mahasiswa}} + '<br>' 
+                 
+
+                  ) 
+
+    });
+  });
 </script>
 @endpush
