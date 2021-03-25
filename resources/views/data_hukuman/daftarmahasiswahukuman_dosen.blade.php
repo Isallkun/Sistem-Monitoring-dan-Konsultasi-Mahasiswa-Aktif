@@ -73,7 +73,7 @@
               {{ csrf_field() }}
 
                 <div class="form-group"> 
-                  <i class="fas fa-filter fa-xs"> Filter : </i>
+                  <i class="fas fa-filter fa-xs"> Filter </i>
                   <select class="btn btn-primary btn-xs dropdown-toggle" name="filter" data-toggle="dropdown" id="filter" onchange="formfilter.submit();">
                     <option value="">- Filter Berdasarkan -</option>
                     <optgroup label="Rendah-Tinggi">
@@ -85,7 +85,7 @@
                     </optgroup>
                   </select>
                   <br>
-                  <p style="font-size: 12px; margin-top: 10px;font-weight: bold;">
+                  <p style="font-size: 13px; margin-top: 10px;font-weight: bold;color: red; ">
                     @if(!empty($info))
                       {{$info}}
                     @endif

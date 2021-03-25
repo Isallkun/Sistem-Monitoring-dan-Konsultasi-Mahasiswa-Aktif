@@ -278,7 +278,7 @@
     });
 
     $('.toastrDefaultInfo').click(function() {
-      toastr.info('Rating &nbsp&nbsp&nbsp: ' + 
+      toastr.info('Rate &nbsp&nbsp&nbsp: ' + 
                   '@for($i=0; $i < $m->total_rate; $i++)' +
                     '<span class="fa fa-star checked" ></span>' +
                   '@endfor'+
