@@ -25,7 +25,8 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
-              <li class="breadcrumb-item active">Detail Daftar Mahasiswa Wali</li>
+              <li class="breadcrumb-item"><a href="{{url('dosen/data/mahasiswa')}}">Daftar Mahasiswa Wali</a></li>
+              <li class="breadcrumb-item active">Detail Mahasiswa Wali</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
