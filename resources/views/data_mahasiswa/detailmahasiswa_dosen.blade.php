@@ -72,7 +72,7 @@
                     <a class="nav-link" id="custom-tabs-two-transkrip-tab" data-toggle="pill" href="#custom-tabs-two-transkrip" role="tab" aria-controls="custom-tabs-two-transkrip" aria-selected="false">Transkrip</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-two-konsultasi-tab" data-toggle="pill" href="#custom-tabs-two-konsultasi" role="tab" aria-controls="custom-tabs-two-konsultasi" aria-selected="false">Konsultasi & Non Konsultasi</a>
+                    <a class="nav-link" id="custom-tabs-two-konsultasi-tab" data-toggle="pill" href="#custom-tabs-two-konsultasi" role="tab" aria-controls="custom-tabs-two-konsultasi" aria-selected="false">Data Konsultasi</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-two-hukuman-tab" data-toggle="pill" href="#custom-tabs-two-hukuman" role="tab" aria-controls="custom-tabs-two-hukuman" aria-selected="false">Hukuman</a>
@@ -361,7 +361,7 @@
                   <div class="tab-pane fade" id="custom-tabs-two-konsultasi" role="tabpanel" aria-labelledby="custom-tabs-two-konsultasi-tab">
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Data Konsultasi</h3>
+                        <h3 class="card-title">Data Konsultasi Terjadwal</h3>
                       </div>  
                       <div class="card-body">
                         <table id="tabel_konsultasi" class="table table-bordered table-striped">
@@ -403,7 +403,7 @@
 
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Data Non Konsultasi </h3>
+                        <h3 class="card-title">Data Konsultasi Tidak Terjadwal</h3>
                       </div>  
                       <div class="card-body">
                         <table id="tabel_nonkonsultasi" class="table table-bordered table-striped">
