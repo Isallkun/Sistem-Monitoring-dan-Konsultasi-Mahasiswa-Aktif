@@ -320,7 +320,7 @@ class DataKonsultasiController extends Controller
             ->join("mahasiswa","mahasiswa.nrpmahasiswa","=","konsultasi_dosenwali.mahasiswa_nrpmahasiswa")
             ->join("semester","semester.idsemester","=","konsultasi_dosenwali.semester_idsemester")
             ->join("tahun_akademik","tahun_akademik.idtahunakademik","=","konsultasi_dosenwali.thnakademik_idthnakademik")
-            ->where("topik_konsultasi.idtopikkonsultasi",$id)
+            ->where("konsultasi_dosenwali.idkonsultasi",$id)
             ->get();
 
             return view('data_konsultasi.ubahkonsultasi_dosen',compact('semester','tahun_akademik','datakonsultasi'));

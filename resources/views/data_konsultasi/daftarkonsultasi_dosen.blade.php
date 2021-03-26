@@ -12,12 +12,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Daftar Data Konsultasi Mahasiswa</h1>
+            <h1 class="m-0 text-dark">Daftar Data Konsultasi Terjadwal</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
-              <li class="breadcrumb-item active">Daftar Data Konsultasi Mahasiswa</li>
+              <li class="breadcrumb-item active">Daftar Data Terjadwal</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -51,7 +51,7 @@
 
         @if(!empty($konsultasi_berikutnya))
           <div class="alert alert-primary">
-            <p style="font-weight: bold">Informasi Jadwal Konsultasi: </p>
+            <p style="font-weight: bold">Informasi Jadwal Konsultasi Terjadwal: </p>
             @foreach($konsultasi_berikutnya as $no => $n)
             ({{$no+1}}). Tanggal {{$n->konsultasiselanjutnya}}, mahasiswa {{$n->namamahasiswa}} ({{$n->mahasiswa_nrpmahasiswa}}) akan melakukan konsultasi dosen wali.
             <br>
@@ -62,7 +62,7 @@
 
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Data Konsultasi</h3>
+            <h3 class="card-title">Data Konsultasi Terjadwal</h3>
           </div>  
           <div class="card-body">
             <table id="tabel_konsultasi" class="table table-bordered table-striped">

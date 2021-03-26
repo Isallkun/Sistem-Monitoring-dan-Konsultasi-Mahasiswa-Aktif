@@ -106,13 +106,13 @@
               <li class="nav-item">
                 <a href="{{url('dosen/data/konsultasi')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Konsultasi</p>
+                  <p>Terjadwal</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{url('dosen/data/nonkonsultasi')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Non-Konsultasi </p>
+                  <p>Tidak Terjadwal</p>
                 </a>
               </li>
             </ul>

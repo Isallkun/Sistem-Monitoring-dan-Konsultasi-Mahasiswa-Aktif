@@ -37,7 +37,7 @@
               <div class="inner">
                 <h3>{{$mahasiswa_aktif}} : {{$mahasiswa}}</h3>
 
-                <p>Total Mahasiswa </p>
+                <p>Total Mahasiswa Aktif</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person"></i>
@@ -52,12 +52,12 @@
               <div class="inner">
                 <h3>{{$konsultasi}}</h3>
 
-                <p>Total Konsultasi</p>
+                <p>Konsultasi Terjadwal</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-people"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('ketuajurusan/submaster/konsultasi')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -67,12 +67,12 @@
               <div class="inner">
                 <h3>{{$non_konsultasi}}</h3>
 
-                <p>Total Non-Konsultasi</p>
+                <p>Konsultasi Tidak Terjadwal</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-book"></i>
               </div>
-              <a href="{{url('admin/master/matakuliah')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('ketuajurusan/submaster/nonkonsultasi')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -88,7 +88,7 @@
               <div class="icon">
                 <i class="ion ion-archive"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{url('ketuajurusan/submaster/hukuman')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

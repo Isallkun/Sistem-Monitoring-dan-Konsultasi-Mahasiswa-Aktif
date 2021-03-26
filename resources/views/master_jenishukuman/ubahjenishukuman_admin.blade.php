@@ -72,7 +72,7 @@
 
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="exampleInputNama">Nama</label>
+                    <label for="exampleInputNama">Nama Hukuman</label>
                     <input type="text" name="namahukuman" class="form-control" id="exampleInputNama" value="{{$j->namahukuman}}"  placeholder="Enter Nama Hukuman">
                   </div>
 

@@ -25,7 +25,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{url('dosen/data/nonkonsultasi')}}">Daftar Non-Konsultasi</a></li>
+              <li class="breadcrumb-item"><a href="{{url('dosen/data/nonkonsultasi')}}">Daftar Tidak Terjadwal</a></li>
               <li class="breadcrumb-item active">Broadcast Informasi</li>
             </ol>
           </div>
@@ -42,7 +42,7 @@
             <!-- jquery validation -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Form Input Data</h3>
+                <h3 class="card-title">Form Input Data Broadcast</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->

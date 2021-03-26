@@ -97,23 +97,32 @@
           </li>
           
           <li class="nav-item has-treeview">
-            <a href="{{url('ketuajurusan/submaster/konsultasi')}}" class="nav-link">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-calendar"></i>
               <p>
                 Data Konsultasi
-                <i class="fas fa-angle-right right"></i>
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-          </li>
+            <ul class="nav nav-treeview">
+              <li class="nav-item has-treeview">
+                <a href="{{url('ketuajurusan/submaster/konsultasi')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Terjadwal
+                  </p>
+                </a>
+              </li>
 
-          <li class="nav-item has-treeview">
-            <a href="{{url('ketuajurusan/submaster/nonkonsultasi')}}" class="nav-link">
-              <i class="nav-icon fas fa-calendar"></i>
-              <p>
-                Data Non-Konsultasi
-                <i class="fas fa-angle-right right"></i>
-              </p>
-            </a>
+              <li class="nav-item has-treeview">
+                <a href="{{url('ketuajurusan/submaster/nonkonsultasi')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>
+                    Tidak Terjadwal
+                  </p>
+                </a>
+              </li>
+            </ul>
           </li>
 
           <li class="nav-item has-treeview">

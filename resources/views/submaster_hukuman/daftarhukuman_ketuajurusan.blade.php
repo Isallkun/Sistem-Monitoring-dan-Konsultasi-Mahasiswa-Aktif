@@ -17,7 +17,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('ketuajurusan')}}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{url('ketuajurusan/submaster/hukuman')}}">Daftar Data Hukuman Mahasiswa</a></li>
+              <li class="breadcrumb-item active">Daftar Data Hukuman Mahasiswa</a></li>
             
             </ol>
           </div><!-- /.col -->

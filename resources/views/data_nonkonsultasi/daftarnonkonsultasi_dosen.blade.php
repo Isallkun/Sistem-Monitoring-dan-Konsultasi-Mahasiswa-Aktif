@@ -12,12 +12,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Daftar Data Non-Konsultasi</h1>
+            <h1 class="m-0 text-dark">Daftar Data Konsultasi Tidak Terjadwal</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
-              <li class="breadcrumb-item active">Daftar Data Non-Konsultasi</li>
+              <li class="breadcrumb-item active">Daftar Data Tidak Terjadwal</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -67,7 +67,7 @@
 
          @if(!empty($non_konsultasi_berikutnya))
           <div class="alert alert-primary">
-            <p style="font-weight: bold">Informasi Jadwal Non-Konsultasi: </p>
+            <p style="font-weight: bold">Informasi Jadwal Konsultasi Tidak Terjadwal: </p>
             @foreach($non_konsultasi_berikutnya as $no => $n)
             ({{$no+1}}). Tanggal {{$n->tanggalpertemuan}},   {{$n->namamahasiswa}} ({{$n->nrpmahasiswa}}) akan melakukan bertemu dengan anda.
             <br>

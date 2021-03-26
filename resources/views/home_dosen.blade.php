@@ -73,7 +73,7 @@
               <div class="inner">
                 <h3>{{$konsultasi}}</h3>
 
-                <p>Total Konsultasi</p>
+                <p>Konsultasi Terjadwal</p>
               </div>
               <div class="icon">
                 <i class="ion ion-calendar"></i>
@@ -89,7 +89,7 @@
               <div class="inner">
                 <h3>{{$nonkonsultasi}}</h3>
 
-                <p>Total Non-Konsultasi</p>
+                <p>Konsultasi Tidak Terjadwal</p>
               </div>
               <div class="icon">
                 <i class="ion ion-ios-alarm"></i>

@@ -25,7 +25,8 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('ketuajurusan')}}">Home</a></li>
-              <li class="breadcrumb-item active">Detail Daftar Mahasiswa</li>
+              <li class="breadcrumb-item active"><a href="{{url('ketuajurusan/submaster/mahasiswa')}}">Daftar Mahasiswa</a></li>
+              <li class="breadcrumb-item active">Detail Mahasiswa</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -56,10 +57,10 @@
                     <a class="nav-link active" id="custom-tabs-two-profil-tab" data-toggle="pill" href="#custom-tabs-two-profil" role="tab" aria-controls="custom-tabs-two-profil" aria-selected="true">Profil Mahasiswa</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-two-konsultasi-tab" data-toggle="pill" href="#custom-tabs-two-konsultasi" role="tab" aria-controls="custom-tabs-two-konsultasi" aria-selected="false">Konsultasi</a>
+                    <a class="nav-link" id="custom-tabs-two-konsultasi-tab" data-toggle="pill" href="#custom-tabs-two-konsultasi" role="tab" aria-controls="custom-tabs-two-konsultasi" aria-selected="false">Konsultasi (Terjadwal)</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-two-nonkonsultasi-tab" data-toggle="pill" href="#custom-tabs-two-nonkonsultasi" role="tab" aria-controls="custom-tabs-two-nonkonsultasi" aria-selected="false">Non Konsultasi</a>
+                    <a class="nav-link" id="custom-tabs-two-nonkonsultasi-tab" data-toggle="pill" href="#custom-tabs-two-nonkonsultasi" role="tab" aria-controls="custom-tabs-two-nonkonsultasi" aria-selected="false">Konsultasi (Tidak Terjadwal)</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-two-hukuman-tab" data-toggle="pill" href="#custom-tabs-two-hukuman" role="tab" aria-controls="custom-tabs-two-hukuman" aria-selected="false">Hukuman</a>
