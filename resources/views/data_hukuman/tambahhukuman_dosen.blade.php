@@ -25,7 +25,9 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{url('dosen/data/hukuman')}}">Daftar Hukuman</a></li>
+              @foreach($mahasiswa as $m)
+              <li class="breadcrumb-item"><a href="{{url('dosen/data/hukuman/detail/'.$m->nrpmahasiswa)}}">Detail Daftar Hukuman</a></li>
+              @endforeach
               <li class="breadcrumb-item active">Tambah Data Hukuman</li>
             </ol>
           </div>

@@ -30,8 +30,8 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{url('dosen')}}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{url('dosen/data/hukuman')}}">Daftar MHS Hukuman</a></li>
-              <li class="breadcrumb-item active">Detail Data Hukuman MHS</li>
+              <li class="breadcrumb-item"><a href="{{url('dosen/data/hukuman')}}">Daftar Mahasiswa (Hukuman)</a></li>
+              <li class="breadcrumb-item active">Detail Daftar Hukuman</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->

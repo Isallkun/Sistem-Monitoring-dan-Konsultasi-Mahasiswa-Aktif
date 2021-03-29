@@ -147,7 +147,7 @@ class DataKonsultasiController extends Controller
                 'thnakademik_idthnakademik'=>$tahun_akademik
             ]);
             
-            return redirect('dosen/data/konsultasi/rangkumankondisi/'.$mahasiswa)->with(['Success' => 'Berhasil Menambahkan Data Konsultasi Mahasiswa ('. $mahasiswa.')']);
+            return redirect('dosen/data/konsultasi/rangkumankondisi/'.$mahasiswa)->with(['Success' => 'Berhasil Menambahkan Data Konsultasi Terjadwal ('. $mahasiswa.')']);
 
         }
         catch (QueryException $e)
@@ -361,7 +361,7 @@ class DataKonsultasiController extends Controller
                 'thnakademik_idthnakademik'=>$request->get('tahun_akademik')
             ]);
           
-            return redirect('dosen/data/konsultasi')->with(['Success' => 'Berhasil Mengubah Data Konsultasi (ID) '.$request->get('idkonsultasi')]);
+            return redirect('dosen/data/konsultasi')->with(['Success' => 'Berhasil Mengubah Data Konsultasi Terjadwal (ID) '.$request->get('idkonsultasi')]);
         }
         catch(QueryException $e)
         {

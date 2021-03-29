@@ -184,7 +184,7 @@ class DataNonKonsultasiController extends Controller
                   "Atas%20perhatiannya%20kami%20sampaikan%20terima%20kasih.%0A%0A".
                   "Dari:%20".$dosen[0]->namadosen."%20(".$dosen[0]->npkdosen.")";
 
-            return redirect('dosen/data/nonkonsultasi')->with(['Success' => "Berhasil Menambahkan Data Non-Konsultasi Mahasiswa ($mahasiswa)",'url'=>$url]);
+            return redirect('dosen/data/nonkonsultasi')->with(['Success' => "Berhasil Menambahkan Data Konsultasi Tidak Terjadwal Mahasiswa ($mahasiswa)",'url'=>$url]);
 
 
     	}
@@ -253,7 +253,7 @@ class DataNonKonsultasiController extends Controller
                   "Atas%20perhatiannya%20kami%20sampaikan%20terima%20kasih.%0A%0A".
                   "Dari:%20".$dosen[0]->namadosen."%20(".$dosen[0]->npkdosen.")";
             
-            return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Berhasil Mengubah Data Non-Konsultasi (ID) '.$request->get('idnonkonsultasi'),'url'=>$url]);
+            return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Berhasil Mengubah Data Konsultasi Tidak Terjadwal (ID) '.$request->get('idnonkonsultasi'),'url'=>$url]);
 
          
         }
@@ -273,7 +273,7 @@ class DataNonKonsultasiController extends Controller
                 ->where('idnonkonsultasi', $id)
                 ->delete();
 
-            return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Berhasil Menghapus Data Non-Konsultasi (ID) '.$id]);
+            return redirect('dosen/data/nonkonsultasi')->with(['success' => 'Berhasil Menghapus Data Konsultasi Tidak Terjadwal (ID) '.$id]);
         }
 
         catch(QueryException $e)

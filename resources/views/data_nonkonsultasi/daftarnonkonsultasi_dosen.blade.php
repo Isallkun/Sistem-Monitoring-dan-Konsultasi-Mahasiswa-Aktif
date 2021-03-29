@@ -51,6 +51,14 @@
       </div>
     @endif
 
+     @if (\Session::has('success'))
+      <div class="alert alert-success alert-block">
+        <ul>
+            <li>{!! \Session::get('success') !!}</li>
+        </ul>
+      </div>
+    @endif
+
     @if (\Session::has('Error'))
       <div class="alert alert-danger alert-block">
         <ul>
@@ -77,7 +85,7 @@
 
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Data Non-Konsultasi</h3>
+            <h3 class="card-title">Data Konsultasi Tidak Terjadwal</h3>
           </div>  
           <div class="card-body">
             <a style="float: right;" href="{{url('dosen/data/nonkonsultasi/broadcast')}}" class="btn btn-warning btn-sm fa fa-bullhorn" role="button"> Broadcast Informasi</a>
