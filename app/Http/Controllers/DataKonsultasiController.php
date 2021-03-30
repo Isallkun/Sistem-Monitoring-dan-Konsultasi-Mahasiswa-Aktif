@@ -403,7 +403,7 @@ class DataKonsultasiController extends Controller
             ->get();
 
             $konsultasi_berikutnya = DB::table('konsultasi_dosenwali')
-            ->select('konsultasiselanjutnya','namamahasiswa','mahasiswa_nrpmahasiswa')
+            ->select('konsultasiselanjutnya','namamahasiswa','mahasiswa_nrpmahasiswa','dosen.namadosen','dosen.npkdosen')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
             ->where('konsultasi_dosenwali.mahasiswa_nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa )

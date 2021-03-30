@@ -83,26 +83,31 @@
             </a>
           </li>
 
-           <li class="nav-item has-treeview">
-            <a href="{{url('mahasiswa/data/konsultasimahasiswa')}}" class="nav-link">
+          <li class="nav-header">Menu</li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Data Konsultasi
-                <i class="fas fa-angle-right right"></i>
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-          </li>
 
-          <li class="nav-item has-treeview">
-            <a href="{{url('mahasiswa/data/nonkonsultasimahasiswa')}}" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                Data Non-Konsultasi
-                <i class="fas fa-angle-right right"></i>
-              </p>
-            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+              <a href="{{url('mahasiswa/data/konsultasimahasiswa')}}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Terjadwal</p>
+              </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{url('mahasiswa/data/nonkonsultasimahasiswa')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Tidak Terjadwal</p>
+                </a>
+              </li>
+            </ul>
           </li>
-
 
           <li class="nav-item has-treeview">
             <a href="{{url('mahasiswa/data/hukumanmahasiswa')}}" class="nav-link">

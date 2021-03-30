@@ -154,7 +154,7 @@
         position: 'bottomRight',
         body: '<ul>'+
               '</li>'+
-              '<li>Menunggu Konfirmasi Konsultasi Dosen Wali <br> {{$notif_konfirmasi_konsultasi}} &nbsp'+  
+              '<li>Menunggu Konfirmasi Hasil Konsultasi <br> {{$notif_konfirmasi_konsultasi}} &nbsp'+  
                    '<a href="{{url('mahasiswa/data/konsultasimahasiswa')}}"> [Detail] </a>'+
               '</li>'+
               '<li>Konsultasi Terjadwal (selanjutnya) <br> {{$notif_konsultasi_berikutnya}} &nbsp'+  
@@ -163,7 +163,7 @@
               '<li>Konsultasi Tidak Terjadwal (selanjutnya) <br> {{$notif_nonkonsultasi_berikutnya}} &nbsp'+  
                    '<a href="{{url('mahasiswa/data/nonkonsultasimahasiswa')}}"> [Detail] </a>'+
               '</li>'+
-              '<li>Hukuman Terbaru (dari dosen wali) <br> {{$notif_hukumaninput_terbaru}} &nbsp'+  
+              '<li>Hukuman Terbaru <br> {{$notif_hukumaninput_terbaru}} &nbsp'+  
                    '<a href="{{url('mahasiswa/data/hukumanmahasiswa')}}"> [Detail] </a>'+
               '</li>'+
 

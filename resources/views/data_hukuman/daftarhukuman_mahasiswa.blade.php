@@ -61,7 +61,7 @@
               @if($d->total <= "30" AND $d->total > "0")
                 <ul>
                   <li>
-                    {{$d->namamahasiswa}} ({{$d->nrpmahasiswa}}) memiliki masa berlaku hukuman kurang dari {{$d->total}} Hari.
+                    Anda ({{$d->namamahasiswa}} ({{$d->nrpmahasiswa}})) memiliki masa berlaku hukuman kurang dari {{$d->total}} Hari.
                     <br>
                     ID: {{$d->idhukuman}} &nbsp [Hukuman: {{$d->namahukuman}}]
                   </li>
