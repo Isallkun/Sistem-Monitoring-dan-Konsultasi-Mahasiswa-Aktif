@@ -207,7 +207,6 @@
  
 @push('scripts')
 
-
 <script>
   $(function () { 
     $('#tabel_mahasiswa').DataTable({
