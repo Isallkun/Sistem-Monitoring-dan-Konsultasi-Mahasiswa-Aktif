@@ -93,7 +93,7 @@
 
                   <p style="font-family: times-new-roman; font-size: 13px; font-weight: bold;color: red;">
                     *Keterangan: <br>
-                    Untuk pesan private yang diinputkan dalam menu "Non-Konsultasi" akan dikirim <br> melalui aplikasi whatsApp. 
+                    Untuk pesan private yang diinputkan dalam menu "Konsultasi tidak terjadwal" akan dikirim <br> melalui aplikasi whatsApp. 
                   </p>
                   
                   <!-- /.card-body -->

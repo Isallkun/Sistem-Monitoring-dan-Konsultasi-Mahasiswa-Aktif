@@ -102,7 +102,7 @@ class DataNonKonsultasiController extends Controller
             ];
             Mail::to($email_pengguna)->cc($dosen[0]->email)->send(new BroadcastNonKonsultasiMail($data));
 
-            return redirect('dosen/data/nonkonsultasi')->with(['Success' => 'Pesan Broadcast Berhasil Dikirimkan ke Seluruh Email Mahasiswa Wali']);
+            return redirect('dosen/data/nonkonsultasi')->with(['success' => 'Pesan Broadcast Berhasil Dikirimkan ke Seluruh Email Mahasiswa Wali']);
         }
         catch (QueryException $e)
         {

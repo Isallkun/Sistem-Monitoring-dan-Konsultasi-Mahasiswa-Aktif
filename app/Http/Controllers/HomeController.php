@@ -612,15 +612,15 @@ class HomeController extends Controller
             $total_hukuman = DB::table('hukuman')
             ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalinput) as bulan,MONTH(tanggalinput) as bln'))
             ->groupBy('bln')
-            ->orderBy('bln','DESC')
+            ->orderBy('bln','ASC')
             ->get();
 
             $hukuman_berlangsung = DB::table('hukuman')
-            ->select('*',DB::raw('COUNT(*) as total, MONTHNAME(tanggalinput) as bulan,MONTH(tanggalinput) as bln'))
+            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalinput) as bulan,MONTH(tanggalinput) as bln'))
             ->whereDate('masaberlaku','>=',Carbon::now())
             ->where('status',1)
             ->groupBy('bln')
-            ->orderBy('bln','DESC')
+            ->orderBy('bln','ASC')
             ->get();
 
             $hukuman_selesai = DB::table('hukuman')
@@ -628,7 +628,7 @@ class HomeController extends Controller
             ->whereDate('masaberlaku','<=',Carbon::now())
             ->where('status',2)
             ->groupBy('bln')
-            ->orderBy('bln','DESC')
+            ->orderBy('bln','ASC')
             ->get();
 
             return view('home_ketuajurusan', compact('mahasiswa','mahasiswa_aktif','konsultasi','non_konsultasi','hukuman','total_konsultasi','total_konsultasi_sekarang','aktifitaskonsultasi','tahun_sekarang','total_hukuman','hukuman_berlangsung','hukuman_selesai'));
