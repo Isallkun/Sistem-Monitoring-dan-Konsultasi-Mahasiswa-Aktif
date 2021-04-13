@@ -389,6 +389,7 @@ class DataMahasiswaController extends Controller
         //4. Transkrip
         $tahunakademik_tidakaktif = DB::table('tahun_akademik')
         ->select('idtahunakademik','tahun')
+        ->where('status',0)
         ->get();
         $whereinTahun=[];
         foreach ($tahunakademik_tidakaktif as $key => $value) 
