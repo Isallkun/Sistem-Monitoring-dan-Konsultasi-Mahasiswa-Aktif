@@ -48,7 +48,6 @@ class DataHukumanController extends Controller
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->where('npkdosen', $dosen[0]->npkdosen)
             ->orderby('tanggalinput','DESC')
-            ->groupBy('idhukuman')
             ->get();
             foreach ($data_hukuman as $d)
             {
@@ -78,7 +77,6 @@ class DataHukumanController extends Controller
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->where('npkdosen', $dosen[0]->npkdosen)
             ->orderby('tanggalinput','DESC')
-            ->groupBy('idhukuman')
             ->whereNotNull('masaberlaku')
             ->get();
  
@@ -183,7 +181,6 @@ class DataHukumanController extends Controller
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->where('npkdosen', $dosen[0]->npkdosen)
             ->orderby('tanggalinput','DESC')
-            ->groupBy('idhukuman')
             ->whereNotNull('masaberlaku')
             ->get();
 
@@ -507,7 +504,6 @@ class DataHukumanController extends Controller
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->where('nrpmahasiswa', $mahasiswa[0]->nrpmahasiswa)
             ->orderby('tanggalinput','DESC')
-            ->groupBy('idhukuman')
             ->get();
 
             foreach ($data_hukuman as $d)
