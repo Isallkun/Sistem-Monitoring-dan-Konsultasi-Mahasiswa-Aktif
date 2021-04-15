@@ -151,7 +151,6 @@ class DataHukumanController extends Controller
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->where('npkdosen', $dosen[0]->npkdosen)
             ->orderby('tanggalinput','DESC')
-            ->groupBy('idhukuman')
             ->get();
             foreach ($data_hukuman as $d)
             {
