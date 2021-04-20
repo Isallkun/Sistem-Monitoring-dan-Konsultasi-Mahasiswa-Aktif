@@ -104,12 +104,12 @@ class LoginController extends Controller
             }
             else
             { 
-                return redirect()->back()->with('Info', 'Harap Periksa Password yang anda masukan');
+                return redirect()->back()->with('Info', 'Harap periksa Password yang anda masukan');
             }
         }
         else
         {
-            return redirect()->back()->with('Info', 'Periksa kembali username yang anda masukan');
+            return redirect()->back()->with('Info', 'Harap periksa kembali Username yang anda masukan');
         }   
     }
 
