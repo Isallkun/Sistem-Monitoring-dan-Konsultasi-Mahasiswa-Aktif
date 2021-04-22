@@ -135,7 +135,7 @@
                   
                   <div class="form-group">
                     <label for="exampleInputPassword">Password</label>
-                    <input type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Password">
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Password (maximal. 10 character)">
                   </div>
 
                   <input type="checkbox" onclick="myFunction()"> Show Password
