@@ -76,10 +76,12 @@ class SubmasterReportController extends Controller
 
             //6. Detail Hukuman Mahasiswa
             $data_hukuman = DB::table('hukuman')
+            ->select('dosen.namadosen','dosen.npkdosen','hukuman.tanggalinput','hukuman.namahukuman','hukuman.keterangan', 'hukuman.status','hukuman.penilaian','hukuman.tanggalkonfirmasi', 'hukuman.masaberlaku')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
             ->where('mahasiswa.nrpmahasiswa',$id)
             ->get();
+            
             
             
             return view('submaster_mahasiswa.detailmahasiswa_ketuajurusan', compact('data_mahasiswa','data_konsultasi','data_nonkonsultasi','data_hukuman'));

@@ -153,7 +153,6 @@
         subtitle: 'System',
         position: 'bottomRight',
         body: '<ul>'+
-              '</li>'+
               '<li>Menunggu Konfirmasi Hasil Konsultasi <br> {{$notif_konfirmasi_konsultasi}} &nbsp'+  
                    '<a href="{{url('mahasiswa/data/konsultasimahasiswa')}}"> [Detail] </a>'+
               '</li>'+

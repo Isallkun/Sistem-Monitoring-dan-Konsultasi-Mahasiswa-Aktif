@@ -243,10 +243,12 @@
                           <td>{{$dh->namahukuman}}</td>
                           <td>{{$dh->keterangan}}</td>
                           <td>
-                            @if($dh->status != "0")
-                              Belum Selesai
+                            @if($dh->status == "0")
+                              <a href="#" class="btn btn-danger btn-xs">Tidak Aktif</a>
+                            @elseif($dh->status == "1")
+                              <a href="#" class="btn btn-success btn-xs">Aktif</a>
                             @else
-                              Selesai
+                              <a href="#" class="btn btn-dark btn-xs">Masa Berlaku Habis</a>
                             @endif
                           </td>
                           <td>

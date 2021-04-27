@@ -129,6 +129,10 @@ class DataMahasiswaController extends Controller
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
             ->where('mahasiswa.nrpmahasiswa',$id)
             ->count();
+            $total_nonkonsultasi = DB::table('non_konsultasi')
+            ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','non_konsultasi.mahasiswa_nrpmahasiswa')
+            ->where('mahasiswa.nrpmahasiswa',$id)
+            ->count();
 
             $total_hukuman = DB::table('hukuman')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
@@ -269,13 +273,13 @@ class DataMahasiswaController extends Controller
         
             //6. Detail Hukuman Mahasiswa
             $data_hukuman = DB::table('hukuman')
+            ->select('dosen.namadosen','dosen.npkdosen','hukuman.tanggalinput','hukuman.namahukuman','hukuman.keterangan', 'hukuman.status','hukuman.penilaian','hukuman.tanggalkonfirmasi', 'hukuman.masaberlaku')
             ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
             ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
             ->where('mahasiswa.nrpmahasiswa',$id)
             ->get();
             
-            
-            return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_nonkonsultasi','data_kartustudi','data_transkrip','data_hukuman','semester','tahunakademik'));
+            return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_nonkonsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_nonkonsultasi','data_kartustudi','data_transkrip','data_hukuman','semester','tahunakademik'));
         }
         else
         {
@@ -309,6 +313,10 @@ class DataMahasiswaController extends Controller
         //1a. informasi dalam bentuk total angka
         $total_konsultasi = DB::table('konsultasi_dosenwali')
         ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','konsultasi_dosenwali.mahasiswa_nrpmahasiswa')
+        ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
+        ->count();
+        $total_nonkonsultasi = DB::table('non_konsultasi')
+        ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','non_konsultasi.mahasiswa_nrpmahasiswa')
         ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
         ->count();
 
@@ -424,13 +432,13 @@ class DataMahasiswaController extends Controller
         
         //6. Detail Hukuman Mahasiswa
         $data_hukuman = DB::table('hukuman')
+        ->select('dosen.namadosen','dosen.npkdosen','hukuman.tanggalinput','hukuman.namahukuman','hukuman.keterangan', 'hukuman.status','hukuman.penilaian','hukuman.tanggalkonfirmasi', 'hukuman.masaberlaku')
         ->join('mahasiswa','mahasiswa.nrpmahasiswa','=','hukuman.mahasiswa_nrpmahasiswa')
         ->join('dosen','dosen.npkdosen','=','hukuman.dosen_npkdosen')
         ->where('mahasiswa.nrpmahasiswa',$nrpmahasiswa)
-        ->get();
+        ->get();    
             
-            
-         return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_nonkonsultasi','data_kartustudi','data_transkrip','data_hukuman','semester','tahunakademik'));
+         return view('data_mahasiswa.detailmahasiswa_dosen', compact('total_konsultasi','total_nonkonsultasi','total_hukuman','total_nisbi_d','sisasks','grafik_akademik','data_mahasiswa','data_konsultasi','data_nonkonsultasi','data_kartustudi','data_transkrip','data_hukuman','semester','tahunakademik'));
     }
 
    

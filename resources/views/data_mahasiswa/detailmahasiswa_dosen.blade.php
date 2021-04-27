@@ -88,9 +88,9 @@
                         <!-- small box -->
                         <div class="small-box bg-info">
                           <div class="inner">
-                            <h3>{{$total_konsultasi}}</h3>
+                            <h3>{{$total_konsultasi}} : {{$total_nonkonsultasi}}</h3>
 
-                            <p>Total Konsultasi<br>Dosen Wali</p>
+                            <p>Konsultasi <br> Terjadwal :: Tidak Terjadwal</p>
                           </div>
                           <div class="icon">
                             <i class="ion ion-archive"></i>
@@ -104,7 +104,7 @@
                           <div class="inner">
                             <h3>{{$total_hukuman}}</h3>
 
-                            <p>Total Hukuman<br>Belum Selesai</p>
+                            <p>Total Hukuman<br>Mahasiswa</p>
                           </div>
                           <div class="icon">
                             <i class="ion ion-ios-cog"></i>
@@ -465,10 +465,12 @@
                           <td>{{$dh->namahukuman}}</td>
                           <td>{{$dh->keterangan}}</td>
                           <td>
-                            @if($dh->status != "0")
-                              Belum Selesai
+                            @if($dh->status == "0")
+                              <a href="#" class="btn btn-danger btn-xs">Tidak Aktif</a>
+                            @elseif($dh->status == "1")
+                              <a href="#" class="btn btn-success btn-xs">Aktif</a>
                             @else
-                              Selesai
+                              <a href="#" class="btn btn-dark btn-xs">Masa Berlaku Habis</a>
                             @endif
                           </td>
                           <td>
