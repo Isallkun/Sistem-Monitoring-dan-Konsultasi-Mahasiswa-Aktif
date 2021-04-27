@@ -64,7 +64,7 @@
                     <a class="nav-link active" id="custom-tabs-two-informasi-tab" data-toggle="pill" href="#custom-tabs-two-informasi" role="tab" aria-controls="custom-tabs-two-informasi" aria-selected="true">Informasi</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-two-profil-tab" data-toggle="pill" href="#custom-tabs-two-profil" role="tab" aria-controls="custom-tabs-two-profil" aria-selected="false">Profil</a>
+                    <a class="nav-link" id="custom-tabs-two-profil-tab" data-toggle="pill" href="#custom-tabs-two-profil" role="tab" aria-controls="custom-tabs-two-profil" aria-selected="false">Profil Mahasiswa</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-two-kartuhasilstudi-tab" data-toggle="pill" href="#custom-tabs-two-kartuhasilstudi" role="tab" aria-controls="custom-tabs-two-kartuhasilstudi" aria-selected="false">Kartu Hasil Studi</a>
@@ -253,14 +253,16 @@
                           </li>
                           <li class="list-group-item"></li>
 
+                          <li class="list-group-item" style="text-align: center;font-weight: bold;">INFORMASI AKADEMIK (TERBARU)</li>
+                          
                           <li class="list-group-item">
-                            <b>Indeks Prestasi Kumulatif</b> <a class="float-right">{{$m->ipk}}</a>
+                            <b>Indeks Prestasi Kumulatif (IPK)</b> <a class="float-right">{{$m->ipk}}</a>
                           </li>
                           <li class="list-group-item">
                             <b>IPKm</b> <a class="float-right">{{$m->ipkm}}</a>
                           </li>
                           <li class="list-group-item">
-                            <b>Indeks Prestasi Semester</b> <a class="float-right">{{$m->ips}}</a>
+                            <b>Indeks Prestasi Semester (IPS)</b> <a class="float-right">{{$m->ips}}</a>
                           </li>
                           <li class="list-group-item">
                             <b>Total SKS</b> <a class="float-right">{{$m->totalsks}}</a>
