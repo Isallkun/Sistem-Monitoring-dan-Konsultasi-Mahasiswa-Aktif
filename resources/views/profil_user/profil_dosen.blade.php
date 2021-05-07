@@ -105,13 +105,22 @@
                   </li>      
 
                   <li class="list-group-item">
-                    <b>Grafik Pelayanan Konsultasi Per-bulan</b>
+                    <b>Grafik Pelayanan Konsultasi Terjadwal dan Tidak Terjadwal</b>
                   </li>
                 </ul>
 
                 <div class="chart">
                   <canvas id="areaChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                  
+                  <br>
+                  <p style="font-size: 11px;">
+                    Keterangan:
+                    <br>
+                    <a href="#" class="btn btn-primary btn-sm"></a> 
+                    Total layanan konsultasi terjadwal setiap bulan.
+                    <br>
+                    <a href="#" class="btn btn-secondary btn-sm"></a> 
+                    Total layanan konsultasi tidak terjadwal setiap bulan.
+                  </p>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -180,11 +189,16 @@
     
     //Total seluruh konsultasi per bulan
     var nama_bulan= new Array();
-    var total= new Array();
 
+    var total_konsultasi= new Array();
     @foreach($total_konsultasi as $t)
       nama_bulan.push('{{$t->bulan}}');
-      total.push({{$t->total}});
+      total_konsultasi.push({{$t->total}});
+    @endforeach
+
+    var total_nonkonsultasi= new Array();
+    @foreach($total_nonkonsultasi as $tn)
+      total_nonkonsultasi.push({{$tn->total}});
     @endforeach
 
    
@@ -194,7 +208,7 @@
       labels  : nama_bulan,
       datasets: [
         {
-          label               : 'Konsultasi Per Bulan',
+          label               : 'Konsultasi Terjadwal',
           backgroundColor     : 'rgba(60,141,188,0.9)',
           borderColor         : 'rgba(60,141,188,0.8)',
           pointRadius          : true,
@@ -202,7 +216,18 @@
           pointStrokeColor    : 'rgba(60,141,188,1)',
           pointHighlightFill  : '#fff',
           pointHighlightStroke: 'rgba(60,141,188,1)',
-          data                : total
+          data                : total_konsultasi
+        },
+         {
+          label               : 'Konsultasi Tidak Terjadwal',
+          backgroundColor     : 'rgba(210, 214, 222, 1)',
+          borderColor         : 'rgba(210, 214, 222, 1)',
+          pointRadius         : true,
+          pointColor          : 'rgba(210, 214, 222, 1)',
+          pointStrokeColor    : '#c1c7d1',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(220,220,220,1)',
+          data                : total_nonkonsultasi
         },
       ]
     }

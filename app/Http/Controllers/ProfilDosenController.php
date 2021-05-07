@@ -41,8 +41,15 @@ class ProfilDosenController extends Controller
             ->groupBy('bulan')
             ->orderBy('bulan','DESC')
             ->get();
+            $total_nonkonsultasi = DB::table('non_konsultasi')
+            ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalpertemuan) as bulan'))
+            ->join('dosen','dosen.npkdosen','=', 'non_konsultasi.dosen_npkdosen')
+            ->where('dosen.npkdosen',$user_dosen[0]->npkdosen)
+            ->groupBy('bulan')
+            ->orderBy('bulan','DESC')
+            ->get();
 
-            return view('profil_user.profil_dosen',compact('user_dosen','total_konsultasi', 'decrypted'));
+            return view('profil_user.profil_dosen',compact('user_dosen','total_konsultasi','total_nonkonsultasi', 'decrypted'));
         }
         else
         {
