@@ -138,17 +138,16 @@
                    <td>{{$d->solusi}}</td>
                   </tr>
                   <tr>
-                   <th>Konsultasi Berikutnya:</th>
+                   <th>Konsultasi Berikutnya</th>
                    <td>{{$d->konsultasiselanjutnya}}</td>
                   </tr>
                   <tr>
-                  @if($d->konfirmasi == 0)
-                    <th>Status Konfirmasi:</th>
-                    <td>Belum Disetujui</td>
-                  @else
-                    <th>Status Konfirmasi:</th>
-                    <td>Disetujui</td>
-                  @endif
+                    <th>Status Konfirmasi</th>
+                    @if($d->konfirmasi == 0)
+                      <td>Belum Disetujui</td>
+                    @else
+                      <td>Disetujui</td>
+                    @endif
                   </tr>
                 </table>
               </div>

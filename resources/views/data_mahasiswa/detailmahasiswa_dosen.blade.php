@@ -527,20 +527,19 @@
                      <td>{{$dk->solusi}}</td>
                     </tr>
                     <tr>
-                     <th>Konsultasi Berikutnya:</th>
+                     <th>Konsultasi Berikutnya</th>
                      <td>{{$dk->konsultasiselanjutnya}}</td>
                     </tr>
                     <tr>
-                    @if($dk->konfirmasi == 0)
-                      <th>Status Konfirmasi:</th>
-                      <td>Belum Disetujui</td>
-                    @else
-                      <th>Status Konfirmasi:</th>
-                      <td>Disetujui</td>
-                    @endif
+                      <th>Status Konfirmasi</th>
+                      @if($dk->konfirmasi == 0)
+                        <td>Belum Disetujui</td>
+                      @else
+                        <td>Disetujui</td>
+                      @endif
                     </tr>
                     <tr>
-                     <th>Tahun akademik:</th>
+                     <th>Tahun akademik</th>
                      <td>{{$dk->semester}} {{$dk->tahun}}</td>
                     </tr>
                   </table>
