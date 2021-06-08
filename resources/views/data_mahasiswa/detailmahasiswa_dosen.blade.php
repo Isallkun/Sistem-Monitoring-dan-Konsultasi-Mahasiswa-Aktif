@@ -6,11 +6,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   
   <style type="text/css">
-  .checked {
-    color: orange;
-  }
+   .checked {color: orange;}
   </style>
- 
 @endpush
 
 <!-- Isi dari yield -->
@@ -305,7 +302,7 @@
                       </div>
                     </form>
 
-                    <table class="table table-bordered table-striped">
+                    <table id="tabel_kartuhasilstudi" class="table table-bordered table-striped">
                       <thead>
                         <tr> 
                           <th width="1%">Kode Mata Kuliah</th>
@@ -695,7 +692,14 @@
     });
   });
 
-   $(function () {
+  $(function () {
+    $('#tabel_kartuhasilstudi').DataTable({
+      "dom": '<"pull-right"f><"pull-left"l>tip'
+
+    });
+  });
+
+  $(function () {
     $('#tabel_transkrip').DataTable({
       "dom": '<"pull-right"f><"pull-left"l>tip'
     });

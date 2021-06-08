@@ -101,30 +101,12 @@
 
                   	<div class="form-group">
                     	<label for="exampleInputSemester">Semester</label>
-                    	<br>
-                    	<select class="btn btn-primary dropdown-toggle" name="semester" data-toggle="dropdown" id="exampleInputSemester">
-                      	@foreach($semester as $s)
-                        	@if($s->idsemester == $d->idsemester)
-                          	<option value="{{$s->idsemester}}" selected>{{$s->semester}}</option>
-                        	@else 
-                          	<option value="{{$s->idsemester}}">{{$s->semester}}</option>
-                        	@endif
-                      	@endforeach
-                    	</select>
+                      <p>{{$d->semester}}</p>
                   	</div>
 
                   	<div class="form-group">
                     	<label for="exampleInputTahunAkademik">Tahun Akademik</label>
-                    	<br>
-                    	<select class="btn btn-primary dropdown-toggle" name="tahun_akademik" data-toggle="dropdown" id="exampleInputTahunAkademik">
-                      	@foreach($tahun_akademik as $th)
-                        	@if($th->idtahunakademik == $d->idtahunakademik)
-                          	<option value="{{$th->idtahunakademik}}" selected>{{$th->tahun}}</option>
-                        	@else 
-                          	<option value="{{$th->idtahunakademik}}">{{$th->tahun}}</option>
-                        	@endif
-                      	@endforeach
-                    	</select>
+                    	<p>{{$d->tahun}}</p>
                   	</div>
                 </div>
                 @endforeach

@@ -44,7 +44,8 @@ class MasterMatakuliahController extends Controller
                         ->get();
             
             $tahun_akademik = DB::table('tahun_akademik')
-                              ->get();
+            ->orderby('idtahunakademik','DESC')
+            ->get();
 
             return view('master_matakuliah.tambahmatakuliah_admin', compact('semester','tahun_akademik'));
         }

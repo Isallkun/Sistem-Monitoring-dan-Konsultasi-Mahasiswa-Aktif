@@ -68,6 +68,7 @@ class MasterMahasiswaController extends Controller
 
             $tahun_akademik = DB::table('tahun_akademik')
                             -> select('*')
+                            ->orderby('idtahunakademik','DESC')
                             ->get();
 
             $role = DB::table('role')
@@ -200,6 +201,7 @@ class MasterMahasiswaController extends Controller
 
             $tahun_akademik = DB::table('tahun_akademik')
                             -> select('*')
+                            ->orderby('idtahunakademik','DESC')
                             ->get();
 
             $datamahasiswa = DB::table('mahasiswa')

@@ -46,33 +46,61 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{url('dosen/data/konsultasi/prosestambah')}}" role="form" method="post">
+          
+              <div class="card-body">
+                <form method="GET" name="formfilter" action="{{url('dosen/data/konsultasi/tampilkanfilter')}}" enctype="multipart/form-data">
                 {{ csrf_field() }}
+                  <div class="form-group float-sm-right">
+                    <i class="fas fa-filter fa-xs"> Filter Data Mahasiswa (Tahun angkatan) </i>
 
-                @if (count($errors) > 0)
-                  <div class="alert alert-danger">
-                    <ul>
-                      @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                      @endforeach
-                    </ul>
-                  </div>
+                  <select class="btn btn-primary btn-xs dropdown-toggle" name="filterAngkatan" data-toggle="dropdown" id="filterAngkatan" onchange="formfilter.submit();">
+                    <option value="">-- Pilih Tahun Angkatan --</option>
+                    @foreach($angkatan as $a)
+                      <option value="{{$a->idtahunakademik}}">{{$a->tahun}}</option>
+                    @endforeach
+                  </select>
+                <p style="font-size: 13px; margin-top: 10px;font-weight: bold;color: red; ">
+                @if(!empty($info))
+                  @foreach($info as $i)
+                   Menampilkan Data Mahasiswa Angkatan {{$i->tahun}}
+                  @endforeach
+                @else
+                  Tidak ada filter data
                 @endif
+                </p>
+                </div>
+                </form>
+                <br><br><br>
 
-                @if (\Session::has('Error'))
-                  <div class="alert alert-danger alert-block">
-                    <ul>
-                        <li>{!! \Session::get('Error') !!}</li>
-                    </ul>
-                  </div>
-                @endif
+                <form action="{{url('dosen/data/konsultasi/prosestambah')}}" role="form" method="post">
+                  {{ csrf_field() }}
+
+                  @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                      <ul>
+                        @foreach ($errors->all() as $error)
+                          <li>{{ $error }}</li>
+                        @endforeach
+                      </ul>
+                    </div>
+                  @endif
+
+                  @if (\Session::has('Error'))
+                    <div class="alert alert-danger alert-block">
+                      <ul>
+                          <li>{!! \Session::get('Error') !!}</li>
+                      </ul>
+                    </div>
+                  @endif
                
-                <div class="card-body">
+                
                   <div class="form-group p-2 mb-3 bg-danger text-white" style="font-family: times-new-roman">
                     <h6>Durasi konsultasi dosen wali</h6> 
                     <p id="demo" name="demo">00 Menit :: 00 Detik</p>
                     <input type="hidden" name="temp_value" id="temp_value">
                   </div>
+
+                 
 
                   <div class="form-group">
                     <label for="exampleInputMahasiswa">Mahasiswa</label>
@@ -86,25 +114,19 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputSemester">Semester</label>
-                    <br>
-                    <select class="btn btn-primary dropdown-toggle" name="semester" data-toggle="dropdown" id="exampleInputSemester">
-                      <option value="">-- Pilih Semester --</option>
-                       @foreach($semester as $s)
-                        <option value="{{$s->idsemester}}">{{$s->semester}}</option>
-                       @endforeach
-                    </select>
+                    <label for="exampleInputSemester">Semester </label>
+                    @foreach($semester as $s)
+                      <p>{{$s->semester}}</p>
+                      <input type="hidden" name="semester" value="{{$s->idsemester}}">
+                    @endforeach
                   </div>
 
                   <div class="form-group">
                     <label for="exampleInputTahunAkademik">Tahun Akademik</label>
-                    <br>
-                    <select class="btn btn-primary dropdown-toggle" name="tahun_akademik" data-toggle="dropdown" id="exampleInputTahunAkademik">
-                      <option value="">-- Pilih Tahun Akademik --</option>
-                       @foreach($tahun_akademik as $th)
-                        <option value="{{$th->idtahunakademik}}">{{$th->tahun}}</option>
-                       @endforeach
-                    </select>
+                    @foreach($tahun_akademik as $th)
+                      <p>{{$th->tahun}}</p>
+                      <input type="hidden" name="tahun_akademik" value="{{$th->idtahunakademik}}">
+                    @endforeach
                   </div>
 
                   <div class="form-group">
