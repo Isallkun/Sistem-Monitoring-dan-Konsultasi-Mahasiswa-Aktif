@@ -136,12 +136,13 @@
                  
                   <div class="form-group">
                     <label for="exampleInputPermasalahan">Materi Konsultasi</label>
-                     <textarea class="form-control" name="permasalahan" id="exampleInputPermasalahan" rows="3" placeholder="Enter Materi Konsultasi"></textarea>
+                    <input type="text" name="permasalahan" class="form-control" id="exampleInputPermasalahan" placeholder="Enter Materi Konsultasi">
+                     
                   </div>
 
                   <div class="form-group">
                     <label for="exampleInputSolusi">Keterangan</label>
-                    <input type="text" name="solusi" class="form-control" id="exampleInputSolusi" placeholder="Enter Keterangan">
+                    <textarea class="form-control" name="solusi" id="exampleInputSolusi" rows="3" placeholder="Enter Keterangan"></textarea>
                   </div>
 
                   <div class="form-group">
