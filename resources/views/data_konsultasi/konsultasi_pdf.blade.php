@@ -46,8 +46,8 @@
 				<th width="1%">Tanggal Konsultasi</th>
 				<th width="1%">Tahun Akademik</th>
 				<th width="1%">Topik</th>
-				<th width="1%">Permasalahan</th>
-				<th width="1%">Solusi</th>
+				<th width="1%">Materi Konsultasi</th>
+				<th width="1%">Keterangan</th>
 				<th width="1%">Dosen Wali</th>
 			</tr>
 		</thead>

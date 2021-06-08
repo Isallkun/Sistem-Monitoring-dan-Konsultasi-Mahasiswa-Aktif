@@ -120,11 +120,11 @@
                    <td>{{$d->tanggalkonsultasi}}</td>
                   </tr>
                   <tr>
-                   <th>Permasalahan</th>
+                   <th>Materi Konsultasi</th>
                    <td>{{$d->permasalahan}}</td>
                   </tr>
                   <tr>
-                   <th>Solusi:</th>
+                   <th>Keterangan:</th>
                    <td>{{$d->solusi}}</td>
                   </tr>
                   <tr>

@@ -135,13 +135,13 @@
                   </div>
                  
                   <div class="form-group">
-                    <label for="exampleInputPermasalahan">Permasalahan</label>
-                     <textarea class="form-control" name="permasalahan" id="exampleInputPermasalahan" rows="3" placeholder="Enter Permasalahan"></textarea>
+                    <label for="exampleInputPermasalahan">Materi Konsultasi</label>
+                     <textarea class="form-control" name="permasalahan" id="exampleInputPermasalahan" rows="3" placeholder="Enter Materi Konsultasi"></textarea>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputSolusi">Solusi</label>
-                    <input type="text" name="solusi" class="form-control" id="exampleInputSolusi" placeholder="Enter Solusi">
+                    <label for="exampleInputSolusi">Keterangan</label>
+                    <input type="text" name="solusi" class="form-control" id="exampleInputSolusi" placeholder="Enter Keterangan">
                   </div>
 
                   <div class="form-group">

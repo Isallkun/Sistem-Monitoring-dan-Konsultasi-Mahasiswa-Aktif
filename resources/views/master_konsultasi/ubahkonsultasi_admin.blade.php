@@ -79,12 +79,12 @@
                   </div>
                  
                   <div class="form-group">
-                    <label for="exampleInputPermasalahan">Permasalahan</label>
+                    <label for="exampleInputPermasalahan">Materi Konsultasi</label>
                      <textarea class="form-control" name="permasalahan" id="exampleInputPermasalahan" rows="3" placeholder="Enter Permasalahan">{{$m->permasalahan}}</textarea>
                   </div>
 
                   <div class="form-group">
-                    <label for="exampleInputSolusi">Solusi</label>
+                    <label for="exampleInputSolusi">Keterangan</label>
                     <input type="text" name="solusi" class="form-control" id="exampleInputSolusi" value="{{$m->solusi}}">
                   </div>
 

@@ -110,8 +110,8 @@
                   <th width="1%">Tanggal Konsultasi</th>
                   <th width="1%">Tahun Akademik</th>
                   <th width="1%">Topik</th>
+                  <th width="1%">Materi Konsultasi</th>
                   <th width="1%">Permasalahan</th>
-                  <th width="1%">Solusi</th>
                 </tr>
               </thead>
               <tbody>

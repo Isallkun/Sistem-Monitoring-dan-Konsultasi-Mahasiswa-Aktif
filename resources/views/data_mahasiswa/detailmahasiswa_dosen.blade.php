@@ -519,11 +519,11 @@
                      <td>{{$dk->tanggalkonsultasi}}</td>
                     </tr>
                     <tr>
-                     <th>Permasalahan</th>
+                     <th>Materi Konsultasi</th>
                      <td>{{$dk->permasalahan}}</td>
                     </tr>
                     <tr>
-                     <th>Solusi:</th>
+                     <th>Keterangan</th>
                      <td>{{$dk->solusi}}</td>
                     </tr>
                     <tr>
