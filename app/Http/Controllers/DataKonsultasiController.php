@@ -70,6 +70,7 @@ class DataKonsultasiController extends Controller
             ->where('users.username',Session::get('dosen'))
             ->get();
 
+
             $mahasiswa = DB::table('mahasiswa')
                     ->select('*')
                     ->join("dosen","dosen.npkdosen","=","mahasiswa.dosen_npkdosen")
@@ -78,20 +79,80 @@ class DataKonsultasiController extends Controller
 
             $semester = DB::table('semester')
                         -> select('*')
+                        -> where ('status','1')
                         ->get();
 
             $tahun_akademik = DB::table('tahun_akademik')
                             -> select('*')
+                             -> where ('status','1')
+                            ->orderby('idtahunakademik','DESC')
                             ->get();
 
+
+            $angkatan = DB::table('tahun_akademik')
+            ->select()
+            ->orderby('idtahunakademik','DESC')
+            ->get();
+
             
-            return view('data_konsultasi.tambahkonsultasi_dosen', compact('mahasiswa','semester','tahun_akademik'));
+            return view('data_konsultasi.tambahkonsultasi_dosen', compact('mahasiswa','semester','tahun_akademik','angkatan'));
         }
         else
         {
             return redirect("/");
         }
     }
+
+     public function tampilkan_filter(Request $request)
+    {
+        if(Session::get('dosen') != null)
+        {
+             $dosen = DB::table('users')
+            ->join('dosen','dosen.users_username','=','users.username')
+            ->where('users.username',Session::get('dosen'))
+            ->get();
+
+
+            $mahasiswa = DB::table('mahasiswa')
+                    ->select('*')
+                    ->join("dosen","dosen.npkdosen","=","mahasiswa.dosen_npkdosen")
+                    ->join("tahun_akademik","tahun_akademik.idtahunakademik",'=',"mahasiswa.thnakademik_idthnakademik")
+                    ->where('tahun_akademik.idtahunakademik', $request->get('filterAngkatan'))
+                    ->where("dosen.npkdosen",$dosen[0]->npkdosen)
+                    ->get();
+            
+            $info= DB::table('tahun_akademik')
+            -> select('tahun')
+            -> where ('idtahunakademik',$request->get('filterAngkatan'))
+            ->get();
+
+
+            $semester = DB::table('semester')
+                        -> select('*')
+                        -> where ('status','1')
+                        ->get();
+
+            $tahun_akademik = DB::table('tahun_akademik')
+                            -> select('*')
+                             -> where ('status','1')
+                            ->orderby('idtahunakademik','DESC')
+                            ->get();
+
+
+            $angkatan = DB::table('tahun_akademik')
+            ->select()
+            ->orderby('idtahunakademik','DESC')
+            ->get();
+
+            
+            return view('data_konsultasi.tambahkonsultasi_dosen', compact('mahasiswa','semester','tahun_akademik','angkatan','info'));
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
+
 
     public function tambahkonsultasi_proses(Request $request)
     {
@@ -306,13 +367,6 @@ class DataKonsultasiController extends Controller
     {
         if(Session::get('dosen') != null)
         {
-            $semester = DB::table('semester')
-            ->select('*')
-            ->get();
-
-            $tahun_akademik = DB::table('tahun_akademik')
-            -> select('*')
-            ->get();
 
             $datakonsultasi= DB::table("konsultasi_dosenwali")
             ->join("topik_konsultasi","topik_konsultasi.idtopikkonsultasi","=","konsultasi_dosenwali.topik_idtopikkonsultasi")
@@ -322,7 +376,7 @@ class DataKonsultasiController extends Controller
             ->join("tahun_akademik","tahun_akademik.idtahunakademik","=","konsultasi_dosenwali.thnakademik_idthnakademik")
             ->where("konsultasi_dosenwali.idkonsultasi",$id)
             ->get();
-
+            // dd($datakonsultasi);
             return view('data_konsultasi.ubahkonsultasi_dosen',compact('semester','tahun_akademik','datakonsultasi'));
         }
         else
@@ -340,8 +394,7 @@ class DataKonsultasiController extends Controller
                 'topik_konsultasi' =>'required',
                 'permasalahan' =>'required',
                 'solusi' =>'required',
-                'semester'=>'required',
-                'tahun_akademik'=>'required'
+                
             ]);
 
             $topik = DB::table('topik_konsultasi')
@@ -357,8 +410,6 @@ class DataKonsultasiController extends Controller
                 'solusi' => $request->get('solusi'),
                 'konsultasiselanjutnya'=> $request->get('konsultasi_selanjutnya'),
                 'topik_idtopikkonsultasi'=>$request->get('idtopik'),
-                'semester_idsemester'=>$request->get('semester'),
-                'thnakademik_idthnakademik'=>$request->get('tahun_akademik')
             ]);
           
             return redirect('dosen/data/konsultasi')->with(['Success' => 'Berhasil Mengubah Data Konsultasi Terjadwal (ID) '.$request->get('idkonsultasi')]);

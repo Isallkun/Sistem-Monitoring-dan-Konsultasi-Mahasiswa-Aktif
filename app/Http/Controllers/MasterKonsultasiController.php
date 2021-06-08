@@ -60,6 +60,7 @@ class MasterKonsultasiController extends Controller
 
             $tahun_akademik = DB::table('tahun_akademik')
                             -> select('*')
+                            ->orderby('idtahunakademik','DESC')
                             ->get();
 
 
@@ -149,6 +150,7 @@ class MasterKonsultasiController extends Controller
 
             $tahun_akademik = DB::table('tahun_akademik')
                             -> select('*')
+                            ->orderby('idtahunakademik','DESC')
                             ->get();
 
             $datakonsultasi = DB::table('konsultasi_dosenwali')

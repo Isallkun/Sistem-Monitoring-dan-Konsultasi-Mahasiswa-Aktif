@@ -145,6 +145,8 @@ Route::group(['prefix' => '/' ], function()
 		//2. DATA KONSULTASI
 		//localhost:8000/dosen/data/konsultasi
 		Route::get('data/konsultasi','DataKonsultasiController@daftarkonsultasi');
+		//Menampilkan hasil filter data mahasiswa
+		Route::get('data/konsultasi/tampilkanfilter','DataKonsultasiController@tampilkan_filter');
 
 		//Tambah data konsultasi
 		Route::get('data/konsultasi/tambah', 'DataKonsultasiController@tambahkonsultasi');
