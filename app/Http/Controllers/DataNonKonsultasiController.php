@@ -127,7 +127,48 @@ class DataNonKonsultasiController extends Controller
             ->where("dosen.npkdosen",$dosen[0]->npkdosen)
             ->get();
 
-            return view('data_nonkonsultasi.tambahnonkonsultasi_dosen', compact('mahasiswa','dosen'));
+            $angkatan = DB::table('tahun_akademik')
+            ->select()
+            ->orderby('idtahunakademik','DESC')
+            ->get();
+
+
+            return view('data_nonkonsultasi.tambahnonkonsultasi_dosen', compact('mahasiswa','dosen','angkatan'));
+        }
+        else
+        {
+            return redirect("/");
+        }
+    }
+
+    public function tampilkan_filter(Request $request)
+    {
+        if(Session::get('dosen') != null)
+        {
+             $dosen = DB::table('users')
+            ->join('dosen','dosen.users_username','=','users.username')
+            ->where('users.username',Session::get('dosen'))
+            ->get();
+
+            $mahasiswa = DB::table('mahasiswa')
+            ->select('*')
+            ->join("dosen","dosen.npkdosen","=","mahasiswa.dosen_npkdosen")
+            ->join("tahun_akademik","tahun_akademik.idtahunakademik",'=',"mahasiswa.thnakademik_idthnakademik")
+            ->where('tahun_akademik.idtahunakademik', $request->get('filterAngkatan'))
+            ->where("dosen.npkdosen",$dosen[0]->npkdosen)
+            ->get();
+
+            $info= DB::table('tahun_akademik')
+            -> select('tahun')
+            -> where ('idtahunakademik',$request->get('filterAngkatan'))
+            ->get();
+
+            $angkatan = DB::table('tahun_akademik')
+            ->select()
+            ->orderby('idtahunakademik','DESC')
+            ->get();
+
+            return view('data_nonkonsultasi.tambahnonkonsultasi_dosen', compact('mahasiswa','dosen','angkatan','info'));
         }
         else
         {

@@ -46,29 +46,52 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="{{url('dosen/data/nonkonsultasi/prosestambah')}}" role="form" method="post">
+              <div class="card-body">
+
+                <form method="GET" name="formfilter" action="{{url('dosen/data/nonkonsultasi/tampilkanfilter')}}" enctype="multipart/form-data">
                 {{ csrf_field() }}
+                  <div class="form-group float-sm-right">
+                    <i class="fas fa-filter fa-xs"> Filter Data Mahasiswa (Tahun angkatan) </i>
 
-                @if (count($errors) > 0)
-                  <div class="alert alert-danger">
-                    <ul>
-                      @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+                    <select class="btn btn-primary btn-xs dropdown-toggle" name="filterAngkatan" data-toggle="dropdown" id="filterAngkatan" onchange="formfilter.submit();">
+                      <option value="">-- Pilih Tahun Angkatan --</option>
+                      @foreach($angkatan as $a)
+                        <option value="{{$a->idtahunakademik}}">{{$a->tahun}}</option>
                       @endforeach
-                    </ul>
+                    </select>
+                    <p style="font-size: 13px; margin-top: 10px;font-weight: bold;color: red; ">
+                    @if(!empty($info))
+                      @foreach($info as $i)
+                       Menampilkan Data Mahasiswa Angkatan {{$i->tahun}}
+                      @endforeach
+                    @else
+                      Tidak ada filter data
+                    @endif
+                    </p>
                   </div>
-                @endif
+                </form>
+                <br><br>
 
-                @if (\Session::has('Error'))
-                  <div class="alert alert-danger alert-block">
-                    <ul>
-                        <li>{!! \Session::get('Error') !!}</li>
-                    </ul>
-                  </div>
-                @endif
-               
-                <div class="card-body">
-               
+                <form action="{{url('dosen/data/nonkonsultasi/prosestambah')}}" role="form" method="post">
+                  {{ csrf_field() }}
+
+                  @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                      <ul>
+                        @foreach ($errors->all() as $error)
+                          <li>{{ $error }}</li>
+                        @endforeach
+                      </ul>
+                    </div>
+                  @endif
+
+                  @if (\Session::has('Error'))
+                    <div class="alert alert-danger alert-block">
+                      <ul>
+                          <li>{!! \Session::get('Error') !!}</li>
+                      </ul>
+                    </div>
+                  @endif
 
                   <div class="form-group">
                     <label for="exampleInputMahasiswa">Mahasiswa</label>

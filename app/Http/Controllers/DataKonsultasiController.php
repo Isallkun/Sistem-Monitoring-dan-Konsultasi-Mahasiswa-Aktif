@@ -103,7 +103,7 @@ class DataKonsultasiController extends Controller
         }
     }
 
-     public function tampilkan_filter(Request $request)
+    public function tampilkan_filter(Request $request)
     {
         if(Session::get('dosen') != null)
         {

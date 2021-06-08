@@ -208,6 +208,10 @@ Route::group(['prefix' => '/' ], function()
 		});
 		Route::post('data/nonkonsultasi/prosesbroadcast', 'DataNonKonsultasiController@broadcast_proses');
 
+
+		//Menampilkan hasil filter data mahasiswa
+		Route::get('data/nonkonsultasi/tampilkanfilter','DataNonKonsultasiController@tampilkan_filter');
+		
 		//Tambah data non konsultasi
 		Route::get('data/nonkonsultasi/tambah', 'DataNonKonsultasiController@tambahnonkonsultasi');
 		Route::post('data/nonkonsultasi/prosestambah', 'DataNonKonsultasiController@tambahnonkonsultasi_proses');

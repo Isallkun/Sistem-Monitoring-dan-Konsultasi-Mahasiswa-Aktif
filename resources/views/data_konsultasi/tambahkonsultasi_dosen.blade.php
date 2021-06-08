@@ -53,22 +53,22 @@
                   <div class="form-group float-sm-right">
                     <i class="fas fa-filter fa-xs"> Filter Data Mahasiswa (Tahun angkatan) </i>
 
-                  <select class="btn btn-primary btn-xs dropdown-toggle" name="filterAngkatan" data-toggle="dropdown" id="filterAngkatan" onchange="formfilter.submit();">
-                    <option value="">-- Pilih Tahun Angkatan --</option>
-                    @foreach($angkatan as $a)
-                      <option value="{{$a->idtahunakademik}}">{{$a->tahun}}</option>
-                    @endforeach
-                  </select>
-                <p style="font-size: 13px; margin-top: 10px;font-weight: bold;color: red; ">
-                @if(!empty($info))
-                  @foreach($info as $i)
-                   Menampilkan Data Mahasiswa Angkatan {{$i->tahun}}
-                  @endforeach
-                @else
-                  Tidak ada filter data
-                @endif
-                </p>
-                </div>
+                    <select class="btn btn-primary btn-xs dropdown-toggle" name="filterAngkatan" data-toggle="dropdown" id="filterAngkatan" onchange="formfilter.submit();">
+                      <option value="">-- Pilih Tahun Angkatan --</option>
+                      @foreach($angkatan as $a)
+                        <option value="{{$a->idtahunakademik}}">{{$a->tahun}}</option>
+                      @endforeach
+                    </select>
+                    <p style="font-size: 13px; margin-top: 10px;font-weight: bold;color: red; ">
+                    @if(!empty($info))
+                      @foreach($info as $i)
+                       Menampilkan Data Mahasiswa Angkatan {{$i->tahun}}
+                      @endforeach
+                    @else
+                      Tidak ada filter data
+                    @endif
+                    </p>
+                  </div>
                 </form>
                 <br><br><br>
 
