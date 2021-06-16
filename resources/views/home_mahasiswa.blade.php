@@ -168,7 +168,7 @@
                  'BRONZE MEMBER'+
               '@elseif($g->level == "Silver")'+
                 '<img src="{{url('rank_pictures/Silver.png')}}" class="rounded float-left" style="width:50px; height:50px;" alt="rank image">'+
-                ' SILVER MEMBER'+
+                'SILVER MEMBER'+
               '@else'+
                 '<img src="{{url('rank_pictures/Gold.png')}}" class="rounded float-left" style="width:50px; height:50px;" alt="rank image">'+
                 'GOLD MEMBER'+
