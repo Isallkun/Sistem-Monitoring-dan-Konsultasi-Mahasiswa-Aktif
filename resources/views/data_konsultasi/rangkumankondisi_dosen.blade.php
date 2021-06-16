@@ -53,6 +53,11 @@
     opacity: 1;
   }
   </style>
+
+  <!-- SweetAlert2 -->
+<link rel="stylesheet" href="{{url('asset/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
+<!-- Toastr -->
+<link rel="stylesheet" href="{{url('asset/plugins/toastr/toastr.min.css')}}">
 @endpush
 
 <!-- Isi dari yield -->
@@ -166,7 +171,10 @@
                  
 
                   <!--UNTUK RATING -->
-                  <p>1. Manfaat dari hasil konsultasi dosen wali: </p>
+                  <p>
+                    1. Manfaat dari hasil konsultasi dosen wali: 
+                    <a href="#" class="fas fa-info-circle float-right toastrDefaultInfo_manfaat"></a>
+                  </p>
                   <div class="rating">
                     <input type="radio" name="star_manfaatkonsultasi" id="star5_manfaatkonsultasi" value="5"><label for="star5_manfaatkonsultasi"></label>
                     <input type="radio" name="star_manfaatkonsultasi" id="star4_manfaatkonsultasi" value="4"><label for="star4_manfaatkonsultasi"></label>
@@ -175,7 +183,10 @@
                     <input type="radio" name="star_manfaatkonsultasi" id="star1_manfaatkonsultasi" value="1"><label for="star1_manfaatkonsultasi"></label>
                   </div>
                   <br>
-                  <p>2. Sifat mahasiswa selama melakukan konsultasi dosen wali: </p>
+                  <p>
+                    2. Sifat mahasiswa selama melakukan konsultasi dosen wali: 
+                    <a href="#" class="fas fa-info-circle float-right toastrDefaultInfo_sifat"></a>
+                  </p>
                   <div class="rating">
                     <input type="radio" name="star_sifatkonsultasi" id="star5_sifatkonsultasi" value="5"><label for="star5_sifatkonsultasi"></label>
                     <input type="radio" name="star_sifatkonsultasi" id="star4_sifatkonsultasi" value="4"><label for="star4_sifatkonsultasi"></label>
@@ -184,7 +195,10 @@
                     <input type="radio" name="star_sifatkonsultasi" id="star1_sifatkonsultasi" value="1"><label for="star1_sifatkonsultasi"></label>
                   </div>
                   <br>
-                  <p>3. Interaksi/keaktifan mahasiswa selama konsultasi dosen wali: </p>
+                  <p>
+                    3. Interaksi/keaktifan mahasiswa selama konsultasi dosen wali: 
+                    <a href="#" class="fas fa-info-circle float-right toastrDefaultInfo_interaksi"></a>
+                  </p>
                   <div class="rating">
                     <input type="radio" name="star_interaksi" id="star5_interaksi" value="5"><label for="star5_interaksi"></label>
                     <input type="radio" name="star_interaksi" id="star4_interaksi" value="4"><label for="star4_interaksi"></label>
@@ -193,7 +207,10 @@
                     <input type="radio" name="star_interaksi" id="star1_interaksi" value="1"><label for="star1_interaksi"></label>
                   </div>
                   <br>
-                  <p>4. Pencapaian yang berhasil dicapai oleh mahasiswa: </p>
+                  <p>
+                    4. Pencapaian yang berhasil dicapai oleh mahasiswa: 
+                    <a href="#" class="fas fa-info-circle float-right toastrDefaultInfo_pencapaian"></a>
+                  </p>
                   <div class="rating">
                     <input type="radio" name="star_pencapaian" id="star5_pencapaian" value="5"><label for="star5_pencapaian"></label>
                     <input type="radio" name="star_pencapaian" id="star4_pencapaian" value="4"><label for="star4_pencapaian"></label>
@@ -229,4 +246,48 @@
 });
 </script> -->
 
+<!-- SweetAlert2 -->
+<script src="{{url('asset/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
+<!-- Toastr -->
+<script src="{{url('asset/plugins/toastr/toastr.min.js')}}"></script>
+<script>
+  $(function () {
+    $('.toastrDefaultInfo_manfaat').click(function() {
+      toastr.info('Keterangan: <br>'+ 
+                  '- Bintang 1: Konsultasi yang <b>sangat tidak bermanfaat</b>. <br>'+
+                  '- Bintang 2: Konsultasi yang <b>tidak bermanfaat</b>. <br>'+
+                  '- Bintang 3: Konsultasi yang <b>cukup bermanfaat</b>. <br>'+
+                  '- Bintang 4: Konsultasi yang <b>bermanfaat</b>. <br>'+
+                  '- Bintang 5: Konsultasi yang <b>sangat bermanfaat</b>. <br>') 
+    });
+
+    $('.toastrDefaultInfo_sifat').click(function() {
+      toastr.info('Keterangan: <br>'+
+                  '- Bintang 1: Mahasiswa dalam konsultasi <b>sangat tidak sopan</b>. <br>'+
+                  '- Bintang 2: Mahasiswa dalam konsultasi <b>tidak sopan</b>. <br>'+
+                  '- Bintang 3: Mahasiswa dalam konsultasi <b>cukup sopan</b>. <br>'+
+                  '- Bintang 4: Mahasiswa dalam konsultasi <b>sopan</b>. <br>'+
+                  '- Bintang 5: Mahasiswa dalam konsultasi <b>sangat sopan</b>. <br>') 
+    });
+
+    $('.toastrDefaultInfo_interaksi').click(function() {
+      toastr.info('Keterangan: <br>'+
+                  '- Bintang 1: Mahasiswa <b>sangat kurang berinteraksi</b> saat konsultasi. <br>'+
+                  '- Bintang 2: Mahasiswa <b>kurang berinteraksi</b> saat konsultasi. <br>'+
+                  '- Bintang 3: Mahasiswa <b>cukup berinteraksi</b> saat konsultasi. <br>'+
+                  '- Bintang 4: Mahasiswa <b>berinteraksi</b> saat konsultasi. <br>'+
+                  '- Bintang 5: Mahasiswa <b>sangat berinteraksi</b> saat konsultasi. <br>') 
+    });
+
+    $('.toastrDefaultInfo_pencapaian').click(function() {
+      toastr.info('Keterangan: <br>'+
+                  '- Bintang 1: Mahasiswa <b>sangat kurang mencapai</b> target yang ditentukan. <br>'+
+                  '- Bintang 2: Mahasiswa <b>kurang mencapai</b> target yang ditentukan. <br>'+
+                  '- Bintang 3: Mahasiswa <b>cukup mencapai</b> target yang ditentukan. <br>'+
+                  '- Bintang 4: Mahasiswa <b>mencapai</b> target yang ditentukan. <br>'+
+                  '- Bintang 5: Mahasiswa <b>sangat mencapai</b> target yang ditentukan. <br>') 
+    });
+
+  });
+</script>
 @endpush

@@ -529,8 +529,15 @@ class HomeController extends Controller
             ->where('hukuman.mahasiswa_nrpmahasiswa',$mahasiswa[0]->nrpmahasiswa)
             ->where('hukuman.status',0)
             ->count();
+
+            $gamifikasi_info = DB::table('mahasiswa')
+            ->select('level', 'total')
+            ->join('gamifikasi','gamifikasi.idgamifikasi','=','mahasiswa.gamifikasi_idgamifikasi')
+            ->where('mahasiswa.nrpmahasiswa', $mahasiswa[0]->nrpmahasiswa)
+            ->get();
+
             
-            return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','konsultasi_setujui','hukuman_mahasiswa','nonkonsultasi','data_konsultasi_mhs','notif_konfirmasi_konsultasi','notif_konsultasi_berikutnya','notif_nonkonsultasi_berikutnya','notif_hukumaninput_terbaru'));
+            return view('home_mahasiswa', compact('mahasiswa','konsultasi_mahasiswa','konsultasi_setujui','hukuman_mahasiswa','nonkonsultasi','data_konsultasi_mhs','notif_konfirmasi_konsultasi','notif_konsultasi_berikutnya','notif_nonkonsultasi_berikutnya','notif_hukumaninput_terbaru','gamifikasi_info'));
         }
         else
         {

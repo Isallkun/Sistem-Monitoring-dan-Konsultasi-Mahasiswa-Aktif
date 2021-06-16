@@ -9,6 +9,15 @@
   <link rel="stylesheet" href="{{url('asset/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
   <!-- Toastr -->
   <link rel="stylesheet" href="{{url('asset/plugins/toastr/toastr.min.css')}}">
+
+  <style type="text/css">
+  .checked {
+    color: orange;
+  }
+  .unchecked {
+    color: black;
+  }
+  </style>
 @endpush
 
 <!-- Isi dari yield -->
@@ -153,6 +162,26 @@
         subtitle: 'System',
         position: 'bottomRight',
         body: '<ul>'+
+              '<li> @foreach($gamifikasi_info as $g)'+
+              '@if($g->level == "Bronze")'+
+                '<img src="{{url('rank_pictures/Bronze.png')}}" class="rounded float-left" style="width:50px; height:50px;" alt="rank image">'+
+                 'BRONZE MEMBER'+
+              '@elseif($g->level == "Silver")'+
+                '<img src="{{url('rank_pictures/Silver.png')}}" class="rounded float-left" style="width:50px; height:50px;" alt="rank image">'+
+                ' SILVER MEMBER'+
+              '@else'+
+                '<img src="{{url('rank_pictures/Gold.png')}}" class="rounded float-left" style="width:50px; height:50px;" alt="rank image">'+
+                'GOLD MEMBER'+
+              '@endif <br>'+
+              
+              '@for($i=0; $i < $g->total; $i++)' +
+                '<span class="fa fa-star checked"></span>' +
+              '@endfor' +
+              '@for($i=0; $i < (5-$g->total); $i++)' +
+                '<span class="fa fa-star unchecked"></span>' +
+              '@endfor' +
+
+              '@endforeach </li> <br>'+
               '<li>Menunggu Konfirmasi Hasil Konsultasi <br> {{$notif_konfirmasi_konsultasi}} &nbsp'+  
                    '<a href="{{url('mahasiswa/data/konsultasimahasiswa')}}"> [Detail] </a>'+
               '</li>'+
