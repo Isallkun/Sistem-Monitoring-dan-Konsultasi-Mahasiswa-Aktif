@@ -100,7 +100,7 @@
                       @if($tanggal_sekarang <= $ds->konsultasiselanjutnya)
                       <a href="#" class="btn btn-secondary btn-sm">Konfirmasi</a>
                       @else
-                      <a href="{{url('mahasiswa/data/konsultasimahasiswa/proseskonfirmasi/'.$ds->idkonsultasi)}}" class="btn btn-primary btn-sm">konfirmasi</a>
+                      <a href="{{url('mahasiswa/data/konsultasimahasiswa/proseskonfirmasi/'.$ds->idkonsultasi)}}" class="btn btn-primary btn-sm">Konfirmasi</a>
                       @endif
                     @else
                       -
