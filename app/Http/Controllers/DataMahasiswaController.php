@@ -47,10 +47,22 @@ class DataMahasiswaController extends Controller
             }
 
             // KS untuk mendapatkan MAHARU
-            $tahunakademik_aktif = DB::table('tahun_akademik')
-            ->select('idtahunakademik','tahun')
-            ->where('status', '1')
+            // $tahunakademik_aktif = DB::table('tahun_akademik')
+            // ->select('idtahunakademik','tahun')
+            // ->where('status', '1')
+            // ->get();
+            $tahunakademik_aktif = DB::table('mahasiswa')
+            ->select('mahasiswa.nrpmahasiswa')
+            ->join('dosen','dosen.npkdosen', '=', 'mahasiswa.dosen_npkdosen')
+            ->join('tahun_akademik','tahun_akademik.idtahunakademik','=','mahasiswa.thnakademik_idthnakademik')
+            ->where('tahun_akademik.status', '1')
+            ->where('mahasiswa.dosen_npkdosen', $dosen[0]->npkdosen)
             ->get();
+            $whereinMaharu=[];
+            foreach ($tahunakademik_aktif as $key => $value) 
+            {
+             $whereinMaharu[] = $value->nrpmahasiswa;
+            }
 
             $mahasiswa = DB::table('mahasiswa')
             ->select('mahasiswa.*', 'kartu_studi.*','gamifikasi.*','tahun_akademik.*')
@@ -63,12 +75,13 @@ class DataMahasiswaController extends Controller
             //Where In untuk mendapatkan KS mahasiswa lama
             ->whereIn('kartu_studi.idkartustudi', $whereinCondition)
             //Where untuk mendapatkan KS mahasiswa baru
-            ->orwhere('mahasiswa.thnakademik_idthnakademik',$tahunakademik_aktif[0]->idtahunakademik)
+            ->orwhereIn('mahasiswa.nrpmahasiswa',$whereinMaharu)
             ->groupBy('mahasiswa_nrpmahasiswa')
             ->orderBy('mahasiswa_nrpmahasiswa','ASC')
             ->get();
 
-            // dd($kartu_studi);
+            // dd($mahasiswa);
+
             return view('data_mahasiswa.daftarmahasiswa_dosen', compact('mahasiswa'));
         }
         else
@@ -222,35 +235,23 @@ class DataMahasiswaController extends Controller
             ->get();
 
             //4. Transkrip
-            // $semester_tidakaktif = DB::table('semester')
-            // ->select('idsemester','semester')
+            // $tahunakademik_tidakaktif = DB::table('tahun_akademik')
+            // ->select('idtahunakademik','tahun')
             // ->where('status',0)
             // ->get();
-            // $whereinSemester=[];
-            // foreach ($semester_tidakaktif as $key => $value) 
+            // $whereinTahun=[];
+            // foreach ($tahunakademik_tidakaktif as $key => $value) 
             // {
-            //     $whereinSemester[] = $value->idsemester;
+            //     $whereinTahun[] = $value->idtahunakademik;
             // }
-
-            $tahunakademik_tidakaktif = DB::table('tahun_akademik')
-            ->select('idtahunakademik','tahun')
-            ->where('status',0)
-            ->get();
-            $whereinTahun=[];
-            foreach ($tahunakademik_tidakaktif as $key => $value) 
-            {
-                $whereinTahun[] = $value->idtahunakademik;
-            }
 
             $data_transkrip = DB::table('kartu_studi')
             ->join('mahasiswa','nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
             ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
             ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
-            // ->where('kartu_studi.mahasiswa_nrpmahasiswa',$id)
-            // ->whereIn('kartu_studi.semester_idsemester', $whereinSemester)
-            // ->orwhereIn('kartu_studi.thnakademik_idthnakademik', $whereinTahun)
-            ->whereIn('kartu_studi.thnakademik_idthnakademik', $whereinTahun)
             ->where('kartu_studi.mahasiswa_nrpmahasiswa',$id)
+            ->where('detail_kartu_studi.na','!=','0')
+            // ->whereIn('kartu_studi.thnakademik_idthnakademik', $whereinTahun)
             ->get();
 
             //5. Detail Konsultasi Mahasiswa
@@ -395,21 +396,22 @@ class DataMahasiswaController extends Controller
         ->get();
  
         //4. Transkrip
-        $tahunakademik_tidakaktif = DB::table('tahun_akademik')
-        ->select('idtahunakademik','tahun')
-        ->where('status',0)
-        ->get();
-        $whereinTahun=[];
-        foreach ($tahunakademik_tidakaktif as $key => $value) 
-        {
-            $whereinTahun[] = $value->idtahunakademik;
-        }
+        // $tahunakademik_tidakaktif = DB::table('tahun_akademik')
+        // ->select('idtahunakademik','tahun')
+        // ->where('status',0)
+        // ->get();
+        // $whereinTahun=[];
+        // foreach ($tahunakademik_tidakaktif as $key => $value) 
+        // {
+        //     $whereinTahun[] = $value->idtahunakademik;
+        // }
+
         $data_transkrip = DB::table('kartu_studi')
         ->join('mahasiswa','nrpmahasiswa','=','kartu_studi.mahasiswa_nrpmahasiswa')
         ->join('detail_kartu_studi','detail_kartu_studi.kartustudi_idkartustudi','=','kartu_studi.idkartustudi')
         ->join('matakuliah','matakuliah.kodematakuliah','=','detail_kartu_studi.matakuliah_kodematakuliah')
-        ->whereIn('kartu_studi.thnakademik_idthnakademik', $whereinTahun)
         ->where('kartu_studi.mahasiswa_nrpmahasiswa',$nrpmahasiswa)
+        ->where('detail_kartu_studi.na','!=','0')
         ->get();
         
         //5. Detail Konsultasi Mahasiswa
