@@ -116,13 +116,13 @@
                     Keterangan:
                     <br>
                     <a href="#" class="btn btn-primary btn-sm"></a> 
-                    Total mahasiswa berdasarkan nilai Indeks Prestasi Semester (IPS).
+                    Total data berdasarkan nilai Indeks Prestasi Semester (IPS).
                     <br>
                     <a href="#" class="btn btn-secondary btn-sm"></a> 
-                    Total mahasiswa berdasarkan nilai Indeks Prestasi Kumulatif (IPK).
+                    Total data berdasarkan nilai Indeks Prestasi Kumulatif (IPK).
                     <br>
                     <a href="#" class="btn btn-info btn-sm"></a> 
-                    Total mahasiswa berdasarkan nilai IPKm
+                    Total data berdasarkan nilai IPKm
                   </p>
                 </div>
               </div>
@@ -257,7 +257,7 @@
       labels  : ["1 - 2","3 - 4"],
       datasets: [
         {
-          label               : 'Total Mahasiswa (IPS) ',
+          label               : 'Total Data (IPS) ',
           backgroundColor     : 'rgba(60,141,188,0.9)',
           borderColor         : 'rgba(60,141,188,0.8)',
           pointRadius          : true,
@@ -268,7 +268,7 @@
           data                : totalmahasiswa_ips
         },
         {
-          label               : 'Total Mahasiswa (IPK) ',
+          label               : 'Total Data (IPK) ',
           backgroundColor     : 'rgba(210, 214, 222, 1)',
           borderColor         : 'rgba(210, 214, 222, 1)',
           pointRadius         : false,
@@ -279,7 +279,7 @@
           data                : totalmahasiswa_ipk
         },
         {
-          label               : 'Total Mahasiswa (IPKm) ',
+          label               : 'Total Data (IPKm) ',
           backgroundColor     : 'rgb(64, 224, 208)',
           borderColor         : 'rgb(64, 224, 208)',
           pointRadius         : false,

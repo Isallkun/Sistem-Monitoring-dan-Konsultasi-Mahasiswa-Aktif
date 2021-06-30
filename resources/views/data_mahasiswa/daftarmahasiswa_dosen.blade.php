@@ -84,7 +84,7 @@
                   <th width="1%">IPK</th>
                   <th width="1%">IPS Terakhir</th>
                   <th width="1%">Kondisi</th>
-                  <th width="7%">Rate</th>
+                  <th width="12%">Rate</th>
                   <th width="1%">Action</th>
                 </tr>
               </thead>
