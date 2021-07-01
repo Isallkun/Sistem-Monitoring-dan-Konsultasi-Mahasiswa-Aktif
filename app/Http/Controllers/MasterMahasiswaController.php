@@ -87,6 +87,7 @@ class MasterMahasiswaController extends Controller
     {
         try
         {
+
             $nrp_mahasiswa = $request->get('nrp_mahasiswa');
             $nama_mahasiswa = $request->get('nama_mahasiswa');
             $jenis_kelamin = $request->get('jenis_kelamin');
@@ -103,16 +104,6 @@ class MasterMahasiswaController extends Controller
             $id_role = $request->get('id_role');
             $username = $request->get('username');
             $password = $request->get('password');
-
-            //Untuk proses enkripsi password
-            $encrypted = Crypt::encryptString($password);
-
-
-             // isi dengan nama folder tempat kemana file diupload
-            $tujuan_upload = 'data_pengguna';
-            // ubah nama file gambar sesuai format yang diinginkan
-            $file_name = time()."_".$nrp_mahasiswa.".".$profil->getClientOriginalExtension();
-
 
             // Form Validasi Input User
             $this->validate($request,[
@@ -132,6 +123,17 @@ class MasterMahasiswaController extends Controller
                 'username' => 'required',
                 'password'=>'required|max:10'
             ]);
+            
+            //Untuk proses enkripsi password
+            $encrypted = Crypt::encryptString($password);
+
+             // isi dengan nama folder tempat kemana file diupload
+            $tujuan_upload = 'data_pengguna';
+            // ubah nama file gambar sesuai format yang diinginkan
+            $file_name = time()."_".$nrp_mahasiswa.".".$profil->getClientOriginalExtension();
+
+
+            
 
             $tambahdata_user= User::insert([
                'username'=>$username, 
