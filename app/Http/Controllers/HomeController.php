@@ -58,9 +58,10 @@ class HomeController extends Controller
                         ->select('*')
                         ->count();
 
-
+            $starts=Carbon::now()->month;
             $total_konsultasi = DB::table('konsultasi_dosenwali')
             ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan,MONTH(tanggalkonsultasi) as bln'))
+            ->whereMonth('tanggalkonsultasi','<=', $starts)
             ->groupBy('bln')
             ->orderBy('bln','DESC')
             ->get();
@@ -265,10 +266,12 @@ class HomeController extends Controller
             
             // Grafik Total Konsultasi Dosen
             // Total konsultasi seluruh
+            $starts=Carbon::now()->month;
             $total_konsultasi = DB::table('konsultasi_dosenwali')
             ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan, MONTH(tanggalkonsultasi) as bln'))
             ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
             ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
+            ->whereMonth('tanggalkonsultasi','<=', $starts)
             ->groupBy('bln')
             ->orderBy('bln','DESC')
             ->get();
@@ -285,7 +288,6 @@ class HomeController extends Controller
             ->orderBy('bln','DESC')
             ->get();
             
-
             $notif_konsultasi_berikutnya = DB::table('konsultasi_dosenwali')
             ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
             ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
@@ -421,10 +423,12 @@ class HomeController extends Controller
             
         // Grafik Total Konsultasi Dosen
         // Total konsultasi seluruh
+        $starts=Carbon::now()->month;
         $total_konsultasi = DB::table('konsultasi_dosenwali')
         ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan, MONTH(tanggalkonsultasi) as bln'))
         ->join('dosen','dosen.npkdosen','=', 'konsultasi_dosenwali.dosen_npkdosen')
         ->where('konsultasi_dosenwali.dosen_npkdosen',$dosen[0]->npkdosen )
+        ->whereMonth('tanggalkonsultasi','<=', $starts)
         ->groupBy('bln')
         ->orderBy('bln','DESC')
         ->get();
@@ -591,8 +595,10 @@ class HomeController extends Controller
             ->select('*')
             ->count();
 
+            $starts=Carbon::now()->month;
             $total_konsultasi = DB::table('konsultasi_dosenwali')
             ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalkonsultasi) as bulan,MONTH(tanggalkonsultasi) as bln'))
+            ->whereMonth('tanggalkonsultasi','<=', $starts)
             ->groupBy('bln')
             ->orderBy('bln','DESC')
             ->get();
