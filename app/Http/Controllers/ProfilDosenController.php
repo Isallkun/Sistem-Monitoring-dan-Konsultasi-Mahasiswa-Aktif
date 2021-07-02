@@ -41,7 +41,6 @@ class ProfilDosenController extends Controller
             ->groupBy('bulan')
             ->orderBy('bulan','DESC')
             ->get();
-            
             $total_nonkonsultasi = DB::table('non_konsultasi')
             ->select(DB::raw('COUNT(*) as total, MONTHNAME(tanggalpertemuan) as bulan'))
             ->join('dosen','dosen.npkdosen','=', 'non_konsultasi.dosen_npkdosen')
