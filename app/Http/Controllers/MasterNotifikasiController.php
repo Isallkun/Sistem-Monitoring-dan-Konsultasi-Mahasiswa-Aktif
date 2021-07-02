@@ -28,6 +28,7 @@ class MasterNotifikasiController extends Controller
         {
         	$jadwalkonsultasi = DB::table('jadwal_konsultasi')
         	->select('*')
+            ->orderBy('tanggalinput','DESC')
         	->get();
 
             $this->ubahstatus();
