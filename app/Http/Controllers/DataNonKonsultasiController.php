@@ -38,6 +38,7 @@ class DataNonKonsultasiController extends Controller
         	->join('dosen','dosen.npkdosen','=','non_konsultasi.dosen_npkdosen')
 			->join('mahasiswa','mahasiswa.nrpmahasiswa','=','non_konsultasi.mahasiswa_nrpmahasiswa')
 			->where('dosen.npkdosen', $dosen[0]->npkdosen)
+            ->orderBy('tanggalinput','DESC')
 			->get();
 			
 			$non_konsultasi_berikutnya = DB::table('non_konsultasi')
