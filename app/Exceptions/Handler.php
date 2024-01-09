@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Exceptions;
-
+use Throwable;
+use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -30,10 +31,11 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $exception)
-    {
-        parent::report($exception);
-    }
+    public function report(Throwable $exception)
+{
+    parent::report($exception);
+}
+
 
     /**
      * Render an exception into an HTTP response.
@@ -42,10 +44,11 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
-    {
-        return parent::render($request, $exception);
-    }
+    public function render($request, Throwable $exception)
+{
+    return parent::render($request, $exception);
+}
+
 
     /**
      * Convert an authentication exception into an unauthenticated response.
@@ -54,12 +57,13 @@ class Handler extends ExceptionHandler
      * @param  \Illuminate\Auth\AuthenticationException  $exception
      * @return \Illuminate\Http\Response
      */
-    protected function unauthenticated($request, AuthenticationException $exception)
-    {
-        if ($request->expectsJson()) {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
-        }
-
-        return redirect()->guest(route('login'));
+    protected function unauthenticated($request, AuthenticationException | Throwable $exception)
+{
+    if ($request->expectsJson()) {
+        return response()->json(['error' => 'Unauthenticated.'], 401);
     }
+
+    return redirect()->guest(route('login'));
+}
+
 }
